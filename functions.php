@@ -3061,7 +3061,7 @@ function leaky_paywall_show_extra_profile_fields( $user ) {
 	}
 	?>
 
-	<h3>Leaky Paywall</h3>
+	<h3>Ice Dragon Paywall</h3>
 
 	<table class="form-table">	
 
@@ -3165,7 +3165,7 @@ add_filter( 'plugin_action_links_' . LEAKY_PAYWALL_BASENAME, 'leaky_paywall_plug
  */
 function leaky_paywall_plugin_row_meta( $input, $file ) {
 	
-	if ( $file != 'leaky-paywall/leaky-paywall.php' ) {
+	if ( $file != 'wp-ice-dragon/wp-ice-dragon.php' ) {
 		return $input;
 	}
 
@@ -3367,10 +3367,10 @@ function leaky_paywall_add_toolbar_items( $admin_bar ){
 
     $admin_bar->add_menu( array(
         'id'    => 'leaky-paywall-toolbar',
-        'title' => 'Leaky Paywall',
+        'title' => 'Ice Dragon Paywall',
         'href'  => admin_url() . 'admin.php?page=issuem-leaky-paywall',
         'meta'  => array(
-            'title' => __('Leaky Paywall'),            
+            'title' => __('Ice Dragon Paywall'),
         ),
     ));
     $admin_bar->add_menu( array(

@@ -215,22 +215,26 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 		 */
 		function admin_menu() {
 					
-			add_menu_page( __( 'Leaky Paywall', 'leaky-paywall' ), __( 'Leaky Paywall', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ), LEAKY_PAYWALL_URL . '/images/anvil-16x16.png' );
+			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ), LEAKY_PAYWALL_URL . '/images/dragon-16x16.png' );
 			
 			add_submenu_page( 'issuem-leaky-paywall', __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
-						
-			add_submenu_page( 'issuem-leaky-paywall', __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
-			
-			add_submenu_page( 'issuem-leaky-paywall', __( 'Transactions', 'leaky-paywall' ), __( 'Transactions', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'edit.php?post_type=lp_transaction' );
-			
-			add_submenu_page( false, __( 'Update', 'leaky-paywall' ), __( 'Update', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-update', array( $this, 'update_page' ) );
 
-			add_submenu_page( 'issuem-leaky-paywall', __( 'Add-Ons', 'leaky-paywall' ), __( 'Add-Ons', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-addons', array( $this, 'addons_page' ) );
+			// Removed for Ice Dragon
+//			add_submenu_page( 'issuem-leaky-paywall', __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
+
+            // Removed for Ice Dragon
+//			add_submenu_page( 'issuem-leaky-paywall', __( 'Transactions', 'leaky-paywall' ), __( 'Transactions', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'edit.php?post_type=lp_transaction' );
+
+            // Removed for Ice Dragon
+//          add_submenu_page( false, __( 'Update', 'leaky-paywall' ), __( 'Update', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-update', array( $this, 'update_page' ) );
+
+            // Removed for Ice Dragon
+//          add_submenu_page( 'issuem-leaky-paywall', __( 'Add-Ons', 'leaky-paywall' ), __( 'Add-Ons', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-addons', array( $this, 'addons_page' ) );
 			
 		}
 		
 				
-		
+
 		
 		/**
 		 * Prints backend IssueM styles
@@ -800,7 +804,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
             
                 <form id="issuem" method="post" action="">
             
-                    <h1 style='margin-bottom: 2px;' ><?php _e( "Leaky Paywall", 'leaky-paywall' ); ?></h1>
+                    <h1 style='margin-bottom: 2px;' ><?php _e( "Ice Dragon Paywall", 'leaky-paywall' ); ?></h1>
 
                     	<?php 
                     	if ( in_array($current_tab, $settings_tabs) )
@@ -1658,14 +1662,14 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
                 </form>
 
 
-                
-            </div>
 
             </div>
 
             </div>
+
+            </div>
+                <?php /* Removed for Ice Dragon
              <div class="leaky-paywall-sidebar" style="float: right; width: 28%; margin-top: 110px;">
-				
 				<div class="leaky-paywall-sidebar-widget">
 					<h3>Need more functionality?</h3>
 					<p><a target="_blank" href="https://zeen101.com/downloads/category/leaky-paywall-addons/?utm_medium=plugin&utm_source=sidebar&utm_campaign=settings">Browse our Add-Ons</a></p>
@@ -1686,8 +1690,8 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 					<p><a target="_blank" href="https://livemarket.pub/?utm_medium=plugin&utm_source=sidebar&utm_campaign=settings">Explode your digital ad revenue with LiveMarket</a></p>
 				</div>
 
-				
              </div>
+                */ ?>
 			</div>
 			<?php
 			
