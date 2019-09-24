@@ -874,7 +874,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 
 	                        	<?php if ( !isset( $settings['page_for_subscription'] ) || !$settings['page_for_subscription'] ) {
 	                        		?>
-	                        		<p>Need help getting started? <a target="_blank" href="https://zeen101.helpscoutdocs.com/article/39-setting-up-leaky-paywall">See our guide</a> or <a target="_blank" href="https://zeen101.com/pubcare/?utm_medium=plugin&utm_source=getting_started&utm_campaign=settings">check out PubCare.</a></p>
+	                        		<p>Need help getting started? <a target="_blank" href="https://github.com/gcomte/wp-ice-dragon">See our guide</a> or <a target="_blank" href="https://puzzle.ch/lightning">contact us</a>.</p>
 	                        		<?php 
 	                        	} ?>
 	                        
