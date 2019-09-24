@@ -3356,9 +3356,14 @@ function leaky_paywall_normalize_chars($s) {
     return strtr($s, $replace);
 }
 
+// Removed for Ice Dragon
+/*
+
 // add leaky paywall links to admin toolbar
 add_action('admin_bar_menu', 'leaky_paywall_add_toolbar_items', 100);
-	
+
+*/
+
 function leaky_paywall_add_toolbar_items( $admin_bar ){
 
 	if ( !current_user_can( 'edit_user' ) ) {
