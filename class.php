@@ -66,7 +66,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 		public function process_js_content_restrictions() 
 		{
 			$settings = get_leaky_paywall_settings();
-			
+
 			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
 				$restrictions = new Leaky_Paywall_Restrictions();
 				$restrictions->process_js_content_restrictions();
@@ -214,8 +214,9 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 		 * @uses do_action() To call 'pigeonpack_admin_menu' for future addons
 		 */
 		function admin_menu() {
-					
-			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ), LEAKY_PAYWALL_URL . '/images/dragon-16x16.png' );
+
+		    // Changed for Ice Dragon
+			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ), LEAKY_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
 			
 			add_submenu_page( 'issuem-leaky-paywall', __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
 
@@ -250,6 +251,13 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 				|| 'index.php' === $hook_suffix
 				|| 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix )
 				wp_enqueue_style( 'leaky_paywall_admin_style', LEAKY_PAYWALL_URL . 'css/issuem-leaky-paywall-admin.css', '', LEAKY_PAYWALL_VERSION );
+
+			/* Added for Ice Dragon */
+			if ( 'ice_dragon_page_leaky-paywall-subscribers' === $hook_suffix
+				|| 'toplevel_page_issuem-leaky-paywall' === $hook_suffix
+				|| 'index.php' === $hook_suffix
+				|| 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix )
+                wp_enqueue_style( 'ice_dragon_admin_style', LEAKY_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', LEAKY_PAYWALL_VERSION );
 				
 			if ( 'post.php' === $hook_suffix || 'post-new.php' === $hook_suffix )
 				wp_enqueue_style( 'leaky_paywall_post_style', LEAKY_PAYWALL_URL . 'css/issuem-leaky-paywall-post.css', '', LEAKY_PAYWALL_VERSION );
@@ -298,6 +306,8 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 			
 			if ( $settings['css_style'] == 'default' ) {
 				wp_enqueue_style( 'issuem-leaky-paywall', LEAKY_PAYWALL_URL . '/css/issuem-leaky-paywall.css', '', LEAKY_PAYWALL_VERSION );
+				// Added for Ice Dragon
+				wp_enqueue_style( 'ice-dragon-paywall', LEAKY_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', LEAKY_PAYWALL_VERSION );
 			}
 			
 			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
@@ -377,8 +387,8 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 				'free_articles'					=> 2,
 				'cookie_expiration' 			=> 24,
 				'cookie_expiration_interval' 	=> 'day',
-				'subscribe_login_message'		=> __( '<a href="{{SUBSCRIBE_URL}}">Subscribe</a> or <a href="{{LOGIN_URL}}">log in</a> to read the rest of this content.', 'leaky-paywall' ),
-				'subscribe_upgrade_message'		=> __( 'You must <a href="{{SUBSCRIBE_URL}}">upgrade your account</a> to read the rest of this content.', 'leaky-paywall' ),
+				'subscribe_login_message'		=> __( 'Use ice-dragon.ch to pay for this content over the Lightning Network ⚡', 'leaky-paywall' ),
+				'subscribe_upgrade_message'		=> __( 'Tear down this Paywall! ⚡', 'leaky-paywall' ),
 				'css_style'						=> 'default',
 				'enable_user_delete_account'	=> 'off',
 				'site_name'						=> get_option( 'blogname' ), /* Site Specific */
@@ -489,8 +499,8 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 		 * @since 1.0.0
 		 */
 		function update_settings( $settings ) {
-			update_option( 'issuem-leaky-paywall', $settings );
-			if ( $this->is_site_wide_enabled() ) {
+            update_option( 'issuem-leaky-paywall', $settings );
+            if ( $this->is_site_wide_enabled()) {
 				update_site_option( 'issuem-leaky-paywall', $settings );
 			}
 		}
@@ -813,11 +823,15 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
                     		<h2 class="nav-tab-wrapper" style="margin-bottom: 10px;">
                     			
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall');?>" class="nav-tab<?php if($current_tab == 'general') { ?> nav-tab-active<?php } ?>"><?php _e('General', 'leaky-paywall');?></a>
-
-                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Subscriptions', 'leaky-paywall');?></a>
-                    				
+                                <?php /* Changed for Ice Dragon
+                    			a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Subscriptions', 'leaky-paywall');?></a>
+                                */ ?>
+                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
+                                <?php /* Changed for Ice Dragon
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Payments', 'leaky-paywall');?></a>
-
+                                */ ?>
+                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Currency Options', 'leaky-paywall');?></a>
+                                <?php /* Removed for Ice Dragon
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=emails');?>" class="nav-tab<?php if($current_tab == 'emails') { ?> nav-tab-active<?php } ?>"><?php _e('Emails', 'leaky-paywall');?></a>
 
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=licenses');?>" class="nav-tab<?php if($current_tab == 'licenses') { ?> nav-tab-active<?php } ?>"><?php _e('Licenses', 'leaky-paywall');?></a>
@@ -825,7 +839,11 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
                     			<?php do_action( 'leaky_paywall_settings_tabs_links', $current_tab ); ?>
 
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=help');?>" class="nav-tab<?php if($current_tab == 'help') { ?> nav-tab-active<?php } ?>"><?php _e('Help', 'leaky-paywall');?></a>
-                    			
+                    			*/ ?>
+                                <?php /* Added fro Ice Dragon */ ?>
+                                <a href="https://ice-dragon.ch" target="_blank">
+                                    <img src="<?php echo LEAKY_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
+                                </a>
                     		</h2>
                     	<?php } // endif ?>
   		
@@ -879,7 +897,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                        	} ?>
 	                        
 	                        <table id="leaky_paywall_administrator_options" class="form-table">
-	                        
+	                        <?php /* Removed for Ice Dragon
 	                        	<tr>
 	                                <th><?php _e( 'Page for Log In', 'leaky-paywall' ); ?></th>
 	                                <td>
@@ -919,7 +937,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                                <p class="description"><?php _e( 'Page a subscriber is redirected to after they subscribe.', 'leaky-paywall' ); ?></p>
 	                                </td>
 	                            </tr>
-
+                                */ ?>
 	                            <tr>
 	                                <th><?php _e( 'Custom Excerpt Length', 'leaky-paywall' ); ?></th>
 	                                <td>
@@ -929,23 +947,23 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                                    </p>	
 	                                </td>
 	                            </tr>
-	                           
+
 	                        	<tr>
-	                                <th><?php _e( 'Subscribe or Login Message', 'leaky-paywall' ); ?></th>
+	                                <th><?php _e( 'Login Necessary Message', 'leaky-paywall' ); ?></th>
 	                                <td>
 	                    				<textarea id="subscribe_login_message" class="large-text" name="subscribe_login_message" cols="50" rows="3"><?php echo stripslashes( $settings['subscribe_login_message'] ); ?></textarea>
 	                                    <p class="description">
-	                                    <?php _e( "Available replacement variables: {{SUBSCRIBE_URL}}  {{LOGIN_URL}}", 'leaky-paywall' ); ?>
+                                            <?php _e( "Is shown when a visitor does not have an active session with the Ice Dragon website. The user has to login first.", 'leaky-paywall' ); ?>
 	                                    </p>
 	                                </td>
 	                            </tr>
-	                            
+
 	                        	<tr>
-	                                <th><?php _e( 'Upgrade Message', 'leaky-paywall' ); ?></th>
+	                                <th><?php _e( 'Direct Pay Message', 'leaky-paywall' ); ?></th>
 	                                <td>
 	                    				<textarea id="subscribe_upgrade_message" class="large-text" name="subscribe_upgrade_message" cols="50" rows="3"><?php echo stripslashes( $settings['subscribe_upgrade_message'] ); ?></textarea>
 	                                    <p class="description">
-	                                    <?php _e( "Available replacement variables: {{SUBSCRIBE_URL}}", 'leaky-paywall' ); ?>
+	                                    <?php _e( "Is shown when a visitor has an active session with the Ice Dragon website. Below a QR code of an Invoice is shown for the user to pay.", 'leaky-paywall' ); ?>
 	                                    </p>
 	                                </td>
 	                            </tr>
@@ -959,12 +977,12 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 									</select>
 	                                </td>
 	                            </tr>
-
+                                <?php /* Removed for Ice Dragon
 	                            <tr class="general-options">
 	                                <th><?php _e( 'User Account Deletion', 'leaky-paywall' ); ?></th>
 	                                <td><input type="checkbox" id="enable_user_delete_account" name="enable_user_delete_account" <?php checked( 'on', $settings['enable_user_delete_account'] ); ?> /> Allow users to delete their account from the My Profile page</td>
 	                            </tr>
-
+                                */ ?>
 	                            <?php wp_nonce_field( 'issuem_leaky_general_options', 'issuem_leaky_general_options_nonce' ); ?>
 
 	                        </table>
@@ -1120,6 +1138,8 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                    <?php if ( $current_tab == 'payments' ) : ?>
 
 	                    <?php do_action('leaky_paywall_before_payments_settings'); ?>
+
+                        <?php /* Removed for Ice Dragon
 	                                        
 	                    <div id="modules" class="postbox leaky-paywall-gateway-settings">
 	                    
@@ -1351,7 +1371,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                        </div>
 	                        
 	                    </div>
-
+                        */ ?>
 	                    <?php // currency options ?>
 
 	                    <div id="modules" class="postbox">
@@ -1443,11 +1463,12 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                        <div class="inside">
 	                        
 	                        <table id="leaky_paywall_default_restriction_options" class="form-table">
-	                        	     
+
+                                <?php /* Removed for Ice Dragon
 	                        	<tr class="restriction-options">
 	                                <th><?php _e( 'Limited Article Cookie Expiration', 'leaky-paywall' ); ?></th>
 	                                <td>
-	                                	<input type="text" id="cookie_expiration" class="small-text" name="cookie_expiration" value="<?php echo stripcslashes( $settings['cookie_expiration'] ); ?>" /> 
+	                                	<input type="text" id="cookie_expiration" class="small-text" name="cookie_expiration" value="<?php echo stripcslashes( $settings['cookie_expiration'] ); ?>" />
 	                                	<select id="cookie_expiration_interval" name="cookie_expiration_interval">
 	                                		<option value="hour" <?php selected( 'hour', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Hour(s)', 'leaky-paywall' ); ?></option>
 	                                		<option value="day" <?php selected( 'day', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Day(s)', 'leaky-paywall' ); ?></option>
@@ -1458,7 +1479,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                                	<p class="description"><?php _e( 'Choose length of time when a visitor can once again read your articles/posts (up to the # of articles allowed).', 'leaky-paywall' ); ?></p>
 	                                </td>
 	                            </tr>
-	                            
+	                            */ ?>
 	                        	<tr class="restriction-options ">
 	                                <th><?php _e( 'Restrict PDF Downloads?', 'leaky-paywall' ); ?></th>
 	                                <td><input type="checkbox" id="restrict_pdf_downloads" name="restrict_pdf_downloads" <?php checked( 'on', $settings['restrict_pdf_downloads'] ); ?> /></td>
@@ -1553,7 +1574,7 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                        </div>
 	                        
 	                    </div>
-	                                        
+                            <?php /* Removed for Ice Dragon
 	                    <div id="modules" class="postbox leaky-paywall-subscription-settings">
 	                    
 	                        <div class="handlediv" title="Click to toggle"><br /></div>
@@ -1618,9 +1639,10 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 	                        </div>
 	                        
 	                    </div>
-	                   
+
 						<?php do_action('leaky_paywall_after_subscriptions_settings'); ?>
 
+                        */ ?>
 						<p class="submit">
                             <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'issuem-leaky-paywall' ) ?>" />
                         </p>

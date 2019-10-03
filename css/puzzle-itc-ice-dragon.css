@@ -1,0 +1,19 @@
+/* CSS Document */
+#ice-dragon-logo-on-paywall {
+	margin-top: -14px;
+	margin-left: -14px;
+	margin-right: 15px;
+	width: 90px;
+	border: none;
+	float: left;
+	box-shadow: none;
+	opacity: 0.75;
+}
+
+.link-on-paywall:link, .link-on-paywall:visited .link-on-paywall:active, .leaky_paywall_message_wrap .link-on-paywall:hover {
+	box-shadow: none;
+}
+
+.leaky_paywall_message_wrap .link-on-paywall:hover {
+	text-decoration: underline;
+}

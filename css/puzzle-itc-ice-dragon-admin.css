@@ -1,0 +1,18 @@
+/* CSS Document */
+
+#ice-dragon-logo {
+	margin-top: -4rem;
+	float:right;
+	width: 100px;
+	opacity: 0.82;
+}
+
+#ice-dragon-logo:hover {
+	opacity: 1;
+}
+
+@media screen and (max-width: 1024px) {
+	#ice-dragon-logo {
+		display: none;
+	}
+}
