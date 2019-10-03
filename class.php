@@ -217,8 +217,9 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 
 		    // Changed for Ice Dragon
 			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ), LEAKY_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
-			
-			add_submenu_page( 'issuem-leaky-paywall', __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
+
+            // Removed for Ice Dragon
+//			add_submenu_page( 'issuem-leaky-paywall', __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
 
 			// Removed for Ice Dragon
 //			add_submenu_page( 'issuem-leaky-paywall', __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
@@ -1644,7 +1645,10 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 
                         */ ?>
 						<p class="submit">
+                            <?php /* Changed for Ice Dragon
                             <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'issuem-leaky-paywall' ) ?>" />
+                            */ ?>
+                            <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'puzzle-ice-dragon' ) ?>" />
                         </p>
 	                     
 
