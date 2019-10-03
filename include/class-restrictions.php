@@ -523,7 +523,9 @@ class Leaky_Paywall_Restrictions {
 		$message  = '<div class="leaky_paywall_message_wrap"><div id="leaky_paywall_message">';
 		if ( !is_user_logged_in() ) {
             $message .= '<a class="link-on-paywall" href="https://ice-dragon.ch" target="_blank">';
-            $message .= '<img src="' . LEAKY_PAYWALL_URL . '/images/iceDragonLogo.png" alt="Ice Dragon Logo" id="ice-dragon-logo-on-paywall">';
+            if ( $settings['css_style'] == 'default' ) {
+                $message .= '<img src="' . LEAKY_PAYWALL_URL . '/images/iceDragonLogo.png" alt="Ice Dragon Logo" id="ice-dragon-logo-on-paywall">';
+            }
             $message .=  $this->replace_variables( stripslashes( $settings['subscribe_login_message'] ) );
             $message .= '</a>';
         } else {
