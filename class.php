@@ -1,4 +1,7 @@
 <?php
+
+require_once ('ice-dragon-constants.php');
+
 /**
  * Registers zeen101's Leaky Paywall class
  *
@@ -462,11 +465,11 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 			);
 		
 			$defaults = apply_filters( 'leaky_paywall_default_settings', $defaults );
-			$settings = get_option( 'issuem-leaky-paywall' ); /* Site specific settings */
+			$settings = get_option( DB_STORAGE_KEY ); /* Site specific settings */
 			$settings = wp_parse_args( $settings, $defaults );
 			
 			if ( $this->is_site_wide_enabled() ) {
-				$site_wide_settings = get_site_option( 'issuem-leaky-paywall' );
+				$site_wide_settings = get_site_option( DB_STORAGE_KEY );
 				/* These are all site-specific settings */
 				unset( $site_wide_settings['page_for_login'] );
 				unset( $site_wide_settings['page_for_subscription'] );
@@ -500,9 +503,9 @@ if ( ! class_exists( 'Leaky_Paywall' ) ) {
 		 * @since 1.0.0
 		 */
 		function update_settings( $settings ) {
-            update_option( 'issuem-leaky-paywall', $settings );
+            update_option( DB_STORAGE_KEY, $settings );
             if ( $this->is_site_wide_enabled()) {
-				update_site_option( 'issuem-leaky-paywall', $settings );
+				update_site_option( DB_STORAGE_KEY, $settings );
 			}
 		}
 		
