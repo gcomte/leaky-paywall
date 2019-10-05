@@ -42,29 +42,6 @@ if ( !function_exists( 'get_leaky_paywall_subscriber_by_hash' ) ) {
 	}
 }
 
-
-
-function leaky_paywall_old_payment_gateway_processing() {
-
-    $response = leaky_paywall_maybe_process_payment();
-
-    if ( is_wp_error( $response ) ) {
-        $args = array(
-            'response' => 401,
-            'back_link' => true,
-        );      
-        wp_die( $response, '', $args );
-    }
-    
-
-    if ( leaky_paywall_maybe_process_webhooks() ) {
-        die(); //no point in loading the whole page for webhooks
-    }
-}
-
-add_action('init', 'leaky_paywall_old_payment_gateway_processing' );
-
-
 if ( !function_exists( 'leaky_paywall_process_free_registration' ) ) {
     function leaky_paywall_process_free_registration() {
         if ( isset( $_POST['leaky_paywall_user_login'] ) && wp_verify_nonce( $_POST['leaky_paywall_register_nonce'], 'leaky_paywall-register-nonce' ) ) {
@@ -1050,7 +1027,7 @@ if ( !function_exists( 'leaky_paywall_pay_with_paypal_standard' ) ) {
         }
         if ( !empty( $level['recurring'] ) && 'on' === $level['recurring'] ) {
                                                                                     
-            $results .= '<script src="' . LEAKY_PAYWALL_URL . '/js/paypal-button.min.js?merchant=' . esc_js( $paypal_account ) . '" 
+            $results .= '<script src="' . ICE_DRAGON_PAYWALL_URL . '/js/paypal-button.min.js?merchant=' . esc_js( $paypal_account ) . '" 
                             data-env="' . esc_js( $paypal_sandbox ) . '" 
                             data-callback="' . esc_js( add_query_arg( 'issuem-leaky-paywall-paypal-standard-' . $mode . '-ipn', '1', get_site_url() . '/' ) ) . '"
                             data-return="' . esc_js( add_query_arg( 'issuem-leaky-paywall-paypal-standard-return', '1', get_page_link( $settings['page_for_subscription'] ) ) ) . '"
@@ -1070,7 +1047,7 @@ if ( !function_exists( 'leaky_paywall_pay_with_paypal_standard' ) ) {
                                                 
         } else {
                         
-            $results .= '<script src="' . LEAKY_PAYWALL_URL . '/js/paypal-button.min.js?merchant=' . esc_js( $paypal_account ) . '" 
+            $results .= '<script src="' . ICE_DRAGON_PAYWALL_URL . '/js/paypal-button.min.js?merchant=' . esc_js( $paypal_account ) . '" 
                             data-env="' . esc_js( $paypal_sandbox ) . '" 
                             data-callback="' . esc_js( add_query_arg( 'issuem-leaky-paywall-paypal-standard-' . $mode . '-ipn', '1', get_site_url() . '/' ) ) . '" 
                             data-return="' . esc_js( add_query_arg( 'issuem-leaky-paywall-paypal-standard-return', '1', get_page_link( $settings['page_for_subscription'] ) ) ) . '"

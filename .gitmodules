@@ -1,3 +1,0 @@
-[submodule "include/stripe"]
-	path = include/stripe
-	url = git@github.com:stripe/stripe-php.git

@@ -11,7 +11,7 @@ Plugin Name: Ice Dragon
 Plugin URI: https://github.com/gcomte/wp-ice-dragon
 Description: The first Bitcoin paywall for Wordpress based on the Lightning Network. Uses <a href="https://ice-dragon.ch" target="_blank">Ice Dragon</a>. Based on zeen101's <a href="https://github.com/zeen101/leaky-paywall" target="_blank">Leaky Paywall</a>.
 Author: Puzzle ITC
-Version: 0.0.1
+Version: 0.0.1 Alpha
 Author URI: https://puzzle.ch/lightning
 Tags: paywall, bitcoin, satoshis, lightning, lightning network, ice dragon, metered, pay wall, content monetization, metered access, metered pay wall, paid content
 Text Domain: leaky-paywall
@@ -22,14 +22,14 @@ Domain Path: /i18n
 if ( !defined( 'ZEEN101_STORE_URL' ) )
 	define( 'ZEEN101_STORE_URL',	'http://zeen101.com' );
 	
-define( 'LEAKY_PAYWALL_NAME', 		'Leaky Paywall for WordPress' );
+define( 'ICE_DRAGON_PAYWALL_NAME', 		'Ice Dragon Plugin for WordPress' );
 define( 'LEAKY_PAYWALL_SLUG', 		'leaky-paywall' );
 define( 'LEAKY_PAYWALL_VERSION',	'4.13.5' );
 define( 'LEAKY_PAYWALL_DB_VERSION',	'1.0.4' );
-define( 'LEAKY_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
-define( 'LEAKY_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
-define( 'LEAKY_PAYWALL_BASENAME',	plugin_basename( __FILE__ ) );
-define( 'LEAKY_PAYWALL_REL_DIR',	dirname( LEAKY_PAYWALL_BASENAME ) );
+define( 'ICE_DRAGON_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
+define( 'ICE_DRAGON_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
+define( 'ICE_DRAGON_PAYWALL_BASENAME',	plugin_basename( __FILE__ ) );
+define( 'ICE_DRAGON_PAYWALL_REL_DIR',	dirname( ICE_DRAGON_PAYWALL_BASENAME ) );
 
 if ( !defined( 'PAYPAL_LIVE_URL' ) )
 	define( 'PAYPAL_LIVE_URL', 'https://www.paypal.com/' );
@@ -49,7 +49,7 @@ if ( !defined( 'PAYPAL_NVP_API_LIVE_URL' ) )
  *
  * @since 1.0.0
  */
-function leaky_paywall_plugins_loaded() {
+function ice_dragon_paywall_plugins_loaded() {
 	
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	if ( is_plugin_active( 'issuem/issuem.php' ) )
@@ -60,51 +60,29 @@ function leaky_paywall_plugins_loaded() {
 	require_once( 'class.php' );
 
 	// Instantiate the Pigeon Pack class
-	if ( class_exists( 'Leaky_Paywall' ) ) {
+	if ( class_exists( 'Ice_Dragon_Paywall' ) ) {
 		
 		global $leaky_paywall;
-		$leaky_paywall = new Leaky_Paywall();
+		$leaky_paywall = new Ice_Dragon_Paywall();
 		
 		require_once( 'functions.php' );
 		require_once( 'deprecated.php' );
 		require_once( 'shortcodes.php' );
-		require_once( 'subscriber-table.php' );
 		require_once( 'metaboxes.php' );
-		require_once( 'include/admin/dashboard-widgets.php' );
-		require_once( 'include/admin/lp-transaction.php' );
 
 		// license key
-		include( LEAKY_PAYWALL_PATH . 'include/license-key.php' );
+		include( ICE_DRAGON_PAYWALL_PATH . 'include/license-key.php' );
 
 		// error tracking
-		include( LEAKY_PAYWALL_PATH . 'include/error-tracking.php' );
-
-		// registration
-		include( LEAKY_PAYWALL_PATH . 'include/registration-functions.php' );
+		include( ICE_DRAGON_PAYWALL_PATH . 'include/error-tracking.php' );
 
 		// helper classes
-		include( LEAKY_PAYWALL_PATH . 'include/class-restrictions.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/class-lp-export.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/class-lp-transaction.php' );
-
-		// gateways
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/gateway-functions.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/stripe/functions.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/paypal/functions.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/class-leaky-paywall-payment-gateway.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/class-leaky-paywall-payment-gateway-stripe.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/class-leaky-paywall-payment-gateway-stripe-checkout.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/class-leaky-paywall-payment-gateway-paypal.php' );
-		include( LEAKY_PAYWALL_PATH . 'include/gateways/class-leaky-paywall-payment-gateways.php' );
-
-		if ( ! class_exists( 'Stripe' ) ) {
-			require_once LEAKY_PAYWALL_PATH . 'include/stripe/init.php';
-		}
+		include( ICE_DRAGON_PAYWALL_PATH . 'include/class-restrictions.php' );
 
 		//Internationalization
-		load_plugin_textdomain( 'leaky-paywall', false, LEAKY_PAYWALL_REL_DIR . '/i18n/' );
+		load_plugin_textdomain( 'leaky-paywall', false, ICE_DRAGON_PAYWALL_REL_DIR . '/i18n/' );
 			
 	}
 
 }
-add_action( 'plugins_loaded', 'leaky_paywall_plugins_loaded', 4815162342 ); //wait for the plugins to be loaded before init
+add_action( 'plugins_loaded', 'ice_dragon_paywall_plugins_loaded', 4815162342 ); //wait for the plugins to be loaded before init

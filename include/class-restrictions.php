@@ -2,7 +2,7 @@
 /**
 * Load the Restrictions Class
 */
-class Leaky_Paywall_Restrictions {
+class Ice_Dragon_Paywall_Restrictions {
 
 	/** @var string Name of the restriction cookie */
 	public $cookie_name = 'issuem_lp';
@@ -109,7 +109,7 @@ class Leaky_Paywall_Restrictions {
 		if ( $this->content_matches_restriction_rules() ) {
 			$is_restricted = true;
 		}
-		
+
 		return apply_filters( 'leaky_paywall_filter_is_restricted', $is_restricted, $this->get_restriction_settings(), $this->post_id );
 	}
 
@@ -131,20 +131,7 @@ class Leaky_Paywall_Restrictions {
 		}
 
 		// check if content is set to be open to everyone
-		if ( $this->visibility_allows_access() ) {
-			return false;
-		}
-
-		if ( $this->visibility_restricts_access() ) {
-			return true;
-		}
-
-		// check if content is restricted based on main restriction settings
-		if ( $this->content_restricted_by_settings() ) {
-			return true;
-		}
-		
-		return false;
+		return $this->visibility_restricts_access();
 
 	}
 
@@ -170,52 +157,9 @@ class Leaky_Paywall_Restrictions {
 
 	}
 
-	public function current_user_can_access() 
+	public function current_user_can_access()
 	{
-
-		// get their level
-		$level_ids = leaky_paywall_subscriber_current_level_ids();
-
-		// compare to the restrictions, and see if they can access the content
-
-		// user does not have a level id, so see if their allowed value lets them view the content
-		if ( empty( $level_ids ) ) {
-
-			// if they do not have a level id, and the content is restricted by level, then they can't view it
-			if ( $this->visibility_restricts_access() ) {
-				return false;
-			}
-
-			
-
-			if ( $this->allowed_value_exceeded() ) {
-				return false;
-			} else {
-				return true;
-			}
-			
-		} else {
-
-			if ( !leaky_paywall_user_has_access() ) {
-				return false;
-			}
-
-
-
-			if ( $this->visibility_restricts_access() ) {
-				return false;
-			}
-
-
-
-			if ( $this->level_id_allows_access() ) {
-				return true;
-			} else {
-				return false;
-			}
-
-		}
-
+        // todo check if paid
 		return false;
 	}
 
@@ -523,11 +467,12 @@ class Leaky_Paywall_Restrictions {
 		$message  = '<div class="leaky_paywall_message_wrap"><div id="leaky_paywall_message">';
 		if ( !is_user_logged_in() ) {
             $message .= '<a class="link-on-paywall" href="https://ice-dragon.ch" target="_blank">';
+            $message .= '<div id="paywall-login-container">';
             if ( $settings['css_style'] == 'default' ) {
-                $message .= '<img src="' . LEAKY_PAYWALL_URL . '/images/iceDragonLogo.png" alt="Ice Dragon Logo" id="ice-dragon-logo-on-paywall">';
+                $message .= '<img src="' . ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png" alt="Ice Dragon Logo" id="ice-dragon-logo-on-paywall">';
             }
-            $message .=  $this->replace_variables( stripslashes( $settings['subscribe_login_message'] ) );
-            $message .= '</a>';
+            $message .=  '<div id="paywall-login-text"><div>' . $this->replace_variables( stripslashes( $settings['subscribe_login_message'] ) . '</div></div>' );
+            $message .= '</div></a>';
         } else {
 			$message .= $this->replace_variables( stripslashes( $settings['subscribe_upgrade_message'] ) );
 		}
@@ -617,120 +562,12 @@ class Leaky_Paywall_Restrictions {
 	 *
 	 * @return boolean
 	 */
-	public function visibility_allows_access()
-	{
-
-		$visibility = get_post_meta( $this->post_id, '_issuem_leaky_paywall_visibility', true );
-		$level_ids = leaky_paywall_subscriber_current_level_ids();
-
-		if ( false !== $visibility && !empty( $visibility['visibility_type'] ) && 'default' !== $visibility['visibility_type'] ) {
-
-			switch( $visibility['visibility_type'] ) {
-
-				case 'only':
-					$only = array_intersect( $level_ids, $visibility['only_visible'] );
-					if ( empty( $only ) ) {
-						return false;
-					}
-					break;
-
-				case 'always':
-					$always = array_intersect( $level_ids, $visibility['always_visible'] );
-
-					if ( in_array( -1, $visibility['always_visible'] ) ) { //-1 = Everyone
-						return true; //always visible, don't need process anymore
-					}
-
-					// level id of the user matches those selected in the settings, and the user currently has access to that level
-					if ( !empty( $always ) && leaky_paywall_user_has_access() ) {
-						return true;
-					}
-					break;
-
-				case 'onlyalways':
-					$onlyalways = array_intersect( $level_ids, $visibility['only_always_visible'] );
-					if ( empty( $onlyalways ) ) {
-						return false;
-					} else if ( !empty( $onlyalways ) && leaky_paywall_user_has_access() ) {
-						return true; //always visible, don't need process anymore
-					}
-					break;
-
-			}
-
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * Check if the Leaky Paywall visibility settings for this post restrict its access to the current user
-	 *
-	 * @since 4.10.3
-	 *
-	 * @param object $post The post object
-	 *
-	 * @return bool $is_restricted 
-	 */
 	public function visibility_restricts_access()
 	{
-		$visibility = get_post_meta( $this->post_id, '_issuem_leaky_paywall_visibility', true );
-		$level_ids = leaky_paywall_subscriber_current_level_ids();
-		$is_restricted = false;
+        $paywallVisibility = get_post_meta( $this->post_id, '_issuem_leaky_paywall_visibility' );
+        $showPaywall = ((!$paywallVisibility[0] || $paywallVisibility[0] === '0') ? false : true );
 
-		if ( false !== $visibility && !empty( $visibility['visibility_type'] ) && 'default' !== $visibility['visibility_type'] ) {
-
-			if ( $visibility['visibility_type'] == 'only' ) {
-				$only = array_intersect( $level_ids, $visibility['only_visible'] );
-				if ( empty( $only ) ) {
-					$is_restricted = true;
-				}
-			}
-
-		}
-
-		return $is_restricted;
-	}
-
-	/**
-	 * Check if the Leaky Paywall visibility settings for this post restrict its access to the current user
-	 *
-	 * @since 4.10.3
-	 *
-	 * @param object $post The post object
-	 *
-	 * @return bool $is_restricted 
-	 */
-	public function content_restricted_by_settings() {
-
-		$restrictions = $this->get_restriction_settings();
-
-		if ( empty( $restrictions ) ) {
-			return false;
-		}
-
-		$content_post_type = get_post_type( $this->post_id );
-
-		foreach( $restrictions['post_types'] as $key => $restriction ) {
-
-			if ( !is_numeric( $key ) ) {
-				continue;
-			}
-			
-			// post_type, taxonomy, allowed_value
-			
-			$restriction_taxomony = isset( $restriction['taxonomy'] ) ? $restriction['taxonomy'] : 'all';
-			
-			if ( $restriction['post_type'] == $content_post_type && $restriction_taxomony == 'all'  ) {
-				return true;
-			}
-
-			if ( $restriction['post_type'] == $content_post_type && $this->content_taxonomy_matches( $restriction_taxomony ) ) {
-				return true;
-			}
-		}
-		
+		return $showPaywall;
 	}
 
 	/* Determine if the user has pdf access

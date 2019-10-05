@@ -9,7 +9,7 @@
 
 #leaky_paywall_message {
 	box-shadow: 0 0 0.5em 0.25em rgba(0,0,0,0.125);
-    padding: 1.375em;
+    padding: 0.5em; /* Changed for Ice Dragon */
     border: .5em solid #FFFFFF;
     -webkit-border-radius: .5em;
 	-moz-border-radius: .5em;

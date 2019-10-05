@@ -1,13 +1,12 @@
 /* CSS Document */
 #ice-dragon-logo-on-paywall {
-	margin-top: -14px;
-	margin-left: -14px;
 	margin-right: 15px;
-	width: 90px;
+	height: 80px;
 	border: none;
-	float: left;
 	box-shadow: none;
 	opacity: 0.75;
+	flex-shrink: 0;
+	align-self: center;
 }
 
 .link-on-paywall:link, .link-on-paywall:visited .link-on-paywall:active, .leaky_paywall_message_wrap .link-on-paywall:hover {
@@ -16,4 +15,16 @@
 
 .leaky_paywall_message_wrap .link-on-paywall:hover {
 	text-decoration: underline;
+}
+
+#paywall-login-container {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 0;
+	align-content: center;
+}
+
+#paywall-login-text {
+	display: flex;
+	align-items: center;
 }

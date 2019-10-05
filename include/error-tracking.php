@@ -6,8 +6,8 @@
  * @access      public
  * @since       1.0
  */
-if ( !function_exists( 'leaky_paywall_errors' ) ) {
-	function leaky_paywall_errors() {
+if ( !function_exists( 'ice_dragon_paywall_errors' ) ) {
+	function ice_dragon_paywall_errors() {
 	    static $wp_error; // Will hold global variable safely
 	    return isset( $wp_error ) ? $wp_error : ( $wp_error = new WP_Error( NULL, NULL, NULL ) );
 	}
@@ -19,7 +19,7 @@ if ( !function_exists( 'leaky_paywall_errors' ) ) {
  * @access      public
  * @since       4.0.0
  */
-function leaky_paywall_get_error_messages_html( $error_id = '' ) {
+function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
 
 	$html   = '';
 	$errors = leaky_paywall_errors()->get_error_codes();
@@ -54,13 +54,13 @@ function leaky_paywall_get_error_messages_html( $error_id = '' ) {
  * @access      public
  * @since       4.0.0
  */
-function leaky_paywall_show_error_messages( $error_id = '' ) {
+function ice_dragon_paywall_show_error_messages( $error_id = '' ) {
 
 	if( leaky_paywall_errors()->get_error_codes() ) {
 
-		do_action( 'leaky_paywall_errors_before' );
-		echo leaky_paywall_get_error_messages_html( $error_id );
-		do_action( 'leaky_paywall_errors_after' );
+		do_action( 'ice_dragon_paywall_errors_before' );
+		echo ice_dragon_paywall_get_error_messages_html( $error_id );
+		do_action( 'ice_dragon_paywall_errors_after' );
 
 	}
 }
