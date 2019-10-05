@@ -66,7 +66,6 @@ function ice_dragon_paywall_plugins_loaded() {
 		$leaky_paywall = new Ice_Dragon_Paywall();
 		
 		require_once( 'functions.php' );
-		require_once( 'deprecated.php' );
 		require_once( 'shortcodes.php' );
 		require_once( 'metaboxes.php' );
 
