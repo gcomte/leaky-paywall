@@ -209,7 +209,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 					// they have access to some taxonomy, but not this one
 					if ( $access_rule['allowed'] == 'unlimited' && $access_rule['taxonomy'] != $restriction['taxonomy'] && $content_post_type == $restriction['post_type'] && $this->content_taxonomy_matches( $restriction['taxonomy'] ) ) {
-						
+
 						if ( $this->allowed_value_exceeded() ) {
 							$allows_access = false;
 						} else {
@@ -276,7 +276,7 @@ class Ice_Dragon_Paywall_Restrictions {
 		return $allows_access;
 	}
 
-	public function allowed_value_exceeded() 
+	public function allowed_value_exceeded()
 	{
 
 		$settings = get_leaky_paywall_settings();
@@ -306,7 +306,7 @@ class Ice_Dragon_Paywall_Restrictions {
 				if ( isset( $viewed_content[$content_post_type] ) && in_array( $this->post_id, array_keys( $viewed_content[$content_post_type]) ) ) {
 					return false;
 				}
-				
+
 				if ( $allowed_value == 0 ) {
 					return true;
 				} else if ( !empty( $viewed_content ) && $number_already_viewed >= $allowed_value ) {
@@ -320,7 +320,7 @@ class Ice_Dragon_Paywall_Restrictions {
 			}
 
 			if ( $restriction['post_type'] == $content_post_type && $this->content_taxonomy_matches( $restriction['taxonomy'] ) ) {
-				
+
 				// this only needs to calculate for this term (unless combined)
 				if ( 'on' == $settings['enable_combined_restrictions'] ) {
 					$allowed_value = $settings['combined_restrictions_total_allowed'];
@@ -329,7 +329,7 @@ class Ice_Dragon_Paywall_Restrictions {
 					$allowed_value = $restriction['allowed_value'];
 					$number_already_viewed = isset( $viewed_content[$content_post_type] ) ? $this->get_number_viewed_by_term( $restriction['taxonomy'] ) : 0;
 				}
-				
+
 				// first, see if the content has already been viewed. if so, let them view it (keys are the post_id)
 				if ( isset( $viewed_content[$content_post_type] ) && in_array( $this->post_id, array_keys( $viewed_content[$content_post_type]) ) ) {
 					return false;
@@ -564,7 +564,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	 */
 	public function visibility_restricts_access()
 	{
-        $paywallVisibility = get_post_meta( $this->post_id, '_issuem_leaky_paywall_visibility' );
+        $paywallVisibility = get_post_meta( $this->post_id, '_puzzle_ice_dragon_paywall_visibility' );
         $showPaywall = ((!$paywallVisibility[0] || $paywallVisibility[0] === '0') ? false : true );
 
 		return $showPaywall;

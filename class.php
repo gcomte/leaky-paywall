@@ -843,7 +843,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=help');?>" class="nav-tab<?php if($current_tab == 'help') { ?> nav-tab-active<?php } ?>"><?php _e('Help', 'leaky-paywall');?></a>
                     			*/ ?>
-                                <?php /* Added fro Ice Dragon */ ?>
+                                <?php /* Added for Ice Dragon */ ?>
                                 <a href="https://ice-dragon.ch" target="_blank">
                                     <img src="<?php echo ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
                                 </a>
@@ -1340,7 +1340,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        
 	                    </div>
 
-                        */ ?>
 						<p class="submit">
                             <?php /* Changed for Ice Dragon
                             <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'issuem-leaky-paywall' ) ?>" />
