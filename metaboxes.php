@@ -6,9 +6,9 @@
  * @since 2.0.0
  */
 
-if ( !function_exists( 'leaky_paywall_general_metaboxes' ) ) {
+if ( !function_exists( 'ice_dragon_paywall_general_metaboxes' ) ) {
 
-	function leaky_paywall_general_metaboxes() {
+	function ice_dragon_paywall_general_metaboxes() {
 	
 		$hidden_post_types = apply_filters( 'leaky_paywall_hidden_post_types_metaboxes', array( 'attachment', 'revision', 'nav_menu_item', 'lp_transaction', 'lp-coupons' ) );
 		$post_types = get_post_types( array(), 'objects' );
@@ -18,22 +18,22 @@ if ( !function_exists( 'leaky_paywall_general_metaboxes' ) ) {
 			if ( in_array( $post_type->name, $hidden_post_types ) ) 
 				continue;
 				
-			add_meta_box( 'leaky_paywall_content_visibility', __( 'Use Ice Dragon Paywall', 'issuem-leaky-paywall' ), 'leaky_paywall_content_visibility', $post_type->name, 'side' );
+			add_meta_box( 'ice_dragon_paywall_content_visibility', __( 'Ice Dragon Paywall', 'issuem-leaky-paywall' ), 'ice_dragon_paywall_content_visibility', $post_type->name, 'side' );
 		
 		}
 		
-		do_action( 'leaky_paywall_general_metaboxes' );
+		do_action( 'ice_dragon_paywall_general_metaboxes' );
 		
 	}
-	add_action( 'add_meta_boxes', 'leaky_paywall_general_metaboxes' );
+	add_action( 'add_meta_boxes', 'ice_dragon_paywall_general_metaboxes' );
 
 }
 
-if ( !function_exists( 'leaky_paywall_content_visibility' ) ) {
+if ( !function_exists( 'ice_dragon_paywall_content_visibility' ) ) {
 
-	function leaky_paywall_content_visibility( $post ) {
+	function ice_dragon_paywall_content_visibility( $post ) {
 	
-		$visibility = get_post_meta( $post->ID, '_issuem_leaky_paywall_visibility' );
+		$visibility = get_post_meta( $post->ID, '_puzzle_ice_dragon_paywall_visibility' );
         $showPaywall = ((!$visibility[0] || $visibility[0] === '0') ? false : true );
 
         $checked = ($showPaywall ? ' checked="checked"' : '');
@@ -46,9 +46,9 @@ if ( !function_exists( 'leaky_paywall_content_visibility' ) ) {
 
 }
 
-if ( !function_exists( 'save_leaky_paywall_content_visibility' ) ) {
+if ( !function_exists( 'save_ice_dragon_paywall_content_visibility' ) ) {
 
-	function save_leaky_paywall_content_visibility( $post_id ) {
+	function save_ice_dragon_paywall_content_visibility( $post_id ) {
 	
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
@@ -78,8 +78,8 @@ if ( !function_exists( 'save_leaky_paywall_content_visibility' ) ) {
 		/* OK, it's safe for us to save the data now. */
         $visibility = isset($_POST['ice_dragon_post_visibility']);
 			
-        update_post_meta( $post_id, '_issuem_leaky_paywall_visibility', $visibility );
+        update_post_meta( $post_id, '_puzzle_ice_dragon_paywall_visibility', $visibility );
 	}
-	add_action( 'save_post', 'save_leaky_paywall_content_visibility' );
+	add_action( 'save_post', 'save_ice_dragon_paywall_content_visibility' );
 	
 }

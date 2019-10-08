@@ -1419,7 +1419,7 @@ if ( !function_exists( 'build_leaky_paywall_subscription_levels_row' ) ) {
        				</div>
         		</td>
 			</tr>
-        		
+
 			<tr>
 				<th><?php _e( 'Access Options', 'leaky-paywall' ); ?></th>
 				<td id="issuem-leaky-paywall-subsciption-row-<?php echo $row_key; ?>-post-types">
@@ -1431,14 +1431,14 @@ if ( !function_exists( 'build_leaky_paywall_subscription_levels_row' ) ) {
 							<th>Taxonomy <span style="font-weight: normal; font-size: 11px; color: #999;"> Category,tag,etc.</span></th>
 							<th>&nbsp;</th>
 						</tr>
-					
-						<?php 
+
+						<?php
 							$last_key = -1;
 							if ( !empty( $level['post_types'] ) ) {
 								foreach( $level['post_types'] as $select_post_key => $select_post_type ) {
-									
+
 									build_leaky_paywall_subscription_row_post_type( $select_post_type, $select_post_key, $row_key );
-									
+
 									$last_key = $select_post_key;
 								}
 							}
@@ -1446,7 +1446,7 @@ if ( !function_exists( 'build_leaky_paywall_subscription_levels_row' ) ) {
 					</table>
 				</td>
 			</tr>
-		
+
 			<tr>
 				<th>&nbsp;</th>
 				<td>
