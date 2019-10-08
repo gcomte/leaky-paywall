@@ -131,8 +131,15 @@ class Ice_Dragon_Paywall_Restrictions {
 		}
 
 		// check if content is set to be open to everyone
-		return $this->visibility_restricts_access();
+        if ($this->visibility_restricts_access() !== null) {
+		    return $this->visibility_restricts_access();
+        }
+        // check if content is restricted based on main restriction settings
+        if ( $this->content_restricted_by_settings() ) {
+            return true;
+        }
 
+        return false;
 	}
 
 	public function is_single() 
@@ -555,8 +562,8 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	}
 
-		/**
-	 * Determine if the current content can be viewed based on the Leaky Paywall visibility settings on the content item
+    /**
+	 * Determine if the current content can be viewed based on individual settings
 	 *
 	 * @since 4.10.3
 	 *
@@ -565,10 +572,48 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function visibility_restricts_access()
 	{
         $paywallVisibility = get_post_meta( $this->post_id, '_puzzle_ice_dragon_paywall_visibility' );
-        $showPaywall = ((!$paywallVisibility[0] || $paywallVisibility[0] === '0') ? false : true );
 
-		return $showPaywall;
+        if ($paywallVisibility[0]['visibility_type'] === 'always') {
+            return true;
+        }
+
+        if($paywallVisibility[0]['visibility_type'] === 'never') {
+            return false;
+        }
 	}
+
+    /**
+     * Check if the Leaky Paywall visibility settings for this post restrict its access to the current user
+     *
+     * @since 4.10.3
+     *
+     * @param object $post The post object
+     *
+     * @return bool $is_restricted
+     */
+    public function content_restricted_by_settings() {
+        $restrictions = $this->get_restriction_settings();
+        if ( empty( $restrictions ) ) {
+            return false;
+        }
+        $content_post_type = get_post_type( $this->post_id );
+        foreach( $restrictions['post_types'] as $key => $restriction ) {
+            if ( !is_numeric( $key ) ) {
+                continue;
+            }
+
+            // post_type, taxonomy, allowed_value
+
+            $restriction_taxomony = isset( $restriction['taxonomy'] ) ? $restriction['taxonomy'] : 'all';
+
+            if ( $restriction['post_type'] == $content_post_type && $restriction_taxomony == 'all'  ) {
+                return true;
+            }
+            if ( $restriction['post_type'] == $content_post_type && $this->content_taxonomy_matches( $restriction_taxomony ) ) {
+                return true;
+            }
+        }
+    }
 
 	/* Determine if the user has pdf access
 	 *

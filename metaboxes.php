@@ -32,14 +32,20 @@ if ( !function_exists( 'ice_dragon_paywall_general_metaboxes' ) ) {
 if ( !function_exists( 'ice_dragon_paywall_content_visibility' ) ) {
 
 	function ice_dragon_paywall_content_visibility( $post ) {
-	
-		$visibility = get_post_meta( $post->ID, '_puzzle_ice_dragon_paywall_visibility' );
-        $showPaywall = ((!$visibility[0] || $visibility[0] === '0') ? false : true );
 
-        $checked = ($showPaywall ? ' checked="checked"' : '');
+        $visibility = get_post_meta( $post->ID, '_puzzle_ice_dragon_paywall_visibility', true );
 
-        echo '<input id="use-ice-dragon-checkbox" type="checkbox" name="ice_dragon_post_visibility"' . $checked . '>';
-        echo '<label for="use-ice-dragon-checkbox">' . sprintf( __( 'Show a paywall for this %s', 'issuem-leaky-paywall' ), $post->post_type ) . '</label>';
+        $defaults = array(
+            'visibility_type' 		=> 'default',
+        );
+        $visibility = wp_parse_args( $visibility, $defaults );
+
+        echo '<label for="leaky-paywall-visibility">' . sprintf( __( 'This %s should...', 'issuem-leaky-paywall' ), $post->post_type ) . '</label> ';
+        echo '<select id="issuem-leaky-paywall-visibility-type" name="ice_dragon_visibility_type">';
+        echo '  <option value="default" ' . selected( $visibility['visibility_type'], 'default', true ) . '>' . __( "obey Ice Dragon defaults.", 'issuem-leaky-paywall' ) . '</option>';
+        echo '  <option value="always" ' . selected( $visibility['visibility_type'], 'always', true ) . '>' . __( 'always show a paywall.', 'issuem-leaky-paywall' ) . '</option>';
+        echo '  <option value="never" ' . selected( $visibility['visibility_type'], 'never', true ) . '>' . __( 'never show a paywall.', 'issuem-leaky-paywall' ) . '</option>';
+        echo '</select>';
 
         wp_nonce_field( 'ice_dragon_content_visibility_meta_box', 'ice_dragon_content_visibility_meta_box_nonce' );
 	}
@@ -74,12 +80,16 @@ if ( !function_exists( 'save_ice_dragon_paywall_content_visibility' ) ) {
 		if ( ! ( current_user_can( 'edit_pages', $post_id ) || current_user_can( 'edit_posts', $post_id ) ) ) {
 			return;
 		}
-	
+
 		/* OK, it's safe for us to save the data now. */
-        $visibility = isset($_POST['ice_dragon_post_visibility']);
-			
-        update_post_meta( $post_id, '_puzzle_ice_dragon_paywall_visibility', $visibility );
-	}
+        if (isset($_POST['ice_dragon_visibility_type'])) {
+            $visibility_type = $_POST['ice_dragon_visibility_type'];
+            update_post_meta( $post_id, '_puzzle_ice_dragon_paywall_visibility', array('visibility_type' => $visibility_type) );
+        } else {
+            delete_post_meta( $post_id, '_puzzle_ice_dragon_paywall_visibility' );
+        }
+
+    }
 	add_action( 'save_post', 'save_ice_dragon_paywall_content_visibility' );
 	
 }
