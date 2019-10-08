@@ -260,13 +260,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
                 /* Added for Ice Dragon */
                 wp_enqueue_style('ice_dragon_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', LEAKY_PAYWALL_VERSION);
-        }
-
-			if ( 'post.php' === $hook_suffix || 'post-new.php' === $hook_suffix )
-				wp_enqueue_style( 'leaky_paywall_post_style', ICE_DRAGON_PAYWALL_URL . 'css/issuem-leaky-paywall-post.css', '', LEAKY_PAYWALL_VERSION );
-			
+            }
 		}
-	
+
 		/**
 		 * Enqueues backend IssueM styles
 		 *
@@ -290,12 +286,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
             	'ajaxurl' => admin_url( 'admin-ajax.php' ),
             	'lpNoticeNonce' => wp_create_nonce( 'leaky-paywall-notice-nonce')
              ) );
-
-				
-			if ( 'post.php' === $hook_suffix|| 'post-new.php' === $hook_suffix ) {
-				wp_enqueue_script( 'leaky_paywall_post_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-post.js', array( 'jquery' ), LEAKY_PAYWALL_VERSION );
-			}
-			
 		}
 		
 		/**
