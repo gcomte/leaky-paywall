@@ -20,7 +20,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function display_viewed_content_debug() 
 	{
 
-		if ( !isset( $_GET['leaky_paywall_debug'] ) ) {
+		if ( !isset( $_GET['lpaywall_debug'] ) ) {
 			return;
 		}
 		?>
@@ -37,14 +37,14 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function process_content_restrictions() 
 	{
 
-		do_action( 'leaky_paywall_before_process_requests', get_ice_dragon_paywall_settings() );
+		do_action( 'ice_dragon_paywall_before_process_requests', get_ice_dragon_paywall_settings() );
 
 		if ( !$this->is_content_restricted() ) {
 			return;
 		}
 
 		// content is restricted, so see if the current user can access it
-		if ( apply_filters( 'leaky_paywall_current_user_can_access', $this->current_user_can_access() ) ) {
+		if ( apply_filters( 'ice_dragon_paywall_current_user_can_access', $this->current_user_can_access() ) ) {
 			return;
 		}
 
@@ -52,14 +52,14 @@ class Ice_Dragon_Paywall_Restrictions {
 
 		$this->display_subscribe_nag();
 
-		do_action( 'leaky_paywall_is_restricted_content' );
+		do_action( 'ice_dragon_paywall_is_restricted_content' );
 
 	}
 
 	public function process_js_content_restrictions() 
 	{
-		add_action( 'wp_ajax_nopriv_leaky_paywall_process_cookie', array( $this, 'check_js_restrictions' ) );
-		add_action( 'wp_ajax_leaky_paywall_process_cookie', array( $this, 'check_js_restrictions' ) );
+		add_action( 'wp_ajax_nopriv_lpaywall_process_cookie', array( $this, 'check_js_restrictions' ) );
+		add_action( 'wp_ajax_lpaywall_process_cookie', array( $this, 'check_js_restrictions' ) );
 
 	}
 
@@ -75,13 +75,13 @@ class Ice_Dragon_Paywall_Restrictions {
 		}
 
 		// content is restricted, so see if the current user can access it
-		if ( apply_filters( 'leaky_paywall_current_user_can_access', $this->current_user_can_access() ) ) {
+		if ( apply_filters( 'ice_dragon_paywall_current_user_can_access', $this->current_user_can_access() ) ) {
 			echo json_encode( 'do not show paywall' );
 			exit();
 		}
 
 		echo json_encode( $this->get_subscribe_nag() );
-		do_action( 'leaky_paywall_is_restricted_content' );
+		do_action( 'ice_dragon_paywall_is_restricted_content' );
 
 		exit();
 
@@ -110,7 +110,7 @@ class Ice_Dragon_Paywall_Restrictions {
 			$is_restricted = true;
 		}
 
-		return apply_filters( 'leaky_paywall_filter_is_restricted', $is_restricted, $this->get_restriction_settings(), $this->post_id );
+		return apply_filters( 'ice_dragon_paywall_filter_is_restricted', $is_restricted, $this->get_restriction_settings(), $this->post_id );
 	}
 
 	public function content_matches_restriction_rules() 
@@ -121,7 +121,7 @@ class Ice_Dragon_Paywall_Restrictions {
 		}
 
 		// allow admins to view all content
-		if ( current_user_can( apply_filters( 'leaky_paywall_current_user_can_view_all_content', 'manage_options' ) ) ) {
+		if ( current_user_can( apply_filters( 'ice_dragon_paywall_current_user_can_view_all_content', 'manage_options' ) ) ) {
 			return false;
 		}
 
@@ -337,7 +337,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	 	$message = $this->the_content_paywall_message();
 	 	$new_content = $this->get_nag_excerpt( $content ) . $message;
 
-		return apply_filters( 'leaky_paywall_subscribe_or_login_message', $new_content, $message, $content );
+		return apply_filters( 'ice_dragon_paywall_subscribe_or_login_message', $new_content, $message, $content );
 	 }
 
 	 public function get_nag_excerpt( $content ) 
@@ -350,7 +350,7 @@ class Ice_Dragon_Paywall_Restrictions {
 			$excerpt = substr( strip_tags( $content ), 0, 100 );
 		}
 
-	 	return apply_filters( 'leaky_paywall_nag_excerpt', strip_shortcodes( $excerpt ), $this->post_id );
+	 	return apply_filters( 'ice_dragon_paywall_nag_excerpt', strip_shortcodes( $excerpt ), $this->post_id );
 	 }
 
 	public function the_content_paywall_message() 
@@ -358,7 +358,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 		$settings = get_ice_dragon_paywall_settings();
 		
-		$message  = '<div class="leaky_paywall_message_wrap"><div id="leaky_paywall_message">';
+		$message  = '<div class="lpaywall_message_wrap"><div id="lpaywall_message">';
 		if ( !is_user_logged_in() ) {
             $message .= '<a class="link-on-paywall" href="https://ice-dragon.ch" target="_blank">';
             $message .= '<div id="paywall-login-container">';
@@ -414,9 +414,6 @@ class Ice_Dragon_Paywall_Restrictions {
 		if ( !empty( $settings['price'] ) ) {
 			$message = str_ireplace( '{{PRICE}}', $settings['price'], $message );
 		}
-		if ( !empty( $settings['interval_count'] ) && !empty( $settings['interval'] ) ) {
-			$message = str_ireplace( '{{LENGTH}}', leaky_paywall_human_readable_interval( $settings['interval_count'], $settings['interval'] ), $message );
-		}
 
 		return $message;
 
@@ -441,7 +438,7 @@ class Ice_Dragon_Paywall_Restrictions {
 			$settings['page_for_register']
 		);
 
-		if ( in_array( $this->post_id, apply_filters( 'leaky_paywall_unblockable_content', $unblockable_content ) ) ) {
+		if ( in_array( $this->post_id, apply_filters( 'ice_dragon_paywall_unblockable_content', $unblockable_content ) ) ) {
 			return true;
 		}
 
@@ -553,7 +550,7 @@ class Ice_Dragon_Paywall_Restrictions {
 			$content_viewed = array();
 		}
 
-		return apply_filters( 'leaky_paywall_available_content', $content_viewed );
+		return apply_filters( 'ice_dragon_paywall_available_content', $content_viewed );
 
 	}
 
@@ -579,8 +576,8 @@ class Ice_Dragon_Paywall_Restrictions {
 	 */
 	public function get_cookie_name() 
 	{
-		$site = leaky_paywall_get_current_site();
-		return apply_filters( 'leaky_paywall_restriction_cookie_name', $this->cookie_name . $site );
+		$site = lpaywall_get_current_site();
+		return apply_filters( 'ice_dragon_paywall_restriction_cookie_name', $this->cookie_name . $site );
 	}
 
 	/**
@@ -615,7 +612,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 		$expiration = time() + ( $settings['cookie_expiration'] * $multiplier );
 
-		return apply_filters( 'leaky_paywall_expiration_time', $expiration );
+		return apply_filters( 'ice_dragon_paywall_expiration_time', $expiration );
 
 	}
 

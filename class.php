@@ -132,7 +132,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     || 'index.php' === $hook_suffix
                     || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
-                wp_enqueue_style('leaky_paywall_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/issuem-leaky-paywall-admin.css', '', LEAKY_PAYWALL_VERSION);
+                wp_enqueue_style('lpaywall_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/lpaywall-admin.css', '', LPAYWALL_VERSION);
 
                 /* Added for Ice Dragon */
                 wp_enqueue_style('ice_dragon_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', ICE_DRAGON_VERSION);
@@ -147,11 +147,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		function admin_wp_enqueue_scripts( $hook_suffix ) {
 			
 			if ( 'toplevel_page_' . TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
-				wp_enqueue_script( 'leaky_paywall_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-settings.js', array( 'jquery' ), LEAKY_PAYWALL_VERSION );
+				wp_enqueue_script( 'lpaywall_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-settings.js', array( 'jquery' ), LPAYWALL_VERSION );
 			}
 
             if ( 'post.php' === $hook_suffix|| 'post-new.php' === $hook_suffix ) {
-                wp_enqueue_script( 'leaky_paywall_post_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-post.js', array( 'jquery' ), ICE_DRAGON_PAYWALL_URL );
+                wp_enqueue_script( 'lpaywall_post_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-post.js', array( 'jquery' ), ICE_DRAGON_PAYWALL_URL );
             }
 		}
 		
@@ -165,7 +165,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			$settings = $this->get_settings();
 			
 			if ( $settings['css_style'] == 'default' ) {
-				wp_enqueue_style( 'issuem-leaky-paywall', ICE_DRAGON_PAYWALL_URL . '/css/issuem-leaky-paywall.css', '', LEAKY_PAYWALL_VERSION );
+				wp_enqueue_style( 'issuem-leaky-paywall', ICE_DRAGON_PAYWALL_URL . '/css/lpaywall.css', '', LPAYWALL_VERSION );
 				// Added for Ice Dragon
 				wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', ICE_DRAGON_VERSION );
 			}
@@ -176,13 +176,13 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					return;
 				}
 
-				wp_enqueue_script( 'js_cookie_js', ICE_DRAGON_PAYWALL_URL . 'js/js-cookie.js', array( 'jquery' ), LEAKY_PAYWALL_VERSION );
-				wp_enqueue_script( 'leaky_paywall_cookie_js', ICE_DRAGON_PAYWALL_URL . 'js/leaky-paywall-cookie.js', array( 'jquery' ), LEAKY_PAYWALL_VERSION );
+				wp_enqueue_script( 'js_cookie_js', ICE_DRAGON_PAYWALL_URL . 'js/js-cookie.js', array( 'jquery' ), LPAYWALL_VERSION );
+				wp_enqueue_script( 'lpaywall_cookie_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-cookie.js', array( 'jquery' ), LPAYWALL_VERSION );
 
 				$post_container = $settings['js_restrictions_post_container'];
 				$page_container = $settings['js_restrictions_page_container'];
 
-				wp_localize_script( 'leaky_paywall_cookie_js', 'leaky_paywall_cookie_ajax',
+				wp_localize_script( 'lpaywall_cookie_js', 'lpaywall_cookie_ajax',
 		            array( 
 		            	'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
 		            	'post_container'	=> $post_container,
@@ -223,11 +223,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'from_name'						=> get_option( 'blogname' ), /* Site Specific */
 				'from_email'					=> get_option( 'admin_email' ), /* Site Specific */
 				'test_mode'						=> 'off',
-				'ice_dragon_paywall_currency'		=> 'USD',
-				'ice_dragon_paywall_currency_position'		=> 'left',
-				'ice_dragon_thousand_separator'	=> ',',
-				'ice_dragon_decimal_separator'	=> '.',
-				'ice_dragon_decimal_number'	=> '2',
+				'lpaywall_currency'		=> 'USD',
+				'lpaywall_currency_position'		=> 'left',
+				'lpaywall_thousand_separator'	=> ',',
+				'lpaywall_decimal_separator'	=> '.',
+				'lpaywall_decimal_number'	=> '2',
 				'restrict_pdf_downloads' 		=> 'off',
 				'enable_combined_restrictions'  => 'off',
 				'combined_restrictions_total_allowed' => '',
@@ -300,11 +300,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				$tab = '';
 			}
 
-			$settings_tabs = apply_filters('leaky_paywall_settings_tabs', array( 'general', 'subscriptions', 'payments' ) );
+			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array( 'general', 'subscriptions', 'payments' ) );
 
-			$current_tab = apply_filters( 'leaky_paywall_current_tab', $tab, $settings_tabs );
+			$current_tab = apply_filters( 'ice_dragon_paywall_current_tab', $tab, $settings_tabs );
 
-			if ( isset( $_REQUEST['update_leaky_paywall_settings'] ) ) {
+			if ( isset( $_REQUEST['update_lpaywall_settings'] ) ) {
 
 				if ( $current_tab == 'general' ) {
 
@@ -397,34 +397,34 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 				if ( $current_tab == 'payments' ) {
 
-					if ( !empty( $_REQUEST['leaky_paywall_currency'] ) )
-						$settings['leaky_paywall_currency'] = trim( $_REQUEST['leaky_paywall_currency'] );
+					if ( !empty( $_REQUEST['lpaywall_currency'] ) )
+						$settings['lpaywall_currency'] = trim( $_REQUEST['lpaywall_currency'] );
 
-					if ( isset( $_POST['leaky_paywall_currency_position'] ) ) {
-						$settings['leaky_paywall_currency_position'] = trim( $_POST['leaky_paywall_currency_position'] );
+					if ( isset( $_POST['lpaywall_currency_position'] ) ) {
+						$settings['lpaywall_currency_position'] = trim( $_POST['lpaywall_currency_position'] );
 					}
 
-					if ( isset( $_POST['leaky_paywall_thousand_separator'] ) ) {
-						$settings['leaky_paywall_thousand_separator'] = trim( $_POST['leaky_paywall_thousand_separator'] );
+					if ( isset( $_POST['lpaywall_thousand_separator'] ) ) {
+						$settings['lpaywall_thousand_separator'] = trim( $_POST['lpaywall_thousand_separator'] );
 					}
 
-					if ( isset( $_POST['leaky_paywall_decimal_separator'] ) ) {
-						$settings['leaky_paywall_decimal_separator'] = trim( $_POST['leaky_paywall_decimal_separator'] );
+					if ( isset( $_POST['lpaywall_decimal_separator'] ) ) {
+						$settings['lpaywall_decimal_separator'] = trim( $_POST['lpaywall_decimal_separator'] );
 					}
 
-					if ( isset( $_POST['leaky_paywall_decimal_number'] ) ) {
-						$settings['leaky_paywall_decimal_number'] = trim( $_POST['leaky_paywall_decimal_number'] );
+					if ( isset( $_POST['lpaywall_decimal_number'] ) ) {
+						$settings['lpaywall_decimal_number'] = trim( $_POST['lpaywall_decimal_number'] );
 					}
 
 				}
 
 				
 
-				$settings = apply_filters( 'leaky_paywall_update_settings_settings', $settings, $current_tab );
+				$settings = apply_filters( 'ice_dragon_paywall_update_settings_settings', $settings, $current_tab );
 				$this->update_settings( $settings );
 				$settings_saved = true;
 				
-				do_action( 'leaky_paywall_update_settings', $settings );
+				do_action( 'ice_dragon_paywall_update_settings', $settings );
 				
 			}
 			
@@ -470,11 +470,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     		</h2>
                     	<?php } // endif ?>
   		
-						<?php do_action('leaky_paywall_before_settings', $current_tab ); ?>
+						<?php do_action('ice_dragon_paywall_before_settings', $current_tab ); ?>
 
 						<?php if ( $current_tab == 'general' ) : ?>
 
-						<?php do_action('leaky_paywall_before_general_settings'); ?>
+						<?php do_action('ice_dragon_paywall_before_general_settings'); ?>
 	                    
 	                    <div id="modules" class="postbox">
 	                    
@@ -490,7 +490,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        		<?php 
 	                        	} ?>
 	                        
-	                        <table id="leaky_paywall_administrator_options" class="form-table">
+	                        <table id="lpaywall_administrator_options" class="form-table">
 	                            <tr>
 	                                <th><?php _e( 'Custom Excerpt Length', 'leaky-paywall' ); ?></th>
 	                                <td>
@@ -531,7 +531,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                                </td>
 	                            </tr>
 
-	                            <?php wp_nonce_field( 'issuem_leaky_general_options', 'issuem_leaky_general_options_nonce' ); ?>
+	                            <?php wp_nonce_field( 'pitc_ice_dragon_general_options', 'pitc_ice_dragon_general_options_nonce' ); ?>
 
 	                        </table>
                                                
@@ -539,19 +539,19 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        
 	                    </div>
 
-	                    <?php do_action('leaky_paywall_after_general_settings'); ?>
+	                    <?php do_action('ice_dragon_paywall_after_general_settings'); ?>
 
-	                    <?php do_action( 'leaky_paywall_settings_form', $settings ); // here for backwards compatibility ?>
+	                    <?php do_action( 'ice_dragon_paywall_settings_form', $settings ); // here for backwards compatibility ?>
 
 	                    <p class="submit">
-                            <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
+                            <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
                         </p>
 
 	                    <?php endif; ?>
 
 	                    <?php if ( $current_tab == 'payments' ) : ?>
 
-	                    <?php do_action('leaky_paywall_before_payments_settings'); ?>
+	                    <?php do_action('ice_dragon_paywall_before_payments_settings'); ?>
 
 	                    <?php // currency options ?>
 
@@ -563,16 +563,16 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			                
 			                <div class="inside">
 			                
-			                <table id="leaky_paywall_currency_options" class="form-table">
+			                <table id="lpaywall_currency_options" class="form-table">
 			                
 			                    <tr>
 			                        <th><?php _e( 'Currency', 'leaky-paywall' ); ?></th>
 			                        <td>
-			                        	<select id="leaky_paywall_currency" name="leaky_paywall_currency">
+			                        	<select id="lpaywall_currency" name="lpaywall_currency">
 				                        	<?php
-											$currencies = leaky_paywall_supported_currencies();
+											$currencies = lpaywall_supported_currencies();
 											foreach ( $currencies as $key => $currency ) {
-				                        		echo '<option value="' . $key . '" ' . selected( $key, $settings['leaky_paywall_currency'], true ) . '>' . $currency['label'] . ' - ' . $currency['symbol'] . '</option>';
+				                        		echo '<option value="' . $key . '" ' . selected( $key, $settings['lpaywall_currency'], true ) . '>' . $currency['label'] . ' - ' . $currency['symbol'] . '</option>';
 											}
 				                        	?>
 			                        	</select>
@@ -583,12 +583,12 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			                    <tr>
 			                        <th><?php _e( 'Currency Position', 'leaky-paywall' ); ?></th>
 			                        <td>
-			                        	<select id="leaky_paywall_currency_position" name="leaky_paywall_currency_position">
+			                        	<select id="lpaywall_currency_position" name="lpaywall_currency_position">
 
-			                        		<option value="left" <?php selected( 'left', $settings['leaky_paywall_currency_position'] ); ?>>Left ($99.99)</option>
-			                        		<option value="right" <?php selected( 'right', $settings['leaky_paywall_currency_position'] ); ?>>Right (99.99$)</option>
-			                        		<option value="left_space" <?php selected( 'left_space', $settings['leaky_paywall_currency_position'] ); ?>>Left with space ($ 99.99)</option>
-			                        		<option value="right_space" <?php selected( 'right_space', $settings['leaky_paywall_currency_position'] ); ?>>Right with space (99.99 $)</option>
+			                        		<option value="left" <?php selected( 'left', $settings['lpaywall_currency_position'] ); ?>>Left ($99.99)</option>
+			                        		<option value="right" <?php selected( 'right', $settings['lpaywall_currency_position'] ); ?>>Right (99.99$)</option>
+			                        		<option value="left_space" <?php selected( 'left_space', $settings['lpaywall_currency_position'] ); ?>>Left with space ($ 99.99)</option>
+			                        		<option value="right_space" <?php selected( 'right_space', $settings['lpaywall_currency_position'] ); ?>>Right with space (99.99 $)</option>
 			                        	</select>
 			                        </td>
 			                    </tr>
@@ -596,25 +596,25 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			                    <tr>
 			                        <th><?php _e( 'Thousand Separator', 'leaky-paywall' ); ?></th>
 			                        <td>
-			                        	<input type="text" class="small-text" id="leaky_paywall_thousand_separator" name="leaky_paywall_thousand_separator" value="<?php echo $settings['leaky_paywall_thousand_separator']; ?>">
+			                        	<input type="text" class="small-text" id="lpaywall_thousand_separator" name="lpaywall_thousand_separator" value="<?php echo $settings['lpaywall_thousand_separator']; ?>">
 			                        </td>
 			                    </tr>
 
 			                    <tr>
 			                        <th><?php _e( 'Decimal Separator', 'leaky-paywall' ); ?></th>
 			                        <td>
-			                        	<input type="text" class="small-text" id="leaky_paywall_decimal_separator" name="leaky_paywall_decimal_separator" value="<?php echo $settings['leaky_paywall_decimal_separator']; ?>">
+			                        	<input type="text" class="small-text" id="lpaywall_decimal_separator" name="lpaywall_decimal_separator" value="<?php echo $settings['lpaywall_decimal_separator']; ?>">
 			                        </td>
 			                    </tr>
 
 			                    <tr>
 			                        <th><?php _e( 'Number of Decimals', 'leaky-paywall' ); ?></th>
 			                        <td>
-			                        	<input type="number" class="small-text" id="leaky_paywall_decimal_number" name="leaky_paywall_decimal_number" value="<?php echo $settings['leaky_paywall_decimal_number']; ?>" min="0" step="1">
+			                        	<input type="number" class="small-text" id="lpaywall_decimal_number" name="lpaywall_decimal_number" value="<?php echo $settings['lpaywall_decimal_number']; ?>" min="0" step="1">
 			                        </td>
 			                    </tr>
 
-			                    <?php do_action( 'leaky_paywall_after_currency_settings', $settings ); ?>
+			                    <?php do_action( 'ice_dragon_paywall_after_currency_settings', $settings ); ?>
 
 			                </table>
 
@@ -623,17 +623,17 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			            </div>
 
 			            <p class="submit">
-		                    <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
+		                    <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
 		                </p>
 
-			            <?php do_action( 'leaky_paywall_after_payments_settings', $settings ); ?>
+			            <?php do_action( 'ice_dragon_paywall_after_payments_settings', $settings ); ?>
 
 	                    <?php endif; // payment tabs ?>
 
 
 	                    <?php if ( $current_tab == 'subscriptions' ) : ?>
 
-	                    <?php do_action('leaky_paywall_before_subscriptions_settings'); ?>
+	                    <?php do_action('ice_dragon_paywall_before_subscriptions_settings'); ?>
 	                    
 	                    <div id="modules" class="postbox leaky-paywall-restriction-settings">
 	                    
@@ -643,7 +643,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        
 	                        <div class="inside">
 	                        
-	                        <table id="leaky_paywall_default_restriction_options" class="form-table">
+	                        <table id="lpaywall_default_restriction_options" class="form-table">
 
 	                        	<tr class="restriction-options">
 									<th>
@@ -668,7 +668,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					                        		if ( !is_numeric( $key ) )
 						                        		continue;
 
-					                        		build_leaky_paywall_default_restriction_row( $restriction, $key );
+					                        		build_lpaywall_default_restriction_row( $restriction, $key );
 					                        		
 					                        		$last_key = $key;
 					                        		
@@ -684,11 +684,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 									<th>&nbsp;</th>
 									<td style="padding-top: 0;">
 								        <script type="text/javascript" charset="utf-8">
-								            var leaky_paywall_restriction_row_key = <?php echo $last_key; ?>;
+								            var lpaywall_restriction_row_key = <?php echo $last_key; ?>;
 								        </script>
 										
 				                    	<p>
-				                       		<input class="button-secondary" id="add-restriction-row" class="add-new-issuem-leaky-paywall-restriction-row" type="submit" name="add_leaky_paywall_restriction_row" value="<?php _e( '+ Add Restricted Content', 'leaky-paywall' ); ?>" />
+				                       		<input class="button-secondary" id="add-restriction-row" class="add-new-issuem-leaky-paywall-restriction-row" type="submit" name="add_lpaywall_restriction_row" value="<?php _e( '+ Add Restricted Content', 'leaky-paywall' ); ?>" />
 				                    	</p>
 				                    	<p class="description"><?php _e( 'By default all content is allowed.', 'leaky-paywall' ); ?></p>
 			                        </td>
@@ -736,10 +736,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                    </div>
 
 						<p class="submit">
-                            <?php /* Changed for Ice Dragon
-                            <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'issuem-leaky-paywall' ) ?>" />
-                            */ ?>
-                            <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'puzzle-ice-dragon' ) ?>" />
+                            <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'puzzle-ice-dragon' ) ?>" />
                         </p>
 	                     
 
@@ -770,7 +767,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
             $settings = $this->get_settings();
 
             $settings['version'] = ICE_DRAGON_VERSION;
-			$settings['db_version'] = LEAKY_PAYWALL_DB_VERSION;
+			$settings['db_version'] = LPAYWALL_DB_VERSION;
 
 			$this->update_settings( $settings );
 			
@@ -786,13 +783,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			$nonce = $_POST['nonce'];
 	
 			if ( ! wp_verify_nonce( $nonce, 'leaky-paywall-notice-nonce' ) )
-				die ( 'Busted!'); 
-	
-			$current_user = wp_get_current_user();
-	
-			update_user_meta( $current_user->ID, 'leaky_paywall_rss_item_notice_link', 1 );
-	
-			echo get_user_meta( $current_user->ID, 'leaky_paywall_rss_item_notice_link', true );
+				die ( 'Busted!');
 	
 			exit;
 	

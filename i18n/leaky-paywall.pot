@@ -15,7 +15,7 @@ msgstr ""
 #. #-#-#-#-#  issuem-leaky-paywall.pot (Leaky Paywall 4.1.3)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: class.php:87
-msgid "Leaky Paywall gcomgcom"
+msgid "Leaky Paywall"
 msgstr ""
 
 #: class.php:89

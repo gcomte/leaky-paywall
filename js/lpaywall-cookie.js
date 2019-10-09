@@ -15,20 +15,20 @@
 				if ( post_id > 0 ) {
 
 					var data = {
-						action: 'leaky_paywall_process_cookie',
+						action: 'lpaywall_process_cookie',
 						post_id: post_id
 					};
 
-					$.get(leaky_paywall_cookie_ajax.ajaxurl, data, function(data) {
+					$.get(lpaywall_cookie_ajax.ajaxurl, data, function(data) {
 						var response;
 	
 						if ( data ) {
 
 							response = JSON.parse(data);
 
-							if ( response.indexOf("leaky_paywall_message_wrap") >= 0 ) {
+							if ( response.indexOf("lpaywall_message_wrap") >= 0 ) {
 								
-								var content = $( leaky_paywall_cookie_ajax.post_container );
+								var content = $( lpaywall_cookie_ajax.post_container );
 								
 								content.html(response);
 								
@@ -52,20 +52,20 @@
 				if ( post_id > 0 ) {
 
 					var data = {
-						action: 'leaky_paywall_process_cookie',
+						action: 'lpaywall_process_cookie',
 						post_id: post_id
 					};
 
-					$.get(leaky_paywall_cookie_ajax.ajaxurl, data, function(data) {
+					$.get(lpaywall_cookie_ajax.ajaxurl, data, function(data) {
 						var response;
 	
 						if ( data ) {
 
 							response = JSON.parse(data);
 
-							if ( response.indexOf("leaky_paywall_message_wrap") >= 0 ) {
+							if ( response.indexOf("lpaywall_message_wrap") >= 0 ) {
 								
-								var content = $( leaky_paywall_cookie_ajax.page_container );
+								var content = $( lpaywall_cookie_ajax.page_container );
 								
 								content.html(response);
 								

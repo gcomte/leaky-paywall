@@ -18,15 +18,15 @@ if ( !function_exists( 'get_ice_dragon_paywall_settings' ) ) {
 	 */
 	function get_ice_dragon_paywall_settings() {
 	
-		global $leaky_paywall;
+		global $ice_dragon_paywall;
 		
-		return $leaky_paywall->get_settings();
+		return $ice_dragon_paywall->get_settings();
 		
 	}
 	
 }
  
-if ( !function_exists( 'update_leaky_paywall_settings' ) ) {
+if ( !function_exists( 'update_lpaywall_settings' ) ) {
 
 	/**
 	 * Helper function to save zeen101's Leaky Paywall settings for current site
@@ -35,32 +35,32 @@ if ( !function_exists( 'update_leaky_paywall_settings' ) ) {
 	 *
 	 * @return mixed Value set for the issuem options.
 	 */
-	function update_leaky_paywall_settings( $settings ) {
+	function update_lpaywall_settings( $settings ) {
 
-		global $leaky_paywall;
+		global $ice_dragon_paywall;
 
-		return $leaky_paywall->update_settings( $settings );
+		return $ice_dragon_paywall->update_settings( $settings );
 		
 	}
 	
 }
 
-if ( !function_exists( 'leaky_paywall_get_current_mode' ) ) {
+if ( !function_exists('lpaywall_get_current_mode') ) {
 	
-	function leaky_paywall_get_current_mode() {
+	function lpaywall_get_current_mode() {
 
 		$settings = get_ice_dragon_paywall_settings();
 		$mode = 'off' === $settings['test_mode'] ? 'live' : 'test';
 
-		return apply_filters( 'leaky_paywall_current_mode', $mode );
+		return apply_filters( 'ice_dragon_paywall_current_mode', $mode );
 		
 	}
 
 }
 
-if ( !function_exists( 'leaky_paywall_get_current_site' ) ) {
+if ( !function_exists('lpaywall_get_current_site') ) {
 	
-	function leaky_paywall_get_current_site() {
+	function lpaywall_get_current_site() {
 
 		global $blog_id;
 
@@ -70,13 +70,13 @@ if ( !function_exists( 'leaky_paywall_get_current_site' ) ) {
 			$site = '';
 		}
 
-		return apply_filters( 'leaky_paywall_current_site', $site );
+		return apply_filters( 'ice_dragon_paywall_current_site', $site );
 		
 	}
 
 }
 
-if ( !function_exists( 'leaky_paywall_get_currency' ) ) {
+if ( !function_exists('lpaywall_get_currency') ) {
 	
 	/**
 	 * Get the currency value set in the Leaky Paywall settings
@@ -85,25 +85,25 @@ if ( !function_exists( 'leaky_paywall_get_currency' ) ) {
 	 *
 	 * @return string Currency code (i.e USD)
 	 */
-	function leaky_paywall_get_currency() {
+	function lpaywall_get_currency() {
 
 		$settings = get_ice_dragon_paywall_settings();
-		$currency = $settings['leaky_paywall_currency'];
+		$currency = $settings['lpaywall_currency'];
 
-		return apply_filters( 'leaky_paywall_currency', $currency );
+		return apply_filters( 'lpaywall_currency', $currency );
 		
 	}
 
 }
 
-if ( !function_exists( 'build_leaky_paywall_default_restriction_row' ) ) {
+if ( !function_exists('build_lpaywall_default_restriction_row') ) {
 
     /**
      * @since 1.0.0
      *
      * @return mixed Value set for the issuem options.
      */
-    function build_leaky_paywall_default_restriction_row( $restriction=array(), $row_key='' ) {
+    function build_lpaywall_default_restriction_row($restriction=array(), $row_key='' ) {
 
         $settings = get_ice_dragon_paywall_settings();
 
@@ -245,20 +245,20 @@ function ice_dragon_paywall_get_restriction_row_post_type_taxonomies() {
 	
 
  
-if ( !function_exists( 'build_leaky_paywall_default_restriction_row_ajax' ) ) {
+if ( !function_exists( 'build_lpaywall_default_restriction_row_ajax' ) ) {
 
 	/**
 	 * AJAX Wrapper
 	 *
 	 * @since 1.0.0
 	 */
-	function build_leaky_paywall_default_restriction_row_ajax() {
+	function build_lpaywall_default_restriction_row_ajax() {
 		if ( isset( $_REQUEST['row-key'] ) )
-			die( build_leaky_paywall_default_restriction_row( array(), $_REQUEST['row-key'] ) );
+			die( build_lpaywall_default_restriction_row( array(), $_REQUEST['row-key'] ) );
 		else
 			die();
 	}
-	add_action( 'wp_ajax_issuem-leaky-paywall-add-new-restriction-row', 'build_leaky_paywall_default_restriction_row_ajax' );
+	add_action( 'wp_ajax_issuem-leaky-paywall-add-new-restriction-row', 'build_lpaywall_default_restriction_row_ajax' );
 	
 }
 
@@ -285,9 +285,9 @@ if ( !function_exists( 'wp_print_r' ) ) {
 	
 }
 
-if ( !function_exists( 'leaky_paywall_supported_currencies' ) ) {
+if ( !function_exists('lpaywall_supported_currencies') ) {
 	
-	function leaky_paywall_supported_currencies() {
+	function lpaywall_supported_currencies() {
 		$currencies = array(
 			'AED' => array( 'symbol' => '&#1583;.&#1573;', 'label' => __( 'UAE dirham', 'leaky-paywall' ), 'country' => __( 'UAE', 'leaky-paywall' ) ),
 			'AFN' => array( 'symbol' => 'Afs', 'label' => __( 'Afghan afghani', 'leaky-paywall' ), 'country' => __( 'Afghanistan', 'leaky-paywall' ) ),
@@ -429,7 +429,7 @@ if ( !function_exists( 'leaky_paywall_supported_currencies' ) ) {
 			'ZMW' => array( 'symbol' => 'ZK', 'label' => __( 'Zambian kwacha', 'leaky-paywall' ), 'country' => __( '', 'leaky-paywall' ) ),
 		);
 	
-		return apply_filters( 'leaky_paywall_supported_currencies', $currencies );
+		return apply_filters( 'ice_dragon_paywall_supported_currencies', $currencies );
 	}
 }
 
@@ -457,13 +457,13 @@ if ( ! function_exists( 'object_to_array' ) ) {
  * @since 4.5.2
  * @return string
  */
-if ( ! function_exists( 'leaky_paywall_get_current_currency_symbol' ) ) {
+if ( ! function_exists('lpaywall_get_current_currency_symbol') ) {
 
-	function leaky_paywall_get_current_currency_symbol() {
+	function lpaywall_get_current_currency_symbol() {
 
 		$settings = get_ice_dragon_paywall_settings();
-		$currency = leaky_paywall_get_currency();
-		$currencies = leaky_paywall_supported_currencies();
+		$currency = lpaywall_get_currency();
+		$currencies = lpaywall_supported_currencies();
 
 		return $currencies[$currency]['symbol'];
 
@@ -561,11 +561,11 @@ function ice_dragon_paywall_get_level_display_price( $level ) {
 
 	$settings = get_ice_dragon_paywall_settings();
 
-	$currency_position = $settings['leaky_paywall_currency_position'];
-	$thousand_separator = $settings['leaky_paywall_thousand_separator'];
-	$decimal_separator = $settings['leaky_paywall_decimal_separator'];
-	$decimal_number = empty( $settings['leaky_paywall_decimal_number'] ) ? '0' : $settings['leaky_paywall_decimal_number'];
-	$currency_symbol = leaky_paywall_get_current_currency_symbol();
+	$currency_position = $settings['lpaywall_currency_position'];
+	$thousand_separator = $settings['lpaywall_thousand_separator'];
+	$decimal_separator = $settings['lpaywall_decimal_separator'];
+	$decimal_number = empty( $settings['lpaywall_decimal_number'] ) ? '0' : $settings['lpaywall_decimal_number'];
+	$currency_symbol = lpaywall_get_current_currency_symbol();
 
 	$price = $level['price'];
 	$broken_price = explode('.', $price);
@@ -604,7 +604,7 @@ function ice_dragon_paywall_get_level_display_price( $level ) {
 		$display_price = 'Free';
 	}
 
-	return apply_filters( 'leaky_paywall_display_price', $display_price, $level );
+	return apply_filters( 'ice_dragon_paywall_display_price', $display_price, $level );
 }
 
 
@@ -657,65 +657,6 @@ function ice_dragon_paywall_normalize_chars($s) {
         'Ы'=>'y', 'ž'=>'z', 'З'=>'z', 'з'=>'z', 'ź'=>'z', 'ז'=>'z', 'ż'=>'z', 'ſ'=>'z', 'Ж'=>'zh', 'ж'=>'zh'
     );
     return strtr($s, $replace);
-}
-
-add_action( 'admin_notices', 'ice_dragon_paywall_display_rate_us_notice', 20 );
-
-function ice_dragon_paywall_display_rate_us_notice() {
-
-	$notice_id = 'lp_rate_us_feedback';
-
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
-	// delete_user_meta( get_current_user_id(), $notice_id );
-
-	$current_user_has_viewed = get_user_meta( get_current_user_id(), $notice_id, true );
-
-	if ( 'dashboard' !== get_current_screen()->id || $current_user_has_viewed ) {
-		return;
-	}
-
-	$site = leaky_paywall_get_current_site();
-
-	$args = array(
-		'number' => 6,
-		'meta_query'	=> array(
-			array(
-				'key'     => '_issuem_leaky_paywall_live_level_id' . $site,
-				'compare' => 'EXISTS',
-			),
-		)
-	);
-
-	$wp_user_search = new WP_User_Query( $args );
-	$total_live_subscribers = count( $wp_user_search->get_results() );
-
-	if ( 5 >= $total_live_subscribers ) {
-		return;
-	}
-
-
-	$dismiss_url = add_query_arg( [
-		'action' => 'ice_dragon_paywall_set_admin_notice_viewed',
-		'notice_id' => esc_attr( $notice_id ),
-	], admin_url() );
-
-	?>
-	<div class="notice updated is-dismissible leaky-paywall-message leaky-paywall-message-dismissed" data-notice_id="<?php echo esc_attr( $notice_id ); ?>">
-		<div class="leaky-paywall-message-inner">
-			
-			<div class="leaky-paywall-message-content">
-				<p><strong><?php echo __( 'Congrats!', 'leaky-paywall' ); ?></strong> <?php _e( 'You have more than 5 subscribers with <strong>Leaky Paywall</strong>. If you can, please help us by leaving a five star review on WordPress.org.', 'leaky-paywall' ); ?></p>
-				<p class="leaky-paywall-message-actions">
-					<a href="https://wordpress.org/support/plugin/leaky-paywall/reviews/?filter=5/#new-post" target="_blank" class="button button-primary"><?php _e( 'Leave a Review', 'leaky-paywall' ); ?></a>
-					<a href="<?php echo esc_url_raw( $dismiss_url ); ?>" class="button leaky-paywall-button-notice-dismiss"><?php _e( 'Hide', 'leaky-paywall' ); ?></a>
-				</p>
-			</div>
-		</div>
-	</div>
-	<?php 
 }
 
 add_action( 'admin_init', 'ice_dragon_paywall_update_admin_notice_viewed' );

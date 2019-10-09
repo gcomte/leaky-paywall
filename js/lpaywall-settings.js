@@ -1,19 +1,19 @@
-var $leaky_paywall_settings = jQuery.noConflict();
+var $ice_dragon_paywall_settings = jQuery.noConflict();
 
-$leaky_paywall_settings(document).ready(function($) {
+$ice_dragon_paywall_settings(document).ready(function($) {
 	
-	$( '#leaky_paywall_default_restriction_options' ).on( 'click', 'input#add-restriction-row', function( event ) {
+	$( '#lpaywall_default_restriction_options' ).on( 'click', 'input#add-restriction-row', function( event ) {
 		event.preventDefault();
         var data = {
             'action': 'issuem-leaky-paywall-add-new-restriction-row',
-            'row-key': ++leaky_paywall_restriction_row_key,
+            'row-key': ++lpaywall_restriction_row_key,
         }
         $.post( ajaxurl, data, function( response ) {
             $( 'td#issuem-leaky-paywall-restriction-rows table' ).append( response );
         });
 	});
 		
-	$( '#leaky_paywall_default_restriction_options' ).on( 'click', '.delete-restriction-row', function ( event ) {
+	$( '#lpaywall_default_restriction_options' ).on( 'click', '.delete-restriction-row', function ( event ) {
 		event.preventDefault();
 		var parent = $( this ).parents( '.issuem-leaky-paywall-restriction-row' );
 		parent.slideUp( 'normal', function() { $( this ).remove(); } );

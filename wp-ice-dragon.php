@@ -20,8 +20,8 @@ Domain Path: /i18n
 
 define( 'ICE_DRAGON_PAYWALL_NAME', 		'Ice Dragon Plugin for WordPress' );
 define( 'ICE_DRAGON_PAYWALL_SLUG', 		'ice-dragon-paywall' );
-define( 'LEAKY_PAYWALL_VERSION',	'4.13.5' );
-define( 'LEAKY_PAYWALL_DB_VERSION',	'1.0.4' );
+define( 'LPAYWALL_VERSION',	'4.13.5' );
+define( 'LPAYWALL_DB_VERSION',	'1.0.4' );
 define( 'ICE_DRAGON_VERSION',	'0.0.1' );
 define( 'ICE_DRAGON_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
@@ -46,8 +46,8 @@ function ice_dragon_paywall_plugins_loaded() {
 	// Instantiate the Pigeon Pack class
 	if ( class_exists( 'Ice_Dragon_Paywall' ) ) {
 		
-		global $leaky_paywall;
-		$leaky_paywall = new Ice_Dragon_Paywall();
+		global $ice_dragon_paywall;
+		$ice_dragon_paywall = new Ice_Dragon_Paywall();
 		
 		require_once( 'functions.php' );
 		require_once( 'shortcodes.php' );

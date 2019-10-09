@@ -22,19 +22,19 @@ if ( !function_exists( 'ice_dragon_paywall_errors' ) ) {
 function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
 
 	$html   = '';
-	$errors = leaky_paywall_errors()->get_error_codes();
+	$errors = ice_dragon_paywall_errors()->get_error_codes();
 
 	if( $errors ) {
 		
-		$html .= '<div class="leaky_paywall_message error">';
+		$html .= '<div class="lpaywall_message error">';
 		// Loop error codes and display errors
 		foreach( $errors as $code ) {
 
-			if( leaky_paywall_errors()->get_error_data( $code ) == $error_id ) {
+			if( ice_dragon_paywall_errors()->get_error_data( $code ) == $error_id ) {
 
-				$message = leaky_paywall_errors()->get_error_message( $code );
+				$message = ice_dragon_paywall_errors()->get_error_message( $code );
 
-				$html .= '<p class="leaky_paywall_error ' . esc_attr( $code ) . '"><span>' . $message . '</span></p>';
+				$html .= '<p class="lpaywall_error ' . esc_attr( $code ) . '"><span>' . $message . '</span></p>';
 
 			}
 
@@ -44,7 +44,7 @@ function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
 
 	}
 
-	return apply_filters( 'leaky_paywall_error_messages_html', $html, $errors );
+	return apply_filters( 'ice_dragon_paywall_error_messages_html', $html, $errors );
 
 }
 
@@ -56,7 +56,7 @@ function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
  */
 function ice_dragon_paywall_show_error_messages( $error_id = '' ) {
 
-	if( leaky_paywall_errors()->get_error_codes() ) {
+	if( ice_dragon_paywall_errors()->get_error_codes() ) {
 
 		do_action( 'ice_dragon_paywall_errors_before' );
 		echo ice_dragon_paywall_get_error_messages_html( $error_id );
