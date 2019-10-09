@@ -18,31 +18,15 @@ Text Domain: leaky-paywall
 Domain Path: /i18n
 */
 
-//Define global variables...
-if ( !defined( 'ZEEN101_STORE_URL' ) )
-	define( 'ZEEN101_STORE_URL',	'http://zeen101.com' );
-	
 define( 'ICE_DRAGON_PAYWALL_NAME', 		'Ice Dragon Plugin for WordPress' );
-define( 'LEAKY_PAYWALL_SLUG', 		'leaky-paywall' );
+define( 'ICE_DRAGON_PAYWALL_SLUG', 		'ice-dragon-paywall' );
 define( 'LEAKY_PAYWALL_VERSION',	'4.13.5' );
 define( 'LEAKY_PAYWALL_DB_VERSION',	'1.0.4' );
+define( 'ICE_DRAGON_VERSION',	'0.0.1' );
 define( 'ICE_DRAGON_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_BASENAME',	plugin_basename( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_REL_DIR',	dirname( ICE_DRAGON_PAYWALL_BASENAME ) );
-
-if ( !defined( 'PAYPAL_LIVE_URL' ) )
-	define( 'PAYPAL_LIVE_URL', 'https://www.paypal.com/' );
-if ( !defined( 'PAYPAL_SANDBOX_URL' ) )
-	define( 'PAYPAL_SANDBOX_URL', 'https://www.sandbox.paypal.com/' );
-if ( !defined( 'PAYPAL_PAYMENT_SANDBOX_URL' ) )
-	define( 'PAYPAL_PAYMENT_SANDBOX_URL', 'https://www.sandbox.paypal.com/cgi-bin/webscr' );
-if ( !defined( 'PAYPAL_PAYMENT_LIVE_URL' ) )
-	define( 'PAYPAL_PAYMENT_LIVE_URL', 'https://www.paypal.com/cgi-bin/webscr' );
-if ( !defined( 'PAYPAL_NVP_API_SANDBOX_URL' ) )
-	define( 'PAYPAL_NVP_API_SANDBOX_URL', 'https://api-3t.sandbox.paypal.com/nvp' );
-if ( !defined( 'PAYPAL_NVP_API_LIVE_URL' ) )
-	define( 'PAYPAL_NVP_API_LIVE_URL', 'https://api-3t.paypal.com/nvp' );
 
 /**
  * Instantiate Pigeon Pack class, require helper files

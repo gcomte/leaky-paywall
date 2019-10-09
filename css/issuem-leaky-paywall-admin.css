@@ -1,12 +1,10 @@
 /* CSS Document */
 
-table.leaky-paywall-table,
-body.leaky-paywall_page_leaky-paywall-subscribers table {
+table.leaky-paywall-table {
 	width: 100%;
 }
 
-table.leaky-paywall-table input.small-text,
-body.leaky-paywall_page_leaky-paywall-subscribers table input.small-text {
+table.leaky-paywall-table input.small-text {
 	height: 28px;
 }
 
@@ -16,14 +14,12 @@ table.issuem-leaky-paywall-subscription-level-row-table {
 	padding: 10px;
 }
 
-table.leaky-paywall-table tr th, table.leaky-paywall-table tr td,
-body.leaky-paywall_page_leaky-paywall-subscribers table tr th,body.leaky-paywall_page_leaky-paywall-subscribers table tr td {
+table.leaky-paywall-table tr th, table.leaky-paywall-table tr td {
 	vertical-align:top;
 	padding-bottom:10px;
 }
 
-table.leaky-paywall-table tr th,
-body.leaky-paywall_page_leaky-paywall-subscribers table tr th {
+table.leaky-paywall-table tr th {
 	padding-top:5px;
 	width:200px;
 }
@@ -32,21 +28,6 @@ table.leaky-paywall-table .leaky_paywall_subscription_level_row_table {
 	border: 1px solid #eee;
 	padding-top: 20px;
 	margin-bottom: 20px;
-}
-
-body.leaky-paywall_page_leaky-paywall-subscribers div.tablenav {
-	margin-top:25px;
-}
-
-body.leaky-paywall_page_leaky-paywall-subscribers div#leaky-paywall-subscriber-add-edit {
-	background:#ECECEC;
-	border:1px solid #CCC;
-	padding:0 10px;
-	margin-top:5px;
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-    width: 100%;
 }
 
 div#leaky-paywall-subscriber-add-edit form#leaky-paywall-susbcriber-add {

@@ -37,7 +37,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function process_content_restrictions() 
 	{
 
-		do_action( 'leaky_paywall_before_process_requests', get_leaky_paywall_settings() );
+		do_action( 'leaky_paywall_before_process_requests', get_ice_dragon_paywall_settings() );
 
 		if ( !$this->is_content_restricted() ) {
 			return;
@@ -172,7 +172,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	public function level_id_allows_access() 
 	{
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 		$level_ids = leaky_paywall_subscriber_current_level_ids();
 		$restrictions = $this->get_restriction_settings();
 		$viewed_content = $this->get_content_viewed_by_user();
@@ -286,7 +286,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function allowed_value_exceeded()
 	{
 
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 
 		// get viewed content
 		$viewed_content = $this->get_content_viewed_by_user();
@@ -455,7 +455,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	 public function get_nag_excerpt( $content ) 
 	 {
-	 	$settings = get_leaky_paywall_settings();
+	 	$settings = get_ice_dragon_paywall_settings();
 
 	 	if ( isset( $settings['custom_excerpt_length'] ) && strlen( $settings['custom_excerpt_length'] ) > 0 ) {
 			$excerpt = substr( strip_tags( get_the_content( get_the_ID() ) ), 0, intval( $settings['custom_excerpt_length'] ) );
@@ -469,7 +469,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function the_content_paywall_message() 
 	{
 
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 		
 		$message  = '<div class="leaky_paywall_message_wrap"><div id="leaky_paywall_message">';
 		if ( !is_user_logged_in() ) {
@@ -500,7 +500,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	 */
 	public function replace_variables( $message ) {
 
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 
 		if ( 0 === $settings['page_for_subscription'] )
 			$subscription_url = get_bloginfo( 'wpurl' ) . '/?subscription'; //CHANGEME -- I don't really know what this is suppose to do...
@@ -545,7 +545,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function is_unblockable_content()
 	{
 
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 
 		$unblockable_content = array(
 			$settings['page_for_login'],
@@ -615,36 +615,9 @@ class Ice_Dragon_Paywall_Restrictions {
         }
     }
 
-	/* Determine if the user has pdf access
-	 *
-	 * @since 4.10.3
-	 *
-	 * @param boolean $has_subscriber_paid
-	 */
-	public function pdf_access()
+	public function get_restriction_settings()
 	{
-
-		$settings = get_leaky_paywall_settings();
-		$has_pdf_access = apply_filters( 'leaky_paywall_pdf_access', leaky_paywall_user_has_access() );
-
-		//Admins or subscribed users can download PDFs
-		if ( current_user_can( apply_filters( 'leaky_paywall_current_user_can_view_all_content', 'manage_options' ) ) || $has_pdf_access ) {
-			leaky_paywall_server_pdf_download( $_REQUEST['issuem-pdf-download'] );
-		} else {
-
-			$output = '<h3>' . __( 'Unauthorized PDF Download', 'leaky-paywall' ) . '</h3>';
-			$output .= '<p>' . sprintf( __( 'You must be logged in with a valid subscription to download Issue PDFs. Please <a href="%s">log in</a> or <a href="%s">subscribe</a>.', 'leaky-paywall' ), get_page_link( $settings['page_for_login'] ), get_page_link( $settings['page_for_subscription'] ) ) . '</p>';
-			$output .= '<a href="' . get_home_url() . '">' . sprintf( __( 'back to %s', 'leak-paywall' ), $settings['site_name'] ) . '</a>';
-
-			wp_die( apply_filters( 'leaky_paywall_unauthorized_pdf_download_output', $output ), $settings['site_name'] . ' - Error' );
-
-		}
-
-	}
-
-	public function get_restriction_settings() 
-	{
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 		return $settings['restrictions'];
 	}
 
@@ -733,7 +706,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function get_expiration_time()
 	{
 
-		$settings = get_leaky_paywall_settings();
+		$settings = get_ice_dragon_paywall_settings();
 
 		switch ( $settings['cookie_expiration_interval'] ) {
 			case 'hour':

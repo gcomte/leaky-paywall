@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f5dbbcc-6df9-4961-b872-c240e583974d" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/leaky-paywall.php" afterPath="$PROJECT_DIR$/wp-ice-dragon.php" />
+    <list default="true" id="4f5dbbcc-6df9-4961-b872-c240e583974d" name="Default" comment="Code cleanup">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/js/issuem-leaky-paywall-subscribers.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class.php" afterPath="$PROJECT_DIR$/class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/issuem-leaky-paywall-admin.css" afterPath="$PROJECT_DIR$/css/issuem-leaky-paywall-admin.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/puzzle-itc-ice-dragon-admin.css" afterPath="$PROJECT_DIR$/css/puzzle-itc-ice-dragon-admin.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/functions.php" afterPath="$PROJECT_DIR$/functions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po" afterPath="$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/class-restrictions.php" afterPath="$PROJECT_DIR$/include/class-restrictions.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shortcodes.php" afterPath="$PROJECT_DIR$/shortcodes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wp-ice-dragon.php" afterPath="$PROJECT_DIR$/wp-ice-dragon.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,45 +24,100 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="leaky-paywall-nl_NL.po" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="leaky-paywall-de_DE.po" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-de_DE.po">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="21" column="7" lean-forward="false" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="leaky-paywall.pot" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall.pot">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class.php" pinned="false" current-in-tab="false">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="class.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/class.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="2025" column="315" lean-forward="false" selection-start-line="2025" selection-start-column="315" selection-end-line="2025" selection-end-column="315" />
+            <state relative-caret-position="624">
+              <caret line="689" column="22" lean-forward="false" selection-start-line="689" selection-start-column="22" selection-end-line="689" selection-end-column="22" />
               <folding>
-                <marker date="1569319007910" expanded="true" signature="113964:114055" ph="SELECT lps.*... ${$wpdb-&gt;prefix}" />
+                <element signature="e#28031#28089#0#HTML" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ice-dragon-constants.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ice-dragon-constants.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="standard_5.php" pinned="false" current-in-tab="false">
+        <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_5.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="281">
+              <caret line="267" column="9" lean-forward="false" selection-start-line="267" selection-start-column="9" selection-end-line="267" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="puzzle-itc-ice-dragon-admin.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/puzzle-itc-ice-dragon-admin.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+              <folding>
+                <marker date="1570644516893" expanded="true" signature="201:223" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="issuem-leaky-paywall-settings.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/issuem-leaky-paywall-settings.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="7" column="67" lean-forward="false" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="67" />
+              <folding>
+                <marker date="1569319007914" expanded="true" signature="3626:3659" ph="..." />
+                <marker date="1569319007914" expanded="true" signature="4379:4412" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="issuem-leaky-paywall-admin.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/issuem-leaky-paywall-admin.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="149" column="1" lean-forward="true" selection-start-line="149" selection-start-column="1" selection-end-line="149" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wp-ice-dragon.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-ice-dragon.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="460">
+              <caret line="58" column="25" lean-forward="true" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-restrictions.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/class-restrictions.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="90" column="20" lean-forward="false" selection-start-line="90" selection-start-column="20" selection-end-line="90" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="shortcodes.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/shortcodes.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="21" column="1" lean-forward="false" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -64,18 +125,13 @@
       <file leaf-file-name="functions.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
-              <caret line="3165" column="55" lean-forward="false" selection-start-line="3165" selection-start-column="55" selection-end-line="3165" selection-end-column="55" />
+            <state relative-caret-position="347">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
-                <marker date="1569329186562" expanded="true" signature="1787:1960" ph="SELECT ${$wp... ${$wpdb-&gt;usermeta}" />
-                <marker date="1569329186562" expanded="true" signature="2849:3022" ph="SELECT ${$wp... ${$wpdb-&gt;usermeta}" />
-                <marker date="1569329186562" expanded="true" signature="57087:57099" ph="..." />
-                <marker date="1569329186562" expanded="true" signature="58127:58134" ph="×" />
-                <marker date="1569329186562" expanded="true" signature="60516:60528" ph="..." />
-                <marker date="1569329186562" expanded="true" signature="61588:61617" ph="..." />
-                <marker date="1569329186562" expanded="true" signature="61984:62028" ph="..." />
-                <marker date="1569329186562" expanded="true" signature="62387:62394" ph="×" />
-                <marker date="1569329186562" expanded="true" signature="79805:79950" ph="..." />
+                <marker date="1570646682241" expanded="true" signature="3575:3587" ph="..." />
+                <marker date="1570646682241" expanded="true" signature="4846:4875" ph="..." />
+                <marker date="1570646682241" expanded="true" signature="5266:5310" ph="..." />
+                <marker date="1570646682241" expanded="true" signature="5696:5703" ph="×" />
               </folding>
             </state>
           </provider>
@@ -85,10 +141,44 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Leaky Paywall</find>
-      <find>leaky payw</find>
-      <find>gcom</find>
+      <find>get_leaky_paywall_settings</find>
+      <find>SLUG</find>
+      <find>LEAKY_PAYWALL_SLUG</find>
+      <find>$defaults</find>
+      <find>_ice_dragon</find>
+      <find>get_leaky_paywall_settings()</find>
+      <find>get_cancellation</find>
+      <find>call_user_func_array</find>
+      <find>call_user_func</find>
+      <find>process_cancellation_request</find>
+      <find>LOGIN</find>
+      <find>ippin-tipdata-use</find>
+      <find>No App Login Found</find>
+      <find>pp Logi</find>
+      <find>leaky_paywall</find>
+      <find>LEAKY__PAYWALL_URL</find>
+      <find>build_ice_dragon_paywall_default_restriction_row</find>
+      <find>paywall_get_restriction_row_post_</find>
+      <find>Restrict PDF Downloads?</find>
+      <find>Restrict PDF Downloads?</find>
+      <find>admin_wp_print_styles</find>
+      <find>settings_saved</find>
+      <find>update_ice_dragon_paywall_settings</find>
+      <find>current_tab ==</find>
+      <find>issuem-leaky-pay</find>
+      <find>restrictions</find>
+      <find>issuem-leaky-paywall</find>
+      <find>paywall_default_settings</find>
+      <find>settings</find>
+      <find>upgrade</find>
     </findStrings>
+    <replaceStrings>
+      <replace>get_ice_dragon_paywall_settings</replace>
+      <replace>ICE_DRAGON_PAYWALL_SLUG</replace>
+      <replace>get_ice_dragon_paywall_settings()</replace>
+      <replace>ice_dragon_paywall</replace>
+      <replace>ice_dragon</replace>
+    </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
     </dirStrings>
@@ -102,7 +192,15 @@
         <option value="$PROJECT_DIR$/i18n/leaky-paywall.pot" />
         <option value="$PROJECT_DIR$/leaky-paywall.php" />
         <option value="$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po" />
+        <option value="$PROJECT_DIR$/metaboxes.php" />
+        <option value="$PROJECT_DIR$/js/issuem-leaky-paywall-post.js" />
+        <option value="$PROJECT_DIR$/css/issuem-leaky-paywall-admin.css" />
+        <option value="$PROJECT_DIR$/shortcodes.php" />
+        <option value="$PROJECT_DIR$/include/class-restrictions.php" />
+        <option value="$PROJECT_DIR$/css/puzzle-itc-ice-dragon-admin.css" />
+        <option value="$PROJECT_DIR$/wp-ice-dragon.php" />
         <option value="$PROJECT_DIR$/functions.php" />
+        <option value="$PROJECT_DIR$/class.php" />
       </list>
     </option>
   </component>
@@ -115,8 +213,8 @@
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="3840" />
-    <option name="width" value="960" />
-    <option name="height" value="1181" />
+    <option name="width" value="961" />
+    <option name="height" value="1179" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -223,7 +321,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../leaky-paywall" />
     <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
@@ -257,6 +355,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -291,33 +395,51 @@
       <option name="presentableId" value="Default" />
       <updated>1569325972912</updated>
       <workItem from="1569325975126" duration="3134000" />
+      <workItem from="1570519708652" duration="2636000" />
+      <workItem from="1570523319790" duration="6241000" />
+      <workItem from="1570635129926" duration="12875000" />
     </task>
+    <task id="LOCAL-00001" summary="Rename methods for Ice Dragon">
+      <created>1570523078411</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1570523078411</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Code cleanup">
+      <created>1570523342013</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1570523342013</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3134000" />
+    <option name="totallyTimeSpent" value="24886000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="3840" y="0" width="960" height="1181" extended-state="0" />
+    <frame x="3840" y="0" width="961" height="1179" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.50209206" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.353914" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296501" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20591038" sideWeight="0.33627343" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20591038" sideWeight="0.66372657" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3174452" sideWeight="0.62362033" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32888466" sideWeight="0.49571276" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,14 +448,30 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Rename methods for Ice Dragon" />
+    <MESSAGE value="Cleanup Stuff" />
+    <MESSAGE value="Code cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code cleanup" />
+  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-de_DE.po">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
+        <state relative-caret-position="378">
           <caret line="21" column="7" lean-forward="false" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
           <folding />
         </state>
@@ -349,47 +487,247 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="2025" column="315" lean-forward="false" selection-start-line="2025" selection-start-column="315" selection-end-line="2025" selection-end-column="315" />
+        <state relative-caret-position="4734">
+          <caret line="263" column="9" lean-forward="true" selection-start-line="263" selection-start-column="9" selection-end-line="263" selection-end-column="9" />
           <folding>
-            <marker date="1569319007910" expanded="true" signature="113964:114055" ph="SELECT lps.*... ${$wpdb-&gt;prefix}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/functions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="3165" column="55" lean-forward="false" selection-start-line="3165" selection-start-column="55" selection-end-line="3165" selection-end-column="55" />
-          <folding>
-            <marker date="1569329186562" expanded="true" signature="1787:1960" ph="SELECT ${$wp... ${$wpdb-&gt;usermeta}" />
-            <marker date="1569329186562" expanded="true" signature="2849:3022" ph="SELECT ${$wp... ${$wpdb-&gt;usermeta}" />
-            <marker date="1569329186562" expanded="true" signature="57087:57099" ph="..." />
-            <marker date="1569329186562" expanded="true" signature="58127:58134" ph="×" />
-            <marker date="1569329186562" expanded="true" signature="60516:60528" ph="..." />
-            <marker date="1569329186562" expanded="true" signature="61588:61617" ph="..." />
-            <marker date="1569329186562" expanded="true" signature="61984:62028" ph="..." />
-            <marker date="1569329186562" expanded="true" signature="62387:62394" ph="×" />
-            <marker date="1569329186562" expanded="true" signature="79805:79950" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-ice-dragon.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162">
-          <caret line="24" column="37" lean-forward="false" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
-          <folding>
-            <element signature="e#6#159#0#PHP" expanded="true" />
+            <element signature="e#28031#28089#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="558">
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-de_DE.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="7" lean-forward="false" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall.pot">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="24156">
+          <caret line="1342" column="24" lean-forward="false" selection-start-line="1342" selection-start-column="24" selection-end-line="1342" selection-end-column="24" />
+          <folding>
+            <element signature="e#28031#28089#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class-restrictions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25578">
+          <caret line="1421" column="0" lean-forward="false" selection-start-line="1421" selection-start-column="0" selection-end-line="1421" selection-end-column="0" />
+          <folding>
+            <marker date="1570646682241" expanded="true" signature="3575:3587" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="4846:4875" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="5266:5310" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="5696:5703" ph="×" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-de_DE.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="7" lean-forward="false" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall.pot">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36378">
+          <caret line="2021" column="0" lean-forward="true" selection-start-line="2021" selection-start-column="0" selection-end-line="2021" selection-end-column="0" />
+          <folding>
+            <element signature="e#28031#28089#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50418">
+          <caret line="2801" column="1" lean-forward="true" selection-start-line="2801" selection-start-column="1" selection-end-line="2801" selection-end-column="1" />
+          <folding>
+            <marker date="1570646682241" expanded="true" signature="3575:3587" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="4846:4875" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="5266:5310" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="5696:5703" ph="×" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-de_DE.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="7" lean-forward="false" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall.pot">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/i18n/leaky-paywall-nl_NL.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/issuem-leaky-paywall-post.js" />
+    <entry file="file://$PROJECT_DIR$/css/issuem-leaky-paywall-post.css" />
+    <entry file="file://$PROJECT_DIR$/metaboxes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="882">
+          <caret line="54" column="7" lean-forward="false" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/leaky-paywall-cookie.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="29" column="32" lean-forward="true" selection-start-line="29" selection-start-column="32" selection-end-line="29" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/issuem-leaky-paywall-admin.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="149" column="1" lean-forward="true" selection-start-line="149" selection-start-column="1" selection-end-line="149" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/issuem-leaky-paywall-settings.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="67" lean-forward="false" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="67" />
+          <folding>
+            <marker date="1569319007914" expanded="true" signature="3626:3659" ph="..." />
+            <marker date="1569319007914" expanded="true" signature="4379:4412" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shortcodes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="21" column="1" lean-forward="false" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/class-restrictions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="90" column="20" lean-forward="false" selection-start-line="90" selection-start-column="20" selection-end-line="90" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/puzzle-itc-ice-dragon-admin.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <folding>
+            <marker date="1570644516893" expanded="true" signature="201:223" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_5.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="267" column="9" lean-forward="false" selection-start-line="267" selection-start-column="9" selection-end-line="267" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-ice-dragon.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="58" column="25" lean-forward="true" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding>
+            <marker date="1570646682241" expanded="true" signature="3575:3587" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="4846:4875" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="5266:5310" ph="..." />
+            <marker date="1570646682241" expanded="true" signature="5696:5703" ph="×" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ice-dragon-constants.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="624">
+          <caret line="689" column="22" lean-forward="false" selection-start-line="689" selection-start-column="22" selection-end-line="689" selection-end-column="22" />
+          <folding>
+            <element signature="e#28031#28089#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

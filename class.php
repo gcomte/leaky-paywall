@@ -19,7 +19,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	class Ice_Dragon_Paywall {
 		
 		private $plugin_name	= ICE_DRAGON_PAYWALL_NAME;
-		private $plugin_slug	= LEAKY_PAYWALL_SLUG;
+		private $plugin_slug	= ICE_DRAGON_PAYWALL_SLUG;
 		private $basename		= ICE_DRAGON_PAYWALL_BASENAME;
 		
 		/**
@@ -31,8 +31,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		
 			$settings = $this->get_settings();
 			
-			add_action( 'admin_notices', array( $this, 'update_notices' ) );
-			
 			add_action( 'http_api_curl', array( $this, 'force_ssl_version' ) );
 		
 			add_action( 'admin_init', array( $this, 'upgrade' ) );
@@ -43,32 +41,21 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
-			add_action( 'wp_ajax_leaky_paywall_process_notice_link', array( $this, 'ajax_process_notice_link' ) );
+			add_action( 'wp_ajax_ice_dragon_paywall_process_notice_link', array( $this, 'ajax_process_notice_link' ) );
 				
 			add_action( 'wp', array( $this, 'process_content_restrictions' ) );
 			add_action( 'wp', array( $this, 'process_pdf_restrictions' ) );
-			add_action( 'wp', array( $this, 'process_cancellation_request' ) );
 			add_action( 'init', array( $this, 'process_js_content_restrictions' ) );
 			
 			if ( 'on' === $settings['restrict_pdf_downloads'] ) {
 				add_filter( 'issuem_pdf_attachment_url', array( $this, 'restrict_pdf_attachment_url' ), 10, 2 );
-			}	
-
-			if ( in_array( 'paypal_standard', $settings['payment_gateway'] ) || in_array( 'paypal-standard', $settings['payment_gateway'] ) ) {
-				
-				if ( empty( $settings['paypal_live_api_username'] ) || empty( $settings['paypal_live_api_password'] ) || empty( $settings['paypal_live_api_secret'] ) ) {
-					
-					add_action( 'admin_notices', array( $this, 'paypal_standard_secure_notice' ) );
-					
-				}
-				
 			}
 			
 		}
 
 		public function process_js_content_restrictions() 
 		{
-			$settings = get_leaky_paywall_settings();
+			$settings = get_ice_dragon_paywall_settings();
 
 			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
 				$restrictions = new Ice_Dragon_Paywall_Restrictions();
@@ -84,7 +71,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				return;
 			}
 
-			$settings = get_leaky_paywall_settings();
+			$settings = get_ice_dragon_paywall_settings();
 
 			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
 				return;
@@ -104,105 +91,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 		}
 
-		public function process_cancellation_request() 
-		{
-			$settings = get_leaky_paywall_settings();
-
-			if ( leaky_paywall_has_user_paid() ) {
-
-				if ( $this->is_cancel_request() ) {
-					wp_die( leaky_paywall_cancellation_confirmation(), $settings['site_name'] . ' - Cancel Request' );
-				}
-
-				$this->redirect_from_login_page();
-
-			} else {
-
-				if ( !empty( $_REQUEST['r'] ) ) {
-					$this->process_passwordless_login();
-				}
-			}
-		}
-
-		public function is_cancel_request() 
-		{
-			$settings = get_leaky_paywall_settings();
-
-			if ( isset( $_REQUEST['cancel'] ) ) {
-
-				if (
-					( !empty( $settings['page_for_subscription'] ) && is_page( $settings['page_for_subscription'] ) )
-					|| ( !empty( $settings['page_for_profile'] ) && is_page( $settings['page_for_profile'] )  )
-				) {
-					return true;
-				} else {
-					return false;
-				}
-
-			} else {
-				return false;
-			}
-		}
-
-		/**
-		 * Send the user to the my account page if they user has paid and they try to access the login page
-		 *
-		 * @since 4.10.3
-		 */
-		public function redirect_from_login_page()
-		{
-
-			$settings = get_leaky_paywall_settings();
-
-			if ( !empty( $settings['page_for_login'] ) && is_page( $settings['page_for_login'] ) ) {
-
-				if ( !empty( $settings['page_for_profile'] ) ) {
-					wp_safe_redirect( get_page_link( $settings['page_for_profile'] ) );
-				} else if ( !empty( $settings['page_for_subscription'] ) ) {
-					wp_safe_redirect( get_page_link( $settings['page_for_subscription'] ) );
-				}
-
-			}
-
-		}
-
-		/**
-		 * Process the passwordless login functionality
-		 *
-		 * @since 4.10.3
-		 */
-		public function process_passwordless_login()
-		{
-
-			$settings = get_leaky_paywall_settings();
-
-			if ( !empty( $settings['page_for_login'] ) && is_page( $settings['page_for_login'] ) ) {
-
-				$login_hash = $_REQUEST['r'];
-
-				if ( verify_leaky_paywall_login_hash( $login_hash ) ) {
-
-					leaky_paywall_attempt_login( $login_hash );
-					if ( !empty( $settings['page_for_profile'] ) ) {
-						wp_safe_redirect( get_page_link( $settings['page_for_profile'] ) );
-					} else if ( !empty( $settings['page_for_subscription'] ) ) {
-						wp_safe_redirect( get_page_link( $settings['page_for_subscription'] ) );
-					}
-
-				} else {
-
-					$output  = '<h3>' . __( 'Invalid or Expired Login Link', 'leaky-paywall' ) . '</h3>';
-					$output .= '<p>' . sprintf( __( 'Sorry, this login link is invalid or has expired. <a href="%s">Try again?</a>', 'leaky-paywall' ), get_page_link( $settings['page_for_login'] ) ) . '</p>';
-					$output .= '<a href="' . get_home_url() . '">' . sprintf( __( 'back to %s', 'leak-paywall' ), $settings['site_name'] ) . '</a>';
-
-					wp_die( apply_filters( 'leaky_paywall_invalid_login_link', $output ) );
-
-				}
-
-			}
-
-		}
-		
 		public function restrict_pdf_attachment_url( $attachment_url, $attachment_id ) {
 			return esc_url( add_query_arg( 'issuem-pdf-download', $attachment_id ) );
 		}
@@ -218,24 +106,13 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		 */
 		function admin_menu() {
 
-		    // Changed for Ice Dragon
-			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
+			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
 
-            // Removed for Ice Dragon
-//			add_submenu_page( 'issuem-leaky-paywall', __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
+            /*
+			add_submenu_page( TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
 
-			// Removed for Ice Dragon
-//			add_submenu_page( 'issuem-leaky-paywall', __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
-
-            // Removed for Ice Dragon
-//			add_submenu_page( 'issuem-leaky-paywall', __( 'Transactions', 'leaky-paywall' ), __( 'Transactions', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'edit.php?post_type=lp_transaction' );
-
-            // Removed for Ice Dragon
-//          add_submenu_page( false, __( 'Update', 'leaky-paywall' ), __( 'Update', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-update', array( $this, 'update_page' ) );
-
-            // Removed for Ice Dragon
-//          add_submenu_page( 'issuem-leaky-paywall', __( 'Add-Ons', 'leaky-paywall' ), __( 'Add-Ons', 'leaky-paywall' ), apply_filters( 'manage_leaky_paywall_settings', 'manage_options' ), 'leaky-paywall-addons', array( $this, 'addons_page' ) );
-			
+			add_submenu_page( TOP_LEVEL_PAGE_NAME, __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
+            */
 		}
 		
 				
@@ -251,15 +128,14 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
             global $hook_suffix;
 
-            if ('leaky-paywall_page_leaky-paywall-subscribers' === $hook_suffix
-                    || 'toplevel_page_' . TOP_LEVEL_PAGE_NAME === $hook_suffix
+            if ('toplevel_page_' . TOP_LEVEL_PAGE_NAME === $hook_suffix
                     || 'index.php' === $hook_suffix
                     || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
                 wp_enqueue_style('leaky_paywall_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/issuem-leaky-paywall-admin.css', '', LEAKY_PAYWALL_VERSION);
 
                 /* Added for Ice Dragon */
-                wp_enqueue_style('ice_dragon_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', LEAKY_PAYWALL_VERSION);
+                wp_enqueue_style('ice_dragon_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', ICE_DRAGON_VERSION);
             }
 		}
 
@@ -273,19 +149,10 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			if ( 'toplevel_page_' . TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
 				wp_enqueue_script( 'leaky_paywall_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-settings.js', array( 'jquery' ), LEAKY_PAYWALL_VERSION );
 			}
-				
-			if ( 'leaky-paywall_page_leaky-paywall-subscribers' === $hook_suffix ) {
 
-				wp_enqueue_script( 'leaky_paywall_subscribers_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-subscribers.js', array( 'jquery-ui-datepicker' ), LEAKY_PAYWALL_VERSION );
-				wp_enqueue_style( 'jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css' );
-			}
-
-
-			wp_localize_script( 'leaky_paywall_subscribers_js', 'leaky_paywall_notice_ajax',
-            array( 
-            	'ajaxurl' => admin_url( 'admin-ajax.php' ),
-            	'lpNoticeNonce' => wp_create_nonce( 'leaky-paywall-notice-nonce')
-             ) );
+            if ( 'post.php' === $hook_suffix|| 'post-new.php' === $hook_suffix ) {
+                wp_enqueue_script( 'leaky_paywall_post_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-post.js', array( 'jquery' ), ICE_DRAGON_PAYWALL_URL );
+            }
 		}
 		
 		/**
@@ -300,7 +167,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			if ( $settings['css_style'] == 'default' ) {
 				wp_enqueue_style( 'issuem-leaky-paywall', ICE_DRAGON_PAYWALL_URL . '/css/issuem-leaky-paywall.css', '', LEAKY_PAYWALL_VERSION );
 				// Added for Ice Dragon
-				wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', LEAKY_PAYWALL_VERSION );
+				wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', ICE_DRAGON_VERSION );
 			}
 			
 			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
@@ -342,40 +209,8 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		 */
 		function get_settings() {
 
-			$default_email_body = 'PLEASE EDIT THIS CONTENT - You can use simple html, including images.
-
-			Thank you for subscribing to %sitename% and welcome to our community!
-
-			Your account is activated.
-
-			As a member you will gain more insight into the topics you care about, gain access to the latest articles, and you will gain a greater understanding of the events that are shaping our time. With a Digital Subscription, you also get our official Mobile App for FREE. Get the apps here: http://OurPublication.com/apps
-
-			<b>How to login:</b>
-
-			Go to: http://OurPublication.com/my-account/ (this is the “Page for Profile” setting in Leaky Paywall Settings)
-			Username: %username%
-			Password: %password%
-
-			Use some social media to tell your friends that you are on the journey with us https://twitter.com/OurPublication 
-
-			TWEET: I just subscribed to Our Publication. Join up and be awesome! www.ourpublication.com
-
-			Facebook https://www.facebook.com/ourpublication/
-
-			Instagram https://www.instagram.com/ourpublication/
-
-			LinkedIn https://www.linkedin.com/groups/12345678
-
-			We love feedback… please help us make your publication better by emailing info@ourpublication.pub … and thanks again!';
-			
-			$defaults = array( 
-				'page_for_login'				=> 0, /* Site Specific */
-				'page_for_subscription'			=> 0, /* Site Specific */
-				'page_for_register'				=> 0, /* Site Specific */
-				'page_for_after_subscribe'		=> 0,
-				'page_for_profile'				=> 0, /* Site Specific */
+			$defaults = array(
 				'custom_excerpt_length'			=> '',
-				'login_method'					=> 'traditional', //default over passwordless
 				'post_types'					=> ACTIVE_ISSUEM ? array( 'article' ) : array( 'post' ), /* Site Specific */
 				'free_articles'					=> 2,
 				'cookie_expiration' 			=> 24,
@@ -387,37 +222,12 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'site_name'						=> get_option( 'blogname' ), /* Site Specific */
 				'from_name'						=> get_option( 'blogname' ), /* Site Specific */
 				'from_email'					=> get_option( 'admin_email' ), /* Site Specific */
-				'new_subscriber_email'			=> 'off',
-				'new_email_subject'				=> '',
-				'new_email_body'				=> $default_email_body,
-				'renewal_reminder_email'		=> 'on',
-				'renewal_reminder_email_subject'=> '',
-				'renewal_reminder_email_body'	=> '',
-				'renewal_reminder_days_before'   => '7',
-				'new_subscriber_admin_email'	=> 'off',
-				'payment_gateway'				=> array( 'stripe_checkout' ),
 				'test_mode'						=> 'off',
-				'live_secret_key'				=> '',
-				'live_publishable_key'			=> '',
-				'test_secret_key'				=> '',
-				'test_publishable_key'			=> '',
-				'enable_stripe_elements'		=> 'no',
-				'enable_apple_pay'				=> 'no',
-				'enable_paypal_on_registration' => 'off',
-				'paypal_live_email'				=> '',
-				'paypal_live_api_username'		=> '',
-				'paypal_live_api_password'		=> '',
-				'paypal_live_api_secret'		=> '',
-				'paypal_image_url'				=> '',
-				'paypal_sand_email'				=> '',
-				'paypal_sand_api_username'		=> '',
-				'paypal_sand_api_password'		=> '',
-				'paypal_sand_api_secret'		=> '',
-				'leaky_paywall_currency'		=> 'USD',
-				'leaky_paywall_currency_position'		=> 'left',
-				'leaky_paywall_thousand_separator'	=> ',',
-				'leaky_paywall_decimal_separator'	=> '.',
-				'leaky_paywall_decimal_number'	=> '2',
+				'ice_dragon_paywall_currency'		=> 'USD',
+				'ice_dragon_paywall_currency_position'		=> 'left',
+				'ice_dragon_thousand_separator'	=> ',',
+				'ice_dragon_decimal_separator'	=> '.',
+				'ice_dragon_decimal_number'	=> '2',
 				'restrict_pdf_downloads' 		=> 'off',
 				'enable_combined_restrictions'  => 'off',
 				'combined_restrictions_total_allowed' => '',
@@ -431,40 +241,15 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						'allowed_value' => 2,
 					)
 				),
-				'levels' => array(
-					'0' => array(
-						'label' 					=> __( 'Magazine Subscription', 'leaky-paywall' ),
-						'price' 					=> '',
-						'subscription_length_type' 	=> 'limited',
-						'interval_count' 			=> 1,
-						'interval' 					=> 'month',
-						'recurring' 				=> 'off',
-						'plan_id' 					=> array(),
-						'post_types' => array(
-							array(
-								'post_type' 		=> ACTIVE_ISSUEM ? 'article' : 'post',
-								'allowed' 			=> 'unlimited',
-								'allowed_value' 	=> -1,
-							),
-						),
-						'deleted' 					=> 0,
-						'site' 						=> 'all',
-					)
-				),
 			);
 		
-			$defaults = apply_filters( 'leaky_paywall_default_settings', $defaults );
+			$defaults = apply_filters( 'ice_dragon_paywall_default_settings', $defaults );
 			$settings = get_option( DB_STORAGE_KEY ); /* Site specific settings */
 			$settings = wp_parse_args( $settings, $defaults );
 			
 			if ( $this->is_site_wide_enabled() ) {
 				$site_wide_settings = get_site_option( DB_STORAGE_KEY );
 				/* These are all site-specific settings */
-				unset( $site_wide_settings['page_for_login'] );
-				unset( $site_wide_settings['page_for_subscription'] );
-				unset( $site_wide_settings['page_for_register'] );
-				unset( $site_wide_settings['page_for_after_subscribe'] );
-				unset( $site_wide_settings['page_for_profile'] );
 				unset( $site_wide_settings['post_types'] );
 				unset( $site_wide_settings['free_articles'] );
 				unset( $site_wide_settings['cookie_expiration'] );
@@ -476,13 +261,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				unset( $site_wide_settings['from_name'] );
 				unset( $site_wide_settings['from_email'] );
 				unset( $site_wide_settings['restrictions'] );
-				$site_wide_settings = apply_filters( 'leak_paywall_get_settings_site_wide_settings', $site_wide_settings );
+				$site_wide_settings = apply_filters( 'ice_dragon_paywall_get_settings_site_wide_settings', $site_wide_settings );
 				$settings = wp_parse_args( $site_wide_settings, $settings );
 			}
 
-			$settings = apply_filters('leaky_paywall_multisite_premium', $settings);
-
-			return apply_filters( 'leaky_paywall_get_settings', $settings );
+			return apply_filters( 'ice_dragon_paywall_get_settings', $settings );
 			
 		}
 		
@@ -517,7 +300,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				$tab = '';
 			}
 
-			$settings_tabs = apply_filters('leaky_paywall_settings_tabs', array( 'general', 'subscriptions', 'payments', 'emails', 'licenses', 'help' ) );
+			$settings_tabs = apply_filters('leaky_paywall_settings_tabs', array( 'general', 'subscriptions', 'payments' ) );
 
 			$current_tab = apply_filters( 'leaky_paywall_current_tab', $tab, $settings_tabs );
 
@@ -531,26 +314,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						update_site_option( 'issuem-leaky-paywall-site-wide', false );
 					}
 
-					if ( isset( $_POST['page_for_login'] ) ) {
-						$settings['page_for_login'] = absint( $_POST['page_for_login'] );
-					}
-
-					if ( isset( $_POST['page_for_subscription'] ) ) {
-						$settings['page_for_subscription'] = absint( $_POST['page_for_subscription'] );
-					}
-
-					if ( isset( $_POST['page_for_register'] ) ) {
-						$settings['page_for_register'] = absint( $_POST['page_for_register'] );
-					}
-
-					if ( isset( $_POST['page_for_after_subscribe'] ) ) {
-						$settings['page_for_after_subscribe'] = absint( $_POST['page_for_after_subscribe'] );
-					}
-
-					if ( isset( $_POST['page_for_profile'] ) ) {
-						$settings['page_for_profile'] = absint( $_POST['page_for_profile'] );
-					}
-
 					if ( isset( $_POST['custom_excerpt_length'] ) ) {
 						
 						if ( strlen( $_POST['custom_excerpt_length'] ) > 0 ) {
@@ -560,11 +323,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						}
 						
 					}
-
-
-						
-					if ( !empty( $_REQUEST['login_method'] ) )
-						$settings['login_method'] = $_REQUEST['login_method'];
 
 					if ( !empty( $_REQUEST['subscribe_login_message'] ) )
 						$settings['subscribe_login_message'] = trim( $_REQUEST['subscribe_login_message'] );
@@ -582,70 +340,19 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					else
 						$settings['enable_user_delete_account'] = 'off';
 				}
-										
-				
-				if ( $current_tab == 'emails' ) {
 
-					if ( !empty( $_REQUEST['site_name'] ) )
-						$settings['site_name'] = sanitize_text_field( $_REQUEST['site_name'] );
 
-					if ( !empty( $_REQUEST['from_name'] ) )
-						$settings['from_name'] = sanitize_text_field( $_REQUEST['from_name'] );
-						
-					if ( !empty( $_REQUEST['from_email'] ) )
-						$settings['from_email'] = sanitize_text_field( $_REQUEST['from_email'] );
-
-					if ( !empty( $_POST['new_subscriber_email'] ) )
-						$settings['new_subscriber_email'] = $_POST['new_subscriber_email'];
-					else
-						$settings['new_subscriber_email'] = 'off';
-
-					if ( !empty( $_REQUEST['new_email_subject'] ) )
-						$settings['new_email_subject'] = sanitize_text_field( $_REQUEST['new_email_subject'] );
-
-					if ( !empty( $_REQUEST['new_email_body'] ) )
-						$settings['new_email_body'] = wp_kses_post( $_REQUEST['new_email_body'] );
-
-					if ( !empty( $_REQUEST['renewal_reminder_email'] ) )
-						$settings['renewal_reminder_email'] = $_REQUEST['renewal_reminder_email'];
-					else
-						$settings['renewal_reminder_email'] = 'off';
-
-					if ( !empty( $_POST['renewal_reminder_email_subject'] ) ) {
-						$settings['renewal_reminder_email_subject'] = sanitize_text_field( $_POST['renewal_reminder_email_subject'] );
-					}
-
-					if ( !empty( $_POST['renewal_reminder_email_body'] ) ) {
-						$settings['renewal_reminder_email_body'] = wp_kses_post( $_POST['renewal_reminder_email_body'] );
-					}
-
-					if ( !empty( $_POST['renewal_reminder_days_before'] ) ) {
-						$settings['renewal_reminder_days_before'] = sanitize_text_field( $_POST['renewal_reminder_days_before'] );
-					}
-
-					if ( !empty( $_REQUEST['new_subscriber_admin_email'] ) )
-						$settings['new_subscriber_admin_email'] = $_REQUEST['new_subscriber_admin_email'];
-					else
-						$settings['new_subscriber_admin_email'] = 'off';
-
-				}
-
-					
-				
-					
-				
-				
 				if ( $current_tab == 'subscriptions' ) {
 
 					if ( !empty( $_REQUEST['post_types'] ) )
 						$settings['post_types'] = $_REQUEST['post_types'];
-						
+
 					if ( isset( $_REQUEST['free_articles'] ) )
 						$settings['free_articles'] = trim( $_REQUEST['free_articles'] );
 
 					if ( !empty( $_REQUEST['cookie_expiration'] ) )
 						$settings['cookie_expiration'] = trim( $_REQUEST['cookie_expiration'] );
-						
+
 					if ( !empty( $_REQUEST['cookie_expiration_interval'] ) )
 						$settings['cookie_expiration_interval'] = trim( $_REQUEST['cookie_expiration_interval'] );
 
@@ -653,7 +360,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						$settings['restrict_pdf_downloads'] = $_REQUEST['restrict_pdf_downloads'];
 					else
 						$settings['restrict_pdf_downloads'] = 'off';
-
 
 					if ( !empty( $_REQUEST['restrictions'] ) ) {
 						$settings['restrictions'] = $_REQUEST['restrictions'];
@@ -685,74 +391,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 					if ( !empty( $_REQUEST['levels'] ) ) {
 						$settings['levels'] = $_REQUEST['levels'];
-					} 
+					}
 
 				}
 
 				if ( $current_tab == 'payments' ) {
-
-					if ( !empty( $_REQUEST['test_mode'] ) )
-						$settings['test_mode'] = $_REQUEST['test_mode'];
-					else
-						$settings['test_mode'] = apply_filters( 'zeen101_demo_test_mode', 'off' );
-						
-					if ( !empty( $_REQUEST['payment_gateway'] ) )
-						$settings['payment_gateway'] = $_REQUEST['payment_gateway'];
-					else
-						$settings['payment_gateway'] = array( 'stripe' );
-						
-					if ( !empty( $_REQUEST['live_secret_key'] ) )
-						$settings['live_secret_key'] = apply_filters( 'zeen101_demo_stripe_live_secret_key', trim( $_REQUEST['live_secret_key'] ) );
-						
-					if ( !empty( $_REQUEST['live_publishable_key'] ) )
-						$settings['live_publishable_key'] = apply_filters( 'zeen101_demo_stripe_live_publishable_key', trim( $_REQUEST['live_publishable_key'] ) );
-						
-					if ( !empty( $_REQUEST['test_secret_key'] ) )
-						$settings['test_secret_key'] = apply_filters( 'zeen101_demo_stripe_test_secret_key', trim( $_REQUEST['test_secret_key'] ) );
-						
-					if ( !empty( $_REQUEST['test_publishable_key'] ) )
-						$settings['test_publishable_key'] = apply_filters( 'zeen101_demo_stripe_test_publishable_key', trim( $_REQUEST['test_publishable_key'] ) );
-					
-					if ( isset( $_POST['enable_stripe_elements'] ) ) {
-						$settings['enable_stripe_elements'] = sanitize_text_field( $_POST['enable_stripe_elements'] );
-					}
-
-					if ( isset( $_POST['enable_apple_pay'] ) ) {
-						$settings['enable_apple_pay'] = sanitize_text_field( $_POST['enable_apple_pay'] );
-					}
-					
-
-					if ( !empty( $_REQUEST['enable_paypal_on_registration'] ) )
-						$settings['enable_paypal_on_registration'] = $_REQUEST['enable_paypal_on_registration'];
-					else
-						$settings['enable_paypal_on_registration'] = apply_filters( 'zeen101_demo_enable_paypal_on_registration', 'off' );
-
-					if ( !empty( $_REQUEST['paypal_live_email'] ) )
-						$settings['paypal_live_email'] = apply_filters( 'zeen101_demo_paypal_live_email', trim( $_REQUEST['paypal_live_email'] ) );
-						
-					if ( !empty( $_REQUEST['paypal_live_api_username'] ) )
-						$settings['paypal_live_api_username'] = apply_filters( 'zeen101_demo_paypal_live_api_username', trim( $_REQUEST['paypal_live_api_username'] ) );
-						
-					if ( !empty( $_REQUEST['paypal_live_api_password'] ) )
-						$settings['paypal_live_api_password'] = apply_filters( 'zeen101_demo_paypal_live_api_password', trim( $_REQUEST['paypal_live_api_password'] ) );
-						
-					if ( !empty( $_REQUEST['paypal_live_api_secret'] ) )
-						$settings['paypal_live_api_secret'] = apply_filters( 'zeen101_demo_paypal_live_api_secret', trim( $_REQUEST['paypal_live_api_secret'] ) );
-
-					if ( !empty( $_REQUEST['paypal_image_url'] ) )
-						$settings['paypal_image_url'] = trim( $_REQUEST['paypal_image_url'] );
-						
-					if ( !empty( $_REQUEST['paypal_sand_email'] ) )
-						$settings['paypal_sand_email'] = apply_filters( 'zeen101_demo_paypal_sand_email', trim( $_REQUEST['paypal_sand_email'] ) );
-						
-					if ( !empty( $_REQUEST['paypal_sand_api_username'] ) )
-						$settings['paypal_sand_api_username'] = apply_filters( 'zeen101_demo_paypal_sand_api_username', trim( $_REQUEST['paypal_sand_api_username'] ) );
-						
-					if ( !empty( $_REQUEST['paypal_sand_api_password'] ) )
-						$settings['paypal_sand_api_password'] = apply_filters( 'zeen101_demo_paypal_sand_api_password', trim( $_REQUEST['paypal_sand_api_password'] ) );
-						
-					if ( !empty( $_REQUEST['paypal_sand_api_secret'] ) )
-						$settings['paypal_sand_api_secret'] = apply_filters( 'zeen101_demo_paypal_sand_api_secret', trim( $_REQUEST['paypal_sand_api_secret'] ) );
 
 					if ( !empty( $_REQUEST['leaky_paywall_currency'] ) )
 						$settings['leaky_paywall_currency'] = trim( $_REQUEST['leaky_paywall_currency'] );
@@ -773,16 +416,11 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						$settings['leaky_paywall_decimal_number'] = trim( $_POST['leaky_paywall_decimal_number'] );
 					}
 
-					
-					
-						
-
 				}
-					
+
 				
 
 				$settings = apply_filters( 'leaky_paywall_update_settings_settings', $settings, $current_tab );
-				
 				$this->update_settings( $settings );
 				$settings_saved = true;
 				
@@ -824,15 +462,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Payments', 'leaky-paywall');?></a>
                                 */ ?>
                     			<a href="<?php echo admin_url('admin.php?page=' . TOP_LEVEL_PAGE_NAME . '&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Currency Options', 'leaky-paywall');?></a>
-                                <?php /* Removed for Ice Dragon
-                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=emails');?>" class="nav-tab<?php if($current_tab == 'emails') { ?> nav-tab-active<?php } ?>"><?php _e('Emails', 'leaky-paywall');?></a>
 
-                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=licenses');?>" class="nav-tab<?php if($current_tab == 'licenses') { ?> nav-tab-active<?php } ?>"><?php _e('Licenses', 'leaky-paywall');?></a>
-
-                    			<?php do_action( 'leaky_paywall_settings_tabs_links', $current_tab ); ?>
-
-                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=help');?>" class="nav-tab<?php if($current_tab == 'help') { ?> nav-tab-active<?php } ?>"><?php _e('Help', 'leaky-paywall');?></a>
-                    			*/ ?>
                                 <?php /* Added for Ice Dragon */ ?>
                                 <a href="https://ice-dragon.ch" target="_blank">
                                     <img src="<?php echo ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
@@ -845,35 +475,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						<?php if ( $current_tab == 'general' ) : ?>
 
 						<?php do_action('leaky_paywall_before_general_settings'); ?>
-
-						<?php if ( is_multisite_premium() && is_super_admin() ) { ?>
-  		
-						<div id="site-wide-option" class="postbox">
-	                    
-	                        <div class="handlediv" title="Click to toggle"><br /></div>
-	                        
-	                        <h3 class="hndle"><span><?php _e( 'Site Wide Options', 'leaky-paywall' ); ?></span></h3>
-	                        
-	                        <div class="inside">
-	                        
-	                        <table id="issuem_multisite_settings" class="leaky-paywall-table">
-	                        	<tr>
-	                                <th rowspan="1"> <?php _e( 'Enable Settings Site Wide?', 'leaky-paywall' ); ?></th>
-	                                <td>
-	                                <td><input type="checkbox" id="site_wide_enabled" name="site_wide_enabled" <?php checked( $this->is_site_wide_enabled() ); ?> /></td>
-	                                </td>
-	                            </tr>
-	                        </table>
-	                                                                                                         
-	                        <p class="submit">
-	                            <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
-	                        </p>
-	                        
-	                        </div>
-	                        
-	                    </div>
-  		
-						<?php } ?>
 	                    
 	                    <div id="modules" class="postbox">
 	                    
@@ -890,47 +491,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        	} ?>
 	                        
 	                        <table id="leaky_paywall_administrator_options" class="form-table">
-	                        <?php /* Removed for Ice Dragon
-	                        	<tr>
-	                                <th><?php _e( 'Page for Log In', 'leaky-paywall' ); ?></th>
-	                                <td>
-									<?php echo wp_dropdown_pages( array( 'name' => 'page_for_login', 'echo' => 0, 'show_option_none' => __( '&mdash; Select &mdash;' ), 'option_none_value' => '0', 'selected' => $settings['page_for_login'] ) ); ?>
-	                                <p class="description"><?php printf( __( 'Add this shortcode to your Log In page: %s', 'leaky-paywall' ), '[leaky_paywall_login]' ); ?></p>
-	                                </td>
-	                            </tr>
-	                            
-	                        	<tr>
-	                                <th><?php _e( 'Page for Subscribe Cards', 'leaky-paywall' ); ?></th>
-	                                <td>
-									<?php echo wp_dropdown_pages( array( 'name' => 'page_for_subscription', 'echo' => 0, 'show_option_none' => __( '&mdash; Select &mdash;' ), 'option_none_value' => '0', 'selected' => $settings['page_for_subscription'] ) ); ?>
-	                                <p class="description"><?php printf( __( 'Add this shortcode to your Subscription page: %s', 'leaky-paywall' ), '[leaky_paywall_subscription]' ); ?></p>
-	                                </td>
-	                            </tr>
-
-	                            <tr>
-	                                <th><?php _e( 'Page for Register Form', 'leaky-paywall' ); ?></th>
-	                                <td>
-									<?php echo wp_dropdown_pages( array( 'name' => 'page_for_register', 'echo' => 0, 'show_option_none' => __( '&mdash; Select &mdash;' ), 'option_none_value' => '0', 'selected' => $settings['page_for_register'] ) ); ?>
-	                                <p class="description"><?php printf( __( 'Add this shortcode to your register page: %s', 'leaky-paywall' ), '[leaky_paywall_register_form]' ); ?></p>
-	                                </td>
-	                            </tr>
-	                            
-	                        	<tr>
-	                                <th><?php _e( 'Page for Profile', 'leaky-paywall' ); ?></th>
-	                                <td>
-									<?php echo wp_dropdown_pages( array( 'name' => 'page_for_profile', 'echo' => 0, 'show_option_none' => __( '&mdash; Select &mdash;' ), 'option_none_value' => '0', 'selected' => $settings['page_for_profile'] ) ); ?>
-	                                <p class="description"><?php printf( __( 'Add this shortcode to your Profile page: %s. This page displays the account information for subscribers.', 'leaky-paywall' ), '[leaky_paywall_profile]' ); ?></p>
-	                                </td>
-	                            </tr>
-
-	                            <tr>
-	                                <th><?php _e( 'Confirmation Page', 'leaky-paywall' ); ?></th>
-	                                <td>
-									<?php echo wp_dropdown_pages( array( 'name' => 'page_for_after_subscribe', 'echo' => 0, 'show_option_none' => __( '&mdash; Select &mdash;' ), 'option_none_value' => '0', 'selected' => $settings['page_for_after_subscribe'] ) ); ?>
-	                                <p class="description"><?php _e( 'Page a subscriber is redirected to after they subscribe.', 'leaky-paywall' ); ?></p>
-	                                </td>
-	                            </tr>
-                                */ ?>
 	                            <tr>
 	                                <th><?php _e( 'Custom Excerpt Length', 'leaky-paywall' ); ?></th>
 	                                <td>
@@ -982,140 +542,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                    <?php do_action('leaky_paywall_after_general_settings'); ?>
 
 	                    <?php do_action( 'leaky_paywall_settings_form', $settings ); // here for backwards compatibility ?>
-
-	                    <p class="submit">
-                            <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
-                        </p>
-
-	                    <?php endif; ?>
-
-	                    <?php if ( $current_tab == 'emails' ) : ?>
-
-	                    <?php do_action('leaky_paywall_before_email_settings'); ?>
-	                    
-	                    <div id="modules" class="postbox">
-	                    
-	                        <div class="handlediv" title="Click to toggle"><br /></div>
-	                        
-	                        <h3 class="hndle"><span><?php _e( 'Email Settings', 'leaky-paywall' ); ?></span></h3>
-	                        
-	                        <div class="inside">
-	                        
-	                        <table id="leaky_paywall_administrator_options" class="form-table">
-	                        
-	                        	<tr>
-	                                <th><?php _e( 'Site Name', 'leaky-paywall' ); ?></th>
-	                                <td><input type="text" id="site_name" class="regular-text" name="site_name" value="<?php echo htmlspecialchars( stripcslashes( $settings['site_name'] ) ); ?>" /></td>
-	                            </tr>
-	                        
-	                        	<tr>
-	                                <th><?php _e( 'From Name', 'leaky-paywall' ); ?></th>
-	                                <td><input type="text" id="from_name" class="regular-text" name="from_name" value="<?php echo htmlspecialchars( stripcslashes( $settings['from_name'] ) ); ?>" /></td>
-	                            </tr>
-	                            
-	                        	<tr>
-	                                <th><?php _e( 'From Email', 'leaky-paywall' ); ?></th>
-	                                <td><input type="text" id="from_email" class="regular-text" name="from_email" value="<?php echo htmlspecialchars( stripcslashes( $settings['from_email'] ) ); ?>" /></td>
-	                            </tr>
-
-
-	                            <tr>
-	                            	<th><?php _e( "Disable New User Notifications", 'leaky-paywall' ); ?></th>
-	                                <td><input type="checkbox" id="new_subscriber_admin_email" name="new_subscriber_admin_email" <?php checked( 'on', $settings['new_subscriber_admin_email'] ); ?> /> <?php _e( 'Disable the email sent to an admin when a new subscriber is added to Leaky Paywall', 'leaky-paywall' ); ?></td>
-	                            </tr>
-
-	                        </table>
-	                        
-	                        </div>
-	                        
-	                    </div>
-
-	                    <div id="modules" class="postbox">
-	                    
-	                        <div class="handlediv" title="Click to toggle"><br /></div>
-	                        
-	                        <h3 class="hndle"><span><?php _e( 'New Subscriber Email', 'leaky-paywall' ); ?></span></h3>
-	                        
-	                        <div class="inside">
-
-	                        	<table id="leaky_paywall_new_subscriber_email_options" class="form-table">
-	                        		
-                        			 <tr>
-                        		    	<th><?php _e( "Disable New Subscriber Email", 'leaky-paywall' ); ?></th>
-                        		        <td><input type="checkbox" id="new_subscriber_email" name="new_subscriber_email" <?php checked( 'on', $settings['new_subscriber_email'] ); ?> /> Disable the new subscriber email sent to a subscriber</td>
-                        		    </tr>
-
-		                        	<tr>
-		                        	    <th><?php _e( 'Subject', 'leaky-paywall' ); ?></th>
-		                        	    <td><input type="text" id="new_email_subject" class="regular-text" name="new_email_subject" value="<?php echo htmlspecialchars( stripcslashes( $settings['new_email_subject'] ) ); ?>" />
-		                        	    	<p class="description"><?php _e( 'The subject line for the email sent to new subscribers.', 'leaky-paywall' ); ?></p>
-		                        	    </td>
-		                        	</tr>
-
-		                        	<tr>
-		                        	    <th><?php _e( 'Body', 'leaky-paywall' ); ?></th>
-		                        	    <td><textarea id="new_email_body" class="large-text" name="new_email_body" rows="10" cols="20"><?php echo htmlspecialchars( stripcslashes( $settings['new_email_body'] ) ); ?></textarea>
-		                        	    <p class="description"><?php _e( 'The email message that is sent to new subscribers.', 'leaky-paywall' ); ?></p>
-		                        	    <p class="description"><?php _e( 'Available template tags:', 'leaky-paywall' ); ?> <br>
-		                        	    %blogname%, %sitename%, %username%, %password%, %firstname%, %lastname%, %displayname%</p>
-		                        	    </td>
-		                        	</tr>
-
-	                        	</table>
-
-	                        </div>
-
-	                    </div>
-
-
-	                     <div id="modules" class="postbox">
-	                    
-	                        <div class="handlediv" title="Click to toggle"><br /></div>
-	                        
-	                        <h3 class="hndle"><span><?php _e( 'Renewal Reminder Email (for non-recurring subscribers)', 'leaky-paywall' ); ?></span></h3>
-	                        
-	                        <div class="inside">
-
-	                        	<table id="leaky_paywall_renewal_reminder_email_options" class="form-table">
-	                        	
-		                        	 <tr>
-		                            	<th><?php _e( "Disable Renewal Reminder Email", 'leaky-paywall' ); ?></th>
-		                                <td><input type="checkbox" id="renewal_reminder_email" name="renewal_reminder_email" <?php checked( 'on', $settings['renewal_reminder_email'] ); ?> /> Disable the renewal reminder email sent to a non-recurring subscriber</td>
-		                            </tr>
-
-		                            <tr>
-		                                <th><?php _e( 'Subject', 'leaky-paywall' ); ?></th>
-		                                <td><input type="text" id="renewal_reminder_email_subject" class="regular-text" name="renewal_reminder_email_subject" value="<?php echo htmlspecialchars( stripcslashes( $settings['renewal_reminder_email_subject'] ) ); ?>" />
-		                                	
-		                                </td>
-		                            </tr>
-
-		                            <tr>
-		                                <th><?php _e( 'Body', 'leaky-paywall' ); ?></th>
-		                                <td><textarea id="renewal_reminder_email_body" class="large-text" name="renewal_reminder_email_body" rows="10" cols="20"><?php echo htmlspecialchars( stripcslashes( $settings['renewal_reminder_email_body'] ) ); ?></textarea>
-		                                <p class="description"><?php _e( 'The email message that is sent to remind non-recurring subscribers to renew their subscription.', 'leaky-paywall' ); ?></p>
-		                                <p class="description"><?php _e( 'Available template tags:', 'leaky-paywall' ); ?> <br>
-		                                %blogname%, %sitename%, %username%, %password%, %firstname%, %lastname%, %displayname%</p>
-		                                </td>
-		                            </tr>
-
-		                            <tr>
-				                        <th><?php _e( 'When to Send Reminder', 'leaky-paywall' ); ?></th>
-				                        <td>
-				                        <input type="number" value="<?php echo $settings['renewal_reminder_days_before']; ?>" name="renewal_reminder_days_before" />
-				                        <p class="description"><?php _e( 'Days in advance of a non-recurring subscriber\'s expiration date to remind them to renew.', 'leaky-paywall' ); ?></p>
-				                        </td>
-				                    </tr>
-
-	                        	</table>
-
-	                        </div>
-
-	                    </div>
-
-	                    <?php wp_nonce_field( 'issuem_leaky_email_options', 'issuem_leaky_email_options_nonce' ); ?>
-
-	                    <?php do_action('leaky_paywall_after_email_settings'); ?>
 
 	                    <p class="submit">
                             <input class="button-primary" type="submit" name="update_leaky_paywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
@@ -1219,27 +645,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        
 	                        <table id="leaky_paywall_default_restriction_options" class="form-table">
 
-                                <?php /* Removed for Ice Dragon
-	                        	<tr class="restriction-options">
-	                                <th><?php _e( 'Limited Article Cookie Expiration', 'leaky-paywall' ); ?></th>
-	                                <td>
-	                                	<input type="text" id="cookie_expiration" class="small-text" name="cookie_expiration" value="<?php echo stripcslashes( $settings['cookie_expiration'] ); ?>" />
-	                                	<select id="cookie_expiration_interval" name="cookie_expiration_interval">
-	                                		<option value="hour" <?php selected( 'hour', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Hour(s)', 'leaky-paywall' ); ?></option>
-	                                		<option value="day" <?php selected( 'day', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Day(s)', 'leaky-paywall' ); ?></option>
-	                                		<option value="week" <?php selected( 'week', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Week(s)', 'leaky-paywall' ); ?></option>
-	                                		<option value="month" <?php selected( 'month', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Month(s)', 'leaky-paywall' ); ?></option>
-	                                		<option value="year" <?php selected( 'year', $settings['cookie_expiration_interval'] ); ?>><?php _e( 'Year(s)', 'leaky-paywall' ); ?></option>
-	                                	</select>
-	                                	<p class="description"><?php _e( 'Choose length of time when a visitor can once again read your articles/posts (up to the # of articles allowed).', 'leaky-paywall' ); ?></p>
-	                                </td>
-	                            </tr>
-	                            */ ?>
-	                        	<tr class="restriction-options ">
-	                                <th><?php _e( 'Restrict PDF Downloads?', 'leaky-paywall' ); ?></th>
-	                                <td><input type="checkbox" id="restrict_pdf_downloads" name="restrict_pdf_downloads" <?php checked( 'on', $settings['restrict_pdf_downloads'] ); ?> /></td>
-	                            </tr>
-	                            
 	                        	<tr class="restriction-options">
 									<th>
 										<label for="restriction-post-type-' . $row_key . '"><?php _e( 'Restrictions', 'leaky-paywall' ); ?></label>
@@ -1257,12 +662,12 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				                        	<?php 
 				                        	$last_key = -1;
 				                        	if ( !empty( $settings['restrictions']['post_types'] ) ) {
-				                        	
+
 					                        	foreach( $settings['restrictions']['post_types'] as $key => $restriction ) {
-					                        	
+
 					                        		if ( !is_numeric( $key ) )
 						                        		continue;
-						                        	
+
 					                        		build_leaky_paywall_default_restriction_row( $restriction, $key );
 					                        		
 					                        		$last_key = $key;
@@ -1340,37 +745,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 	                    <?php endif; ?>
 
-	                    <?php if ( $current_tab == 'licenses' ) : ?>
-
-	                     	<?php do_action('leaky_paywall_before_licenses_settings'); ?>
-
-	                    	<h2><a target="_blank" href="https://zeen101.com/for-developers/leakypaywall/leaky-paywall-add-ons/?utm_source=plugin&utm_medium=license_tab&utm_content=link&utm_campaign=settings">Find out more about our add-ons</a></h2>
-							
-							<?php wp_nonce_field( 'verify', 'leaky_paywall_license_wpnonce' ); ?>
-							
-	                    	<?php do_action('leaky_paywall_after_licenses_settings'); ?>
-
-	                    <?php endif; ?>
-
-	                    <?php if ( $current_tab == 'help' ) : ?>
-
-	                     	<?php do_action('leaky_paywall_before_help_settings'); ?>
-
-	                     	<h2><?php _e( 'Getting Started', 'leaky-paywall' ); ?></h2>
-
-	                    	<p><a target="_blank" href="https://zeen101.helpscoutdocs.com/article/39-setting-up-leaky-paywall">Setting Up Leaky Paywall</a></p>
-
-	                    	<h2><?php _e( 'Documentation Articles' ); ?></h2>
-
-	                    	<p><a target="_blank" href="https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall">View All</a></p>
-							
-							<?php wp_nonce_field( 'verify', 'leaky_paywall_help_wpnonce' ); ?>
-							
-	                    	<?php do_action('leaky_paywall_after_help_settings'); ?>
-
-	                    <?php endif; ?>
-
-                    
                 </form>
 
 
@@ -1385,571 +759,20 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			<?php
 			
 		}
-				
-		/**
-		 * Create and Display Leaky Paywall Subscribers page
-		 *
-		 * @since 1.0.0
-		 */
-		function subscribers_page() {
-			
-			global $blog_id;
-			$settings = get_leaky_paywall_settings();
 
-			if ( is_multisite_premium() && !is_main_site( $blog_id ) ) {
-				$site = '_' . $blog_id;
-			} else {
-				$site = '';
-			}
-			
-			$date_format = get_option( 'date_format' );
-			$jquery_date_format = leaky_paywall_jquery_datepicker_format( $date_format );
-			$headings = apply_filters( 'leaky_paywall_bulk_add_headings', array( 'username', 'email', 'price', 'expires', 'status', 'level-id', 'subscriber-id' ) );
-			
-			$mode = 'off' === $settings['test_mode'] ? 'live' : 'test';
-
-
-			$this->display_zeen101_dot_com_leaky_rss_item();
-
-		   
-			?>
-			<div class="wrap">
-			   
-				<div id="icon-users" class="icon32"><br/></div>
-				<h2><?php _e( 'Leaky Paywall Subscribers', 'issuem-leaky-paywall' ); ?></h2>
-                    
-                <?php
-                if ( !empty( $_POST['leaky_paywall_add_subscriber'] ) )  {
-                    if ( !wp_verify_nonce( $_POST['leaky_paywall_add_subscriber'], 'add_new_subscriber' ) ) {
-						echo '<div class="error settings-error" id="setting-error-invalid_nonce"><p><strong>' . __( 'Unable to verify security token. Subscriber not added. Please try again.', 'leaky-paywall' ) . '</strong></p></div>';
-
-					}  else {
-						// process form data
-						if ( !empty( $_POST['leaky-paywall-subscriber-email'] ) && is_email( trim( rawurldecode( $_POST['leaky-paywall-subscriber-email'] ) ) ) 
-							&& !empty( $_POST['leaky-paywall-subscriber-login'] ) ) {
-							
-							$login = trim( rawurldecode( $_POST['leaky-paywall-subscriber-login'] ) );
-							$email = trim( rawurldecode( $_POST['leaky-paywall-subscriber-email'] ) );
-							$payment_gateway = trim( rawurldecode( $_POST['leaky-paywall-subscriber-payment-gateway'] ) );
-							$subscriber_id = trim( rawurldecode( $_POST['leaky-paywall-subscriber-id'] ) );
-							if ( empty( $_POST['leaky-paywall-subscriber-expires'] ) )
-								$expires = 0;
-							else 
-								$expires = date( 'Y-m-d 23:59:59', strtotime( trim( urldecode( $_POST['leaky-paywall-subscriber-expires'] ) ) ) );
-							
-							$meta = array(
-								'level_id' 			=> $_POST['leaky-paywall-subscriber-level-id'],
-								'subscriber_id'		=> $subscriber_id,
-								'price' 			=> trim( $_POST['leaky-paywall-subscriber-price'] ),
-								'description' 		=> __( 'Manual Addition', 'issuem-leaky-paywall' ),
-								'expires' 			=> $expires,
-								'payment_gateway' 	=> $payment_gateway,
-								'payment_status' 	=> $_POST['leaky-paywall-subscriber-status'],
-								'interval' 			=> 0,
-								'plan'				=> '',
-								'site'				=> $site,
-							);
-							
-							$user_id = leaky_paywall_new_subscriber( NULL, $email, $subscriber_id, $meta, $login );
-							
-							do_action( 'add_leaky_paywall_subscriber', $user_id );
-
-							echo '<div class="updated notice is-dismissible" id="message"><p><strong>' . __( 'Subscriber added.', 'leaky-paywall' ) . '</strong></p></div>';
-							
-						} else {
-						
-							echo '<div class="error settings-error" id="setting-error-missing_email"><p><strong>' . __( 'You must include a valid email address.', 'leaky-paywall' ) . '</strong></p></div>';
-							
-						}
-					
-					}
-                } else if ( !empty( $_POST['leaky_paywall_edit_subscriber'] ) )  {
-                    if ( !wp_verify_nonce( $_POST['leaky_paywall_edit_subscriber'], 'edit_subscriber' ) ) {
-						echo '<div class="error settings-error" id="setting-error-invalid_nonce"><p><strong>' . __( 'Unable to verify security token. Subscriber not added. Please try again.', 'leaky-paywall' ) . '</strong></p></div>';
-
-					}  else {
-						// process form data
-						if ( !empty( $_POST['leaky-paywall-subscriber-email'] ) && is_email( trim( rawurldecode( $_POST['leaky-paywall-subscriber-email'] ) ) )
-							&& !empty( $_POST['leaky-paywall-subscriber-original-email'] ) && is_email( trim( rawurldecode( $_POST['leaky-paywall-subscriber-original-email'] ) ) ) 
-							&& !empty( $_POST['leaky-paywall-subscriber-login'] ) && !empty( $_POST['leaky-paywall-subscriber-original-login'] ) ) {
-							
-							$orig_login = trim( rawurldecode( $_POST['leaky-paywall-subscriber-original-login'] ) );
-							$orig_email = trim( rawurldecode( $_POST['leaky-paywall-subscriber-original-email'] ) );
-							$user = get_user_by( 'email', $orig_email );
-							
-							if ( !empty( $user ) ) {
-								$new_login = trim( rawurldecode( $_POST['leaky-paywall-subscriber-login'] ) );
-								$new_email = trim( rawurldecode( $_POST['leaky-paywall-subscriber-email'] ) );
-								$price = trim( $_POST['leaky-paywall-subscriber-price'] );
-								$status = $_POST['leaky-paywall-subscriber-status'];
-								$payment_gateway = trim( rawurldecode( $_POST['leaky-paywall-subscriber-payment-gateway'] ) );
-								$subscriber_id = trim( rawurldecode( $_POST['leaky-paywall-subscriber-id'] ) );
-								
-								if ( empty( $_POST['leaky-paywall-subscriber-expires'] ) )
-									$expires = 0;
-								else 
-									$expires = date( 'Y-m-d 23:59:59', strtotime( trim( urldecode( $_POST['leaky-paywall-subscriber-expires'] ) ) ) );
-									
-								if ( $price !== get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_price' . $site, true ) )
-									update_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_price' . $site, $price );
-								if ( $expires !== get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_expires' . $site, true ) )
-									update_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_expires' . $site, $expires );
-								if ( $status !== get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_payment_status' . $site, true ) )
-									update_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_payment_status' . $site, $status );
-								if ( $payment_gateway !== get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_payment_gateway' . $site, true ) )
-									update_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_payment_gateway' . $site, $payment_gateway );
-								if ( $subscriber_id !== get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_subscriber_id' . $site, true ) )
-									update_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_subscriber_id' . $site, $subscriber_id );
-								
-								if ( $orig_email !== $new_email ) {
-									$args = array( 'ID' => $user->ID );
-									$args['user_email'] = ( $orig_email === $new_email ) ? $orig_email : $new_email;
-									
-									$user_id = wp_update_user( $args );
-								}
-								
-								if ( $orig_login !== $new_login ) {
-									global $wpdb;
-									$wpdb->update( $wpdb->users,
-										array( 'user_login' => $new_login ), 
-										array( 'ID' => $user->ID ),
-										array( '%s' ), 
-										array( '%d' )
-									);
-									clean_user_cache( $user->ID );
-								}
-								
-								update_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_level_id' . $site, $_POST['leaky-paywall-subscriber-level-id'] );
-								
-								do_action( 'update_leaky_paywall_subscriber', $user->ID );
-
-								echo '<div class="updated notice is-dismissible" id="message"><p><strong>' . __( 'Subscriber updated.', 'leaky-paywall' ) . '</strong></p></div>';
-							}
-							
-						} else {
-						
-							echo '<div class="error settings-error" id="setting-error-missing_email"><p><strong>' . __( 'You must include a valid email address.', 'leaky-paywall' ) . '</strong></p></div>';
-							
-						}
-					
-					}
-
-                }
-
-				//Create an instance of our package class...
-				$subscriber_table = new Leaky_Paywall_Subscriber_List_Table();
-				$pagenum = $subscriber_table->get_pagenum();
-				//Fetch, prepare, sort, and filter our data...
-				$subscriber_table->prepare_items();
-                $total_pages = $subscriber_table->get_pagination_arg( 'total_pages' );
-		        if ( $pagenum > $total_pages && $total_pages > 0 ) {
-	                wp_redirect( esc_url_raw( add_query_arg( 'paged', $total_pages ) ) );
-	                exit;
-		        }
-		        
-                ?>
-			   
-				<div id="leaky-paywall-subscriber-add-edit">
-                	<?php 
-                	$email = !empty( $_GET['edit'] ) ? trim( rawurldecode( $_GET['edit'] ) ) : '';
-            		$user = get_user_by( 'email', $email );
-
-                	if ( !empty( $email ) && !empty( $user ) ) {
-                	
-                		$login = $user->user_login;
-                		
-                		$subscriber_id = get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_subscriber_id' . $site, true );
-                		$subscriber_level_id = get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_level_id' . $site, true );
-                		$payment_status = get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_payment_status' . $site, true );
-                		$payment_gateway = get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_payment_gateway' . $site, true );
-                		$price = get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_price' . $site, true );
-                		$expires = get_user_meta( $user->ID, '_issuem_leaky_paywall_' . $mode . '_expires' . $site, true );
-						if ( '0000-00-00 00:00:00' === $expires )
-							$expires = '';
-						else
-							$expires = mysql2date( $date_format, $expires );
-						
-						?>
-	                    <form id="leaky-paywall-susbcriber-edit" name="leaky-paywall-subscriber-edit" method="post">
-	                    	<div style="display: table">
-	                    	<p><label for="leaky-paywall-subscriber-login" style="display:table-cell"><?php _e( 'Username (required)', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-login" class="regular-text" type="text" value="<?php echo $login; ?>" name="leaky-paywall-subscriber-login" /></p><input id="leaky-paywall-subscriber-original-login" type="hidden" value="<?php echo $login; ?>" name="leaky-paywall-subscriber-original-login" /></p>
-	                    	<p><label for="leaky-paywall-subscriber-email" style="display:table-cell"><?php _e( 'Email Address (required)', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-email" class="regular-text" type="text" value="<?php echo $email; ?>" placeholder="support@zeen101.com" name="leaky-paywall-subscriber-email" /></p><input id="leaky-paywall-subscriber-original-email" type="hidden" value="<?php echo $email; ?>" name="leaky-paywall-subscriber-original-email" /></p>
-	                    	<p><label for="leaky-paywall-subscriber-price" style="display:table-cell"><?php _e( 'Price Paid', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-price" class="regular-text" type="text" value="<?php echo $price; ?>"  placeholder="0.00" name="leaky-paywall-subscriber-price" /></p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-expires" style="display:table-cell"><?php _e( 'Expires', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-expires" class="regular-text datepicker" type="text" value="<?php echo $expires; ?>" placeholder="<?php echo date_i18n( $date_format, time() ); ?>"name="leaky-paywall-subscriber-expires"  />
-	                        <input type="hidden" name="date_format" value="<?php echo $jquery_date_format; ?>" />
-	                        </p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-level-id" style="display:table-cell"><?php _e( 'Subscription Level', 'leaky-paywall' ); ?></label>
-	                        <select name="leaky-paywall-subscriber-level-id">
-	                        <?php
-	                        foreach( $settings['levels'] as $key => $level ) {
-	                        	if ( !$level['label'] ) {
-	                        		continue;
-	                        	}
-		                        echo '<option value="' . $key . '" ' . selected( $key, $subscriber_level_id, true ) . '>' . stripslashes( $level['label'] );
-		                        echo $level['deleted'] ? '(deleted)' : '';
-		                        echo '</option>';
-	                        }
-	                        ?>
-	                        </select>
-	                        </p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-status" style="display:table-cell"><?php _e( 'Status', 'leaky-paywall' ); ?></label>
-	                        <select name="leaky-paywall-subscriber-status">
-	                            <option value="active" <?php selected( 'active', $payment_status ); ?>><?php _e( 'Active', 'leaky-paywall' ); ?></option>
-	                            <option value="canceled" <?php selected( 'canceled', $payment_status ); ?>><?php _e( 'Canceled', 'leaky-paywall' ); ?></option>
-	                            <option value="deactivated" <?php selected( 'deactivated', $payment_status ); ?>><?php _e( 'Deactivated', 'leaky-paywall' ); ?></option>
-	                        </select>
-	                        </p>
-	                        <p>
-	                        <label for="leaky-paywall-subscriber-payment-gateway" style="display:table-cell"><?php _e( 'Payment Method', 'leaky-paywall' ); ?></label>
-	                        <?php $payment_gateways = leaky_paywall_payment_gateways(); ?>
-	                        <select name="leaky-paywall-subscriber-payment-gateway">
-		                        <?php foreach( $payment_gateways as $key => $gateway ) {
-	                            	echo '<option value="' . $key . '" ' . selected( $key, $payment_gateway, false ) . '>' . $gateway . '</option>';
-		                        }
-								echo apply_filters( 'leaky_paywall_subscriber_payment_gateway_select_option', '' );
-								?>
-	                        </select>
-	                        </p>
-	                    	<p>
-		                        <label for="leaky-paywall-subscriber-id" style="display:table-cell"><?php _e( 'Subscriber ID', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-id" class="regular-text" type="text" value="<?php echo $subscriber_id; ?>" name="leaky-paywall-subscriber-id"  />
-	                        </p>
-	                        <?php do_action( 'update_leaky_paywall_subscriber_form', $user->ID ); ?>
-	                        </div>
-	                        <?php submit_button( 'Update Subscriber' ); ?>
-	                        <p>
-	                        <a href="<?php echo esc_url( remove_query_arg( 'edit' ) ); ?>"><?php _e( 'Cancel', 'leaky-paywall' ); ?></a>
-	                        </p>
-	                        <?php wp_nonce_field( 'edit_subscriber', 'leaky_paywall_edit_subscriber' ); ?>
-						</form>
-                    <?php } else { ?>
-	                    <form id="leaky-paywall-susbcriber-add" name="leaky-paywall-subscriber-add" method="post">
-	                    	<div style="display: table">
-	                    	<p><label for="leaky-paywall-subscriber-login" style="display:table-cell"><?php _e( 'Username (required)', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-login" class="regular-text" type="text" value="" name="leaky-paywall-subscriber-login" /></p>
-	                    	<p><label for="leaky-paywall-subscriber-email" style="display:table-cell"><?php _e( 'Email Address (required)', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-email" class="regular-text" type="text" value="" placeholder="support@zeen101.com" name="leaky-paywall-subscriber-email" /></p>
-	                    	<p><label for="leaky-paywall-subscriber-price" style="display:table-cell"><?php _e( 'Price Paid', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-price" class="regular-text" type="text" value=""  placeholder="0.00" name="leaky-paywall-subscriber-price" /></p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-expires" style="display:table-cell"><?php _e( 'Expires', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-expires" class="regular-text datepicker" type="text" value="" placeholder="<?php echo date_i18n( $date_format, time() ); ?>"name="leaky-paywall-subscriber-expires"  />
-	                        <input type="hidden" name="date_format" value="<?php echo $jquery_date_format; ?>" />
-	                        </p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-level-id" style="display:table-cell"><?php _e( 'Subscription Level', 'leaky-paywall' ); ?></label>
-	                        <select name="leaky-paywall-subscriber-level-id">
-	                        <?php
-	                        foreach( $settings['levels'] as $key => $level ) {
-	                        	if ( !$level['label'] ) {
-	                        		continue;
-	                        	}
-		                        echo '<option value="' . $key .'">' . stripslashes( $level['label'] );
-		                        echo $level['deleted'] ? '(deleted)' : '';
-		                        echo '</option>';
-	                        }
-	                        ?>
-	                        </select>
-	                        </p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-status" style="display:table-cell"><?php _e( 'Status', 'leaky-paywall' ); ?></label>
-	                        <select name="leaky-paywall-subscriber-status">
-	                            <option value="active"><?php _e( 'Active', 'leaky-paywall' ); ?></option>
-	                            <option value="canceled"><?php _e( 'Canceled', 'leaky-paywall' ); ?></option>
-	                            <option value="deactivated"><?php _e( 'Deactivated', 'leaky-paywall' ); ?></option>
-	                        </select>
-	                        </p>
-	                    	<p>
-	                        <label for="leaky-paywall-subscriber-payment-gateway" style="display:table-cell"><?php _e( 'Payment Method', 'leaky-paywall' ); ?></label>
-	                        <?php $payment_gateways = leaky_paywall_payment_gateways(); ?>
-	                        <select name="leaky-paywall-subscriber-payment-gateway">
-		                        <?php foreach( $payment_gateways as $key => $gateway ) {
-	                            	echo '<option value="' . $key . '">' . $gateway . '</option>';
-		                        }
-								echo apply_filters( 'leaky_paywall_subscriber_payment_gateway_select_option', '' );
-								?>
-	                        </select>
-	                        </p>
-	                    	<p>
-		                        <label for="leaky-paywall-subscriber-id" style="display:table-cell"><?php _e( 'Subscriber ID', 'leaky-paywall' ); ?></label><input id="leaky-paywall-subscriber-id" class="regular-text" type="text" value="" name="leaky-paywall-subscriber-id"  />
-	                        </p>
-	                        <?php do_action( 'add_leaky_paywall_subscriber_form' ); ?>
-	                        </div>
-	                        <?php submit_button( 'Add New Subscriber' ); ?>
-	                        <?php wp_nonce_field( 'add_new_subscriber', 'leaky_paywall_add_subscriber' ); ?>
-	                    </form>
-
-	                    <?php do_action( 'leaky_paywall_after_new_subscriber_form' ); ?>
-	                   
-                    <?php } ?>
-					<br class="clear">
-				</div>
-			   
-				<!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
-				<form id="leaky-paywall-subscribers" method="get">
-					<!-- For plugins, we also need to ensure that the form posts back to our current page -->
-					<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-					<!-- Now we can render the completed list table -->
-					<div class="tablenav top">
-						<?php $subscriber_table->user_views(); ?>
-						<?php $subscriber_table->search_box( __( 'Search Subscribers' ), 'leaky-paywall' ); ?>
-					</div>
-					<?php $subscriber_table->display(); ?>
-				</form>
-			   
-			</div>
-			<?php
-			
-		}
-
-		/**
-		 * Outputs the Leaky Paywall Add Ons page
-		 *
-		 * @since 3.1.3
-		 */
-		function addons_page() {
-			
-			// Display HTML
-			?>
-			<div class="wrap">
-        	
-        	<div style="max-width: 1035px; margin-bottom: 20px; overflow: hidden;">
-	        	<div>
-	                <h2 style='margin-bottom: 10px;' ><?php _e( 'Leaky Paywall Add-Ons', 'leaky-paywall' ); ?></h2>
-	                <p><?php _e( 'Just a few of the add-ons available to extend Leaky Paywall functionality. Click the button below to view them all.', 'leaky-paywall' ); ?></p>
-	                			<p>
-	                					<a target="_blank" class="button-primary" href="https://zeen101.com/downloads/category/leaky-paywall-addons/?utm_source=Leaky%20dashboard%20addons&utm_medium=Button&utm_content=Button&utm_campaign=Leaky%20Addons%20dashboard%20Browse%20addons%20button">Browse all add-ons for Leaky Paywall</a>
-	                             	</p>
-				</div>
-
-			</div>
-			
-			
-
-                <table id="leaky-paywall-addons" cellpadding="0" cellspacing="0">
-                	<tbody>
-	                    <tr>
-
-	                    	<td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<img src="https://zeen101.com/wp-content/uploads/2019/06/Leaky_Paywall_Add-Ons_Archives_-_ZEEN101-1.jpg" alt="Ad Dropper">
-									<h3>Leaky Paywall - Multiple Levels</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/downloads/leaky-paywall-multiple-levels/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>Give your readers different subscription options by creating an unlimited number of subscriber levels.</p>
-	                            </div>
-	                        </td>
-
-	                    	<td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<a target="_blank" href="https://zeen101.com/downloads/leaky-paywall-recurring-payments/?ref=leaky_paywall_addons"><img src="https://zeen101.com/wp-content/uploads/2019/06/Leaky_Paywall_Add-Ons_Archives_-_ZEEN101.jpg" alt="Leaky Paywall MailChimp"></a>
-									<h3>Leaky Paywall - Recurring Payments</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/downloads/leaky-paywall-recurring-payments/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>Easily add recurring payments to any subscription level.</p>
-	                            </div>
-	                        </td>
-
-	                        <td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<a target="_blank" href="https://zeen101.com/downloads/leaky-paywall-mailchimp/?ref=leaky_paywall_addons"><img src="https://zeen101.com/wp-content/uploads/2019/06/Leaky_Paywall_Add-Ons_Archives_-_ZEEN101-2.jpg" alt="Leaky Paywall MailChimp"></a>
-									<h3>Leaky Paywall - MailChimp</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/downloads/leaky-paywall-mailchimp/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>Automatically add new Leaky Paywall subscribers to your MailChimp lists.</p>
-	                            </div>
-	                        </td>
-
-	                        
-	                        
-	                    </tr>
-
-	                    <tr>
-
-	                    	<td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<a target="_blank" href="https://zeen101.com/downloads/leaky-paywall-coupons/?ref=leaky_paywall_addons"><img src="https://zeen101.com/wp-content/uploads/2015/11/leaky-paywall-coupons.jpg" alt="Leaky Paywall Coupons"></a>
-									<h3>Leaky Paywall – Coupons</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/downloads/leaky-paywall-coupons/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>Create unlimited coupon codes. Assign them to individual subscription levels and more.</p>
-	                            </div>
-	                        </td> 
-
-	                    	<td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<a target="_blank" href="https://zeen101.com/downloads/gift-subscriptions/?ref=leaky_paywall_addons"><img src="https://zeen101.com/wp-content/uploads/2015/11/leaky-paywall-gift-subscriptions.jpg" alt="Leaky Paywall Gift Subscriptions"></a>
-									<h3>Leaky Paywall - Gift Subscriptions</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/downloads/gift-subscriptions/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>Generate more subscriptions to your publication by letting friends and family buy gift subscriptions!</p>
-	                            </div>
-	                        </td>
-
-	                    	<td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<a target="_blank" href="https://zeen101.com/downloads/reporting-tool-free/?ref=leaky_paywall_addons"><img src="https://zeen101.com/wp-content/uploads/2015/11/leaky-paywall-reporting.jpg" alt="Leaky Paywall Reporting Tool"></a>
-									<h3>Leaky Paywall - Reporting Tool</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/downloads/reporting-tool-free/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>Filter and download (CSV) the subscriber info you need to analyze your subscriptions.</p>
-	                            </div>
-	                        </td>
-   
-	                    </tr>
-
-	                    <tr>
-	                    	<td class="available-addon">
-	                        	<div class="available-addon-inner">
-									<img src="https://zeen101.com/wp-content/uploads/2015/03/unipress.jpg" alt="UniPress">
-									<h3>UniPress</h3>
-									<a class="button" target="_blank" href="https://zeen101.com/unipress/?ref=leaky_paywall_addons">Get this Add-on</a>
-									<p>UniPress is the first WordPress-to-App publishing framework. It is now simple, quick, and affordable to offer your publication as an app.</p>
-	                            </div>
-	                        </td>
-	                    </tr>
-
-
-                    </tbody>
-                </table>
-
-            </div>
-
-			<?php
-			
-		}
-		
-		function update_page() {
-			// Display HTML form for the options below
-			?>
-			<div class=wrap>
-            <div style="width:70%;" class="postbox-container">
-            <div class="metabox-holder">	
-            <div class="meta-box-sortables ui-sortable">
-            
-                <form id="issuem" method="post" action="">
-            
-                    <h2 style='margin-bottom: 10px;' ><?php _e( "Leaky Paywall Updater", 'issuem-leaky-paywall' ); ?></h2>
-                    
-					<?php
-					
-					$manual_update_version = get_option( 'leaky_paywall_manual_update_version' );
-					$manual_update_version = '1.2.0'; //CHANGEME
-										
-					if ( version_compare( $manual_update_version, '2.0.0', '<' ) )
-						$this->update_2_0_0();
-									
-					?>
-                                        
-					<?php wp_nonce_field( 'leaky_paywall_update', 'leaky_paywall_update_nonce' ); ?>
-					
-                    <?php do_action( 'leaky_paywall_update_form' ); ?>
-                    
-                </form>
-                
-            </div>
-            </div>
-            </div>
-			</div>
-			<?php
-		}
-		
 		/**
 		 * Upgrade function, tests for upgrade version changes and performs necessary actions
 		 *
 		 * @since 1.0.0
 		 */
 		function upgrade() {
-			
-			$settings = $this->get_settings();
-			
-			if ( isset( $settings['version'] ) )
-				$old_version = $settings['version'];
-			else
-				$old_version = 0;
-				
-			/* Table Version Changes */
-			if ( isset( $settings['db_version'] ) )
-				$old_db_version = $settings['db_version'];
-			else
-				$old_db_version = 0;
-				
-			if ( 0 !== $old_version && version_compare( $old_version, '2.0.2', '<' ) )
-				$this->update_2_0_2();
 
-			if ( !isset( $settings['version'] ) ) {
-				$settings['post_4106'] = true;
-			}
-						
-			$settings['version'] = LEAKY_PAYWALL_VERSION;
+            $settings = $this->get_settings();
+
+            $settings['version'] = ICE_DRAGON_VERSION;
 			$settings['db_version'] = LEAKY_PAYWALL_DB_VERSION;
-			
+
 			$this->update_settings( $settings );
-			
-		}
-		
-		function update_notices() {
-		
-			global $hook_suffix;
-			
-			$settings = $this->get_settings();
-			
-			if ( isset( $settings['version'] ) )
-				$old_version = $settings['version'];
-			else
-				$old_version = 0;
-				
-			if ( empty( $old_version ) ) { //new installs shouldn't see this notice
-				if ( current_user_can( 'manage_options' ) ) {
-					if ( 'admin_page_leaky-paywall-update' !== $hook_suffix && 'leaky-paywall_page_leaky-paywall-update' !== $hook_suffix ) {
-										
-						$manual_update_version = get_option( 'leaky_paywall_manual_update_version' );
-											
-						if ( version_compare( $manual_update_version, '2.0.0', '<' ) ) {
-							?>
-							<div id="leaky-paywall-2-0-0-update-nag" class="update-nag">
-								<?php
-								$update_link = esc_url( add_query_arg( array( 'page' => 'leaky-paywall-update' ), admin_url( 'admin.php' ) ) );
-								printf( __( 'You must update the Leaky Paywall Database to version 2 to continue using this plugin... %s', 'issuem-leaky-paywall' ), '<a class="btn" href="' . $update_link . '">' . __( 'Update Now', 'issuem-leaky-paywall' ) . '</a>' );
-								?>
-							</div>
-							<?php
-						}
-					}
-				}
-			}
-		}
-		
-		function paypal_standard_secure_notice() {
-			if ( current_user_can( 'manage_options' ) ) {
-				?>
-				<div id="missing-paypal-settings" class="update-nag">
-					<?php
-					$settings_link = esc_url( add_query_arg( array( 'page' => TOP_LEVEL_PAGE_NAME, 'tab' => 'payments' ), admin_url( 'admin.php' ) ) );
-					printf( __( 'You must complete your PayPal setup to continue using the Leaky Paywall Plugin. %s.', 'leaky-paywall' ), '<a class="btn" href="' . $settings_link . '">' . __( 'Complete Your Setup Now', 'leaky-paywall' ) . '</a>' );
-					?>
-				</div>
-				<?php
-			}
-		}
-		
-		/**
-		 * Displays latest RSS item from Zeen101.com on Subscriber page
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $views
-		 */
-		function display_zeen101_dot_com_leaky_rss_item() {
-	
-			$current_user = wp_get_current_user();
-	
-			$hide = get_user_meta( $current_user->ID, 'leaky_paywall_rss_item_notice_link', true );
-	
-			if ( $hide == 1 ) {
-				return;
-			} 
-	
-			if ( $last_rss_item = get_option( 'last_zeen101_dot_com_leaky_rss_item', true ) ) {
-				
-				echo '<div class="notice notice-success">';
-				echo $last_rss_item;
-				echo '<p><a href="#" class="lp-notice-link" data-notice="rss_item" data-type="dismiss">' . __( 'Dismiss', 'leaky-paywall' ) . '</a></p>';
-				echo '</div>';
-				
-			}
 			
 		}
 
