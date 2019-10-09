@@ -53,9 +53,6 @@ function ice_dragon_paywall_plugins_loaded() {
 		require_once( 'shortcodes.php' );
 		require_once( 'metaboxes.php' );
 
-		// license key
-		include( ICE_DRAGON_PAYWALL_PATH . 'include/license-key.php' );
-
 		// error tracking
 		include( ICE_DRAGON_PAYWALL_PATH . 'include/error-tracking.php' );
 
