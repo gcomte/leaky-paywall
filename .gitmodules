@@ -1,0 +1,3 @@
+[submodule "include/php-jwt"]
+	path = include/php-jwt
+	url = git@github.com:adhocore/php-jwt.git
