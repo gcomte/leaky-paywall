@@ -25,7 +25,7 @@ if ( !function_exists( 'get_ice_dragon_paywall_settings' ) ) {
 	}
 	
 }
- 
+
 if ( !function_exists( 'update_lpaywall_settings' ) ) {
 
 	/**
@@ -168,19 +168,6 @@ if ( !function_exists('build_lpaywall_default_restriction_row') ) {
 
         }
         echo '</select></td>';
-
-        echo '<td>';
-
-        if ( 'on' == $settings['enable_combined_restrictions'] ) {
-
-            echo '<p class="allowed-number-helper-text" style="color: #555; font-size: 12px;">Using combined restrictions.</p>';
-            echo '<input style="display: none;" id="restriction-allowed-' . $row_key . '" type="number" class="small-text restriction-allowed-number-setting" name="restrictions[post_types][' . $row_key . '][allowed_value]" value="' . $restriction['allowed_value'] . '" />';
-        } else {
-            echo '<p class="allowed-number-helper-text" style="color: #555; font-size: 12px; display: none;">Using combined restrictions.</p>';
-            echo '<input id="restriction-allowed-' . $row_key . '" type="number" class="small-text restriction-allowed-number-setting" name="restrictions[post_types][' . $row_key . '][allowed_value]" value="' . $restriction['allowed_value'] . '" />';
-        }
-
-        echo '</td>';
 
         echo '<td><span class="delete-x delete-restriction-row">&times;</span></td>';
 
@@ -520,7 +507,7 @@ function ice_dragon_paywall_log( $data, $event ) {
  * @return  array $links
  */
 function ice_dragon_paywall_plugin_add_settings_link( $links ) {
-    $settings_link = '<a href="admin.php?page=' . TOP_LEVEL_PAGE_NAME . '">' . __( 'Settings' ) . '</a>';
+    $settings_link = '<a href="admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '">' . __( 'Settings' ) . '</a>';
     array_unshift( $links, $settings_link );
   	return $links;
 }

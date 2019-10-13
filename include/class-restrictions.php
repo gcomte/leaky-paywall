@@ -166,160 +166,17 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	public function current_user_can_access()
 	{
-        // todo check if paid
-		return false;
-	}
+        $settings = get_ice_dragon_paywall_settings();
+        $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
 
-	public function allowed_value_exceeded()
-	{
+        define('PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
+        define('DRAGONS_NEST_CLASS_RELATIVE_PATH', 'include/class-dragons-nest.php');
+        define('DRAGONS_NEST_CLASS_ABSOLUTE_PATH', PLUGIN_ABSOLUTE_PATH . DRAGONS_NEST_CLASS_RELATIVE_PATH);
 
-		$settings = get_ice_dragon_paywall_settings();
+        require_once(DRAGONS_NEST_CLASS_ABSOLUTE_PATH);
 
-		// get viewed content
-		$viewed_content = $this->get_content_viewed_by_user();
-		$restrictions = $this->get_restriction_settings();
-		$content_post_type = get_post_type( $this->post_id );
-
-		foreach( $restrictions['post_types'] as $restriction ) {
-
-			if ( !isset( $restriction['taxonomy'] ) ) {
-				$restriction['taxonomy'] = 'all';
-			}
-
-			if ( $restriction['post_type'] == $content_post_type && $restriction['taxonomy'] == 'all'  ) {
-
-				if ( 'on' == $settings['enable_combined_restrictions'] ) {
-					$allowed_value = $settings['combined_restrictions_total_allowed'];
-					$number_already_viewed = isset( $viewed_content[$content_post_type] ) ? $this->get_total_content_viewed() : 0;
-				} else {
-					$allowed_value = $restriction['allowed_value'];
-					$number_already_viewed = isset( $viewed_content[$content_post_type] ) ? count( $viewed_content[$content_post_type] ) : 0;
-				}
-
-				// If the content has already been viewed, then let them view it (keys are the post_id)
-				if ( isset( $viewed_content[$content_post_type] ) && in_array( $this->post_id, array_keys( $viewed_content[$content_post_type]) ) ) {
-					return false;
-				}
-
-				if ( $allowed_value == 0 ) {
-					return true;
-				} else if ( !empty( $viewed_content ) && $number_already_viewed >= $allowed_value ) {
-					// max views reached so block the content
-					return true;
-				} else {
-					$this->update_content_viewed_by_user();
-					return false;
-				}
-
-			}
-
-			if ( $restriction['post_type'] == $content_post_type && $this->content_taxonomy_matches( $restriction['taxonomy'] ) ) {
-
-				// this only needs to calculate for this term (unless combined)
-				if ( 'on' == $settings['enable_combined_restrictions'] ) {
-					$allowed_value = $settings['combined_restrictions_total_allowed'];
-					$number_already_viewed = isset( $viewed_content[$content_post_type] ) ? $this->get_total_content_viewed() : 0;
-				} else {
-					$allowed_value = $restriction['allowed_value'];
-					$number_already_viewed = isset( $viewed_content[$content_post_type] ) ? $this->get_number_viewed_by_term( $restriction['taxonomy'] ) : 0;
-				}
-
-				// first, see if the content has already been viewed. if so, let them view it (keys are the post_id)
-				if ( isset( $viewed_content[$content_post_type] ) && in_array( $this->post_id, array_keys( $viewed_content[$content_post_type]) ) ) {
-					return false;
-				}
-
-				// max views reached so block the content
-				if ( $allowed_value == 0 ) {
-					return true;
-				} else if ( !empty( $viewed_content ) && $number_already_viewed >= $allowed_value ) {
-					return true;
-				} else {
-					$this->update_content_viewed_by_user();
-					return false;
-				}
-
-			}
-
-			if ( $restriction['post_type'] == $content_post_type && 'on' == $settings['enable_combined_restrictions'] ) {
-
-				$allowed_value = $settings['combined_restrictions_total_allowed'];
-
-				// first, see if the content has already been viewed. if so, let them view it (keys are the post_id)
-				if ( isset( $viewed_content[$content_post_type] ) && in_array( $this->post_id, array_keys( $viewed_content[$content_post_type]) ) ) {
-					return false;
-				}
-
-				// calculate for all content since its combined restrictions
-				$number_already_viewed = isset( $viewed_content[$content_post_type] ) ? $this->get_total_content_viewed() : 0;
-
-				// max views reached so block the content
-				if ( $allowed_value == 0 ) {
-					return true;
-				} else if ( !empty( $viewed_content ) && $number_already_viewed >= $allowed_value ) {
-					return true;
-				} else {
-					$this->update_content_viewed_by_user();
-					return false;
-				}
-
-
-			}
-
-		}
-
-	}
-
-	// go through each content item viewed and see if its term matches any restrictions
-	public function get_number_viewed_by_term( $term_id ) 
-	{
-
-		$viewed_content = $this->get_content_viewed_by_user();
-		$num = 0;
-
-		foreach( $viewed_content as $post_type => $items ) {
-
-			foreach( $items as $post_id => $item ) {
-
-				// if all, then count every one
-				// @todo had to add this condition to account for the "all" term
-				if ( $term_id == 'all' ) {
-					$num++;
-				}  else if ( $this->content_taxonomy_matches( $term_id, $post_id ) ) {
-					$num++;
-				}
-
-			}
-
-		}
-
-		return $num;
-
-	}
-
-	/**
-	 * Calculate all content items that have been viewed the current user
-	 *
-	 * @since 4.10.3
-	 *
-	 * @param array $available_content
-	 *
-	 * @return string $total_viewed Number of content items viewed
-	 */
-	public function get_total_content_viewed()
-	{
-
-		$viewed_content = $this->get_content_viewed_by_user();
-		$total_viewed = 0;
-
-		foreach( $viewed_content as $content ) {
-
-			$total_viewed += count( $content );
-
-		}
-
-		return $total_viewed;
-
+        $dragonsNest = new DragonsNest();
+        return $dragonsNest->receivedValidIceDragonCookie($paymentConfirmationSecret);
 	}
 
 	 public function display_subscribe_nag() 
@@ -532,52 +389,6 @@ class Ice_Dragon_Paywall_Restrictions {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Get the content that the user has already viewed
-	 *
-	 * @since 4.10.3
-	 *
-	 * @return array $available_content Array of post ids that have been viewed
-	 */
-	public function get_content_viewed_by_user()
-	{
-
-		if ( !empty( $_COOKIE[$this->get_cookie_name()] ) ) {
-			$content_viewed = json_decode( stripslashes( $_COOKIE[$this->get_cookie_name()] ), true );
-		} else {
-			$content_viewed = array();
-		}
-
-		return apply_filters( 'ice_dragon_paywall_available_content', $content_viewed );
-
-	}
-
-	public function update_content_viewed_by_user() 
-	{
-
-		$viewed_content = $this->get_content_viewed_by_user();
-		$restricted_post_type = get_post_type( $this->post_id );
-		$viewed_content[$restricted_post_type][$this->post_id] = $this->get_expiration_time();
-		$json_viewed_content = json_encode( $viewed_content );
-
-		$cookie = setcookie( $this->get_cookie_name(), $json_viewed_content, $this->get_expiration_time(), '/' );
-		$_COOKIE[$this->get_cookie_name()] = $json_viewed_content;
-
-	}
-
-	/**
-	 * Get the cookie name used for Leaky Paywall restrictions
-	 *
-	 * @since 4.10.10
-	 *
-	 * @return string
-	 */
-	public function get_cookie_name() 
-	{
-		$site = lpaywall_get_current_site();
-		return apply_filters( 'ice_dragon_paywall_restriction_cookie_name', $this->cookie_name . $site );
 	}
 
 	/**

@@ -44,7 +44,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			add_action( 'wp_ajax_ice_dragon_paywall_process_notice_link', array( $this, 'ajax_process_notice_link' ) );
 				
 			add_action( 'wp', array( $this, 'process_content_restrictions' ) );
-			add_action( 'wp', array( $this, 'process_pdf_restrictions' ) );
 			add_action( 'init', array( $this, 'process_js_content_restrictions' ) );
 			
 			if ( 'on' === $settings['restrict_pdf_downloads'] ) {
@@ -80,20 +79,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			$restrictions = new Ice_Dragon_Paywall_Restrictions();
 			$restrictions->process_content_restrictions();
 		}
-
-		public function process_pdf_restrictions() 
-		{
-
-			if ( isset( $_GET['issuem-pdf-download'] ) ) {
-				$restrictions = new Ice_Dragon_Paywall_Restrictions();
-				$restrictions->pdf_access();
-			}
-
-		}
-
-		public function restrict_pdf_attachment_url( $attachment_url, $attachment_id ) {
-			return esc_url( add_query_arg( 'issuem-pdf-download', $attachment_id ) );
-		}
 		
 		/**
 		 * Initialize pigeonpack Admin Menu
@@ -106,12 +91,12 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		 */
 		function admin_menu() {
 
-			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
+			add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IceDragonConstants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
 
             /*
-			add_submenu_page( TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
+			add_submenu_page( IceDragonConstants::TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
 
-			add_submenu_page( TOP_LEVEL_PAGE_NAME, __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
+			add_submenu_page( IceDragonConstants::TOP_LEVEL_PAGE_NAME, __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
             */
 		}
 		
@@ -128,7 +113,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
             global $hook_suffix;
 
-            if ('toplevel_page_' . TOP_LEVEL_PAGE_NAME === $hook_suffix
+            if ('toplevel_page_' . IceDragonConstants::TOP_LEVEL_PAGE_NAME === $hook_suffix
                     || 'index.php' === $hook_suffix
                     || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
@@ -146,7 +131,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		 */
 		function admin_wp_enqueue_scripts( $hook_suffix ) {
 			
-			if ( 'toplevel_page_' . TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
+			if ( 'toplevel_page_' . IceDragonConstants::TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
 				wp_enqueue_script( 'lpaywall_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-settings.js', array( 'jquery' ), LPAYWALL_VERSION );
 			}
 
@@ -229,8 +214,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'lpaywall_decimal_separator'	=> '.',
 				'lpaywall_decimal_number'	=> '2',
 				'restrict_pdf_downloads' 		=> 'off',
-				'enable_combined_restrictions'  => 'off',
-				'combined_restrictions_total_allowed' => '',
 				'enable_js_cookie_restrictions' => 'off',
 				'js_restrictions_post_container' => 'article .entry-content',
 				'js_restrictions_page_container' => 'article .entry-content',
@@ -238,17 +221,16 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					'post_types' => array(
 						'post_type' 	=> ACTIVE_ISSUEM ? 'article' : 'post',
 						'taxonomy'	=> 'all',
-						'allowed_value' => 2,
 					)
 				),
 			);
 		
 			$defaults = apply_filters( 'ice_dragon_paywall_default_settings', $defaults );
-			$settings = get_option( DB_STORAGE_KEY ); /* Site specific settings */
+			$settings = get_option( IceDragonConstants::DB_STORAGE_KEY ); /* Site specific settings */
 			$settings = wp_parse_args( $settings, $defaults );
 			
 			if ( $this->is_site_wide_enabled() ) {
-				$site_wide_settings = get_site_option( DB_STORAGE_KEY );
+				$site_wide_settings = get_site_option( IceDragonConstants::DB_STORAGE_KEY );
 				/* These are all site-specific settings */
 				unset( $site_wide_settings['post_types'] );
 				unset( $site_wide_settings['free_articles'] );
@@ -275,9 +257,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		 * @since 1.0.0
 		 */
 		function update_settings( $settings ) {
-            update_option( DB_STORAGE_KEY, $settings );
+            update_option( IceDragonConstants::DB_STORAGE_KEY, $settings );
             if ( $this->is_site_wide_enabled()) {
-				update_site_option( DB_STORAGE_KEY, $settings );
+				update_site_option( IceDragonConstants::DB_STORAGE_KEY, $settings );
 			}
 		}
 		
@@ -294,7 +276,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 			if(isset($_GET['tab'])) {
 				$tab = $_GET['tab'];
-			} else if ( $_GET['page'] == TOP_LEVEL_PAGE_NAME ) {
+			} else if ( $_GET['page'] == IceDragonConstants::TOP_LEVEL_PAGE_NAME ) {
 				$tab = 'general';
 			} else {
 				$tab = '';
@@ -333,12 +315,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					if ( !empty( $_REQUEST['css_style'] ) )
 						$settings['css_style'] = $_REQUEST['css_style'];
 
-					
+                    if ( !empty( $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ) )
+						$settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
 
-					if ( !empty( $_REQUEST['enable_user_delete_account'] ) )
-						$settings['enable_user_delete_account'] = $_REQUEST['enable_user_delete_account'];
-					else
-						$settings['enable_user_delete_account'] = 'off';
 				}
 
 
@@ -365,15 +344,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						$settings['restrictions'] = $_REQUEST['restrictions'];
 					} else {
 						$settings['restrictions'] = array();
-					}
-
-					if ( !empty( $_POST['enable_combined_restrictions'] ) )
-						$settings['enable_combined_restrictions'] = $_POST['enable_combined_restrictions'];
-					else
-						$settings['enable_combined_restrictions'] = 'off';
-
-					if ( isset( $_POST['combined_restrictions_total_allowed'] ) ) {
-						$settings['combined_restrictions_total_allowed'] = sanitize_text_field( $_POST['combined_restrictions_total_allowed'] );
 					}
 
 					if ( !empty( $_POST['enable_js_cookie_restrictions'] ) )
@@ -453,16 +423,13 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     		?>
                     		<h2 class="nav-tab-wrapper" style="margin-bottom: 10px;">
                     			
-                    			<a href="<?php echo admin_url('admin.php?page=' . TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'general') { ?> nav-tab-active<?php } ?>"><?php _e('General', 'leaky-paywall');?></a>
-                                <?php /* Changed for Ice Dragon
-                    			a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Subscriptions', 'leaky-paywall');?></a>
-                                */ ?>
-                    			<a href="<?php echo admin_url('admin.php?page=' . TOP_LEVEL_PAGE_NAME . '&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
-                                <?php /* Changed for Ice Dragon
-                    			<a href="<?php echo admin_url('admin.php?page=issuem-leaky-paywall&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Payments', 'leaky-paywall');?></a>
-                                */ ?>
-                    			<a href="<?php echo admin_url('admin.php?page=' . TOP_LEVEL_PAGE_NAME . '&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Currency Options', 'leaky-paywall');?></a>
+                    			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'general') { ?> nav-tab-active<?php } ?>"><?php _e('General', 'leaky-paywall');?></a>
 
+                    			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
+
+                                <?php /* Todo implement Currency options
+                                <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Currency Options', 'leaky-paywall');?></a>
+                                */ ?>
                                 <?php /* Added for Ice Dragon */ ?>
                                 <a href="https://ice-dragon.ch" target="_blank">
                                     <img src="<?php echo ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
@@ -486,20 +453,24 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 	                        	<?php if ( !isset( $settings['page_for_subscription'] ) || !$settings['page_for_subscription'] ) {
 	                        		?>
-	                        		<p>Need help getting started? <a target="_blank" href="https://github.com/gcomte/wp-ice-dragon">See our guide</a> or <a target="_blank" href="https://puzzle.ch/lightning">contact us</a>.</p>
+	                        		<p>Need help getting started?
+                                        <?php /* todo write documentation and copy repository to puzzle Github
+                                        <a target="_blank" href="https://github.com/gcomte/wp-ice-dragon">See our guide</a>
+ or */ ?>
+                                        <a target="_blank" href="https://puzzle.ch/lightning">Contact us</a>.</p>
 	                        		<?php 
 	                        	} ?>
 	                        
 	                        <table id="lpaywall_administrator_options" class="form-table">
-	                            <tr>
-	                                <th><?php _e( 'Custom Excerpt Length', 'leaky-paywall' ); ?></th>
-	                                <td>
-										<input type="number" id="custom_excerpt_length" class="small-text" name="custom_excerpt_length" value="<?php echo esc_attr( $settings['custom_excerpt_length'] ); ?>">
-	                                    <p class="description">
-	                                    	<?php _e( "Amount of content (in characters) to show before displaying the subscribe nag. If nothing is entered then the full excerpt is displayed.", 'leaky-paywall' ); ?>
-	                                    </p>	
-	                                </td>
-	                            </tr>
+                                <tr>
+                                    <th><?php _e( 'Custom Excerpt Length', 'leaky-paywall' ); ?></th>
+                                    <td>
+                                        <input type="number" id="custom_excerpt_length" class="small-text" name="custom_excerpt_length" value="<?php echo esc_attr( $settings['custom_excerpt_length'] ); ?>">
+                                        <p class="description">
+                                            <?php _e( "Amount of content (in characters) to show before displaying the subscribe nag. If nothing is entered then the full excerpt is displayed.", 'leaky-paywall' ); ?>
+                                        </p>
+                                    </td>
+                                </tr>
 
 	                        	<tr>
 	                                <th><?php _e( 'Login Necessary Message', 'leaky-paywall' ); ?></th>
@@ -511,6 +482,8 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                                </td>
 	                            </tr>
 
+                <?php /* Todo implement this
+
 	                        	<tr>
 	                                <th><?php _e( 'Direct Pay Message', 'leaky-paywall' ); ?></th>
 	                                <td>
@@ -520,7 +493,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                                    </p>
 	                                </td>
 	                            </tr>
-	                        
+
+ */ ?>
+
 	                        	<tr>
 	                                <th><?php _e( 'CSS Style', 'leaky-paywall' ); ?></th>
 	                                <td>
@@ -530,6 +505,16 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 									</select>
 	                                </td>
 	                            </tr>
+
+                                <tr>
+                                    <th><?php _e( 'Ice Dragon Secret', 'leaky-paywall' ); ?></th>
+                                    <td>
+                                        <input type="text" id="custom_excerpt_length" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
+                                        <p class="description">
+                                            <?php _e( "Keep this information private! This secret is used to verify the validity of the purchased vouchers of your visitors.", 'leaky-paywall' ); ?>
+                                        </p>
+                                    </td>
+                                </tr>
 
 	                            <?php wp_nonce_field( 'pitc_ice_dragon_general_options', 'pitc_ice_dragon_general_options_nonce' ); ?>
 
@@ -634,15 +619,15 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                    <?php if ( $current_tab == 'subscriptions' ) : ?>
 
 	                    <?php do_action('ice_dragon_paywall_before_subscriptions_settings'); ?>
-	                    
+
 	                    <div id="modules" class="postbox leaky-paywall-restriction-settings">
-	                    
+
 	                        <div class="handlediv" title="Click to toggle"><br /></div>
-	                        
-	                        <h3 class="hndle"><span><?php _e( 'Content Restriction', 'leaky-paywall' ); ?></span></h3>
-	                        
+
+	                        <h3 class="hndle"><span><?php _e( 'Restrict Content via Paywall', 'leaky-paywall' ); ?></span></h3>
+
 	                        <div class="inside">
-	                        
+
 	                        <table id="lpaywall_default_restriction_options" class="form-table">
 
 	                        	<tr class="restriction-options">
@@ -655,11 +640,10 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 											<tr>
 												<th>Post Type</th>
 												<th>Taxonomy <span style="font-weight: normal; font-size: 11px; color: #999;"> Category,tag,etc.</span></th>
-												<th>Number Allowed</th>
 												<th>&nbsp;</th>
 											</tr>
 
-				                        	<?php 
+				                        	<?php
 				                        	$last_key = -1;
 				                        	if ( !empty( $settings['restrictions']['post_types'] ) ) {
 
@@ -669,44 +653,33 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						                        		continue;
 
 					                        		build_lpaywall_default_restriction_row( $restriction, $key );
-					                        		
+
 					                        		$last_key = $key;
-					                        		
+
 					                        	}
-					                        	
+
 				                        	}
 				                        	?>
 				                        </table>
 			                        </td>
 		                        </tr>
-	                    
+
 	                        	<tr class="restriction-options">
 									<th>&nbsp;</th>
 									<td style="padding-top: 0;">
 								        <script type="text/javascript" charset="utf-8">
 								            var lpaywall_restriction_row_key = <?php echo $last_key; ?>;
 								        </script>
-										
+
 				                    	<p>
 				                       		<input class="button-secondary" id="add-restriction-row" class="add-new-issuem-leaky-paywall-restriction-row" type="submit" name="add_lpaywall_restriction_row" value="<?php _e( '+ Add Restricted Content', 'leaky-paywall' ); ?>" />
 				                    	</p>
 				                    	<p class="description"><?php _e( 'By default all content is allowed.', 'leaky-paywall' ); ?></p>
 			                        </td>
 		                        </tr>
-
-		                        <tr class="restriction-options">
-	                                <th><?php _e( 'Combined Restrictions', 'leaky-paywall' ); ?></th>
-	                                <td><input type="checkbox" id="enable_combined_restrictions" name="enable_combined_restrictions" <?php checked( 'on', $settings['enable_combined_restrictions'] ); ?> /> <?php _e( 'Use a single value for total number allowed regardless of content type or taxonomy. This uses the Post Type and Taxonomy settings from the Restrictions settings above.', 'leaky-paywall' ); ?></td>
-	                            </tr>
-
-	                            <tr class="restriction-options combined-restrictions-total-allowed <?php echo $settings['enable_combined_restrictions'] != 'on' ? 'hide-setting' : ''; ?>">
-	                                <th><?php _e( 'Combined Restrictions Total Allowed', 'leaky-paywall' ); ?></th>
-	                                <td>
-	                                	<input type="number" id="combined_restrictions_total_allowed" class="small-text" name="combined_restrictions_total_allowed" value="<?php echo stripcslashes( $settings['combined_restrictions_total_allowed'] ); ?>" /> 
-	                                	<p class="description"><?php _e( 'If combined restrictions is enabled, the total amount of content items allowed before content is restricted.' ); ?></p>
-	                                </td>
-	                            </tr>
-
+                                <?php
+                                /* todo study this. What does it do? Do we need this for Ice Dragon? Could the current implementation possibly be tweaked to use it for removing ads through an LN payment?
+                                ?>
 		                        <tr class="restriction-options">
 	                                <th><?php _e( 'Alternative Restriction Handling', 'leaky-paywall' ); ?></th>
 	                                <td><input type="checkbox" id="enable_js_cookie_restrictions" name="enable_js_cookie_restrictions" <?php checked( 'on', $settings['enable_js_cookie_restrictions'] ); ?> /> <?php _e( 'Only enable this if you are using a caching plugin or your host uses heavy caching and the paywall notice is not displaying on your site.' ); ?></td>
@@ -715,7 +688,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                            <tr class="restriction-options-post-container <?php echo $settings['enable_js_cookie_restrictions'] != 'on' ? 'hide-setting' : ''; ?>">
 	                                <th><?php _e( 'Alternative Restrictions Post Container', 'leaky-paywall' ); ?></th>
 	                                <td>
-	                                	<input type="text" id="js_restrictions_post_container" class="medium-text" name="js_restrictions_post_container" value="<?php echo stripcslashes( $settings['js_restrictions_post_container'] ); ?>" /> 
+	                                	<input type="text" id="js_restrictions_post_container" class="medium-text" name="js_restrictions_post_container" value="<?php echo stripcslashes( $settings['js_restrictions_post_container'] ); ?>" />
 	                                	<p class="description"><?php _e( 'CSS selector of the container that contains the content on a post and custom post type.' ); ?></p>
 	                                </td>
 	                            </tr>
@@ -723,22 +696,22 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                            <tr class="restriction-options-page-container <?php echo $settings['enable_js_cookie_restrictions'] != 'on' ? 'hide-setting' : ''; ?>">
 	                                <th><?php _e( 'Alternative Restrictions Page Container', 'leaky-paywall' ); ?></th>
 	                                <td>
-	                                	<input type="text" id="js_restrictions_page_container" class="medium-text" name="js_restrictions_page_container" value="<?php echo stripcslashes( $settings['js_restrictions_page_container'] ); ?>" /> 
+	                                	<input type="text" id="js_restrictions_page_container" class="medium-text" name="js_restrictions_page_container" value="<?php echo stripcslashes( $settings['js_restrictions_page_container'] ); ?>" />
 	                                	<p class="description"><?php _e( 'CSS selector of the container that contains the content on a page.' ); ?></p>
 	                                </td>
 	                            </tr>
+*/ ?>
 
-	                            
 	                        </table>
-	
+
 	                        </div>
-	                        
+
 	                    </div>
 
 						<p class="submit">
                             <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'puzzle-ice-dragon' ) ?>" />
                         </p>
-	                     
+
 
 	                    <?php endif; ?>
 
