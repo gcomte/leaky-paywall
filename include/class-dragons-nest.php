@@ -5,12 +5,16 @@
  * Time: 2:51 PM
  */
 
-define('COOKIE_TITLE', 'ICE_DRAGON');
 define('DEFAULT_HMAC_HASHING_ALGORITHM', 'HS512');
 define('JWT_LIBRARY_SUPPORTED_HASHING_ALGORITHMS', array('HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512'));
-define('SUCCESS_MESSAGE', 'success');
 define('JWT_EXPIRATION_KEY', 'exp');
 define('JWT_SEGMENT_DELIMITER', '.');
+
+define('HEADER_ALLOW_ORIGIN', 'Access-Control-Allow-Origin: ' . IceDragonConstants::ICE_DRAGON_DOMAIN);
+define('HEADER_ALLOW_CREDENTIALS', 'Access-Control-Allow-Credentials: true');
+define('HEADER_ALLOW_METHODS', 'Access-Control-Allow-Methods: GET');
+define('HEADER_EXPOSE_HEADERS', 'Access-Control-Expose-Headers: Set-Cookie');
+
 
 define('PLUGIN_ABSOLUTE_PATH', dirname(__FILE__) . '/');
 define('COMPOSER_LOADER_RELATIVE_PATH', 'vendor/autoload.php');
@@ -25,8 +29,16 @@ class DragonsNest {
 
         try {
             $payload = $this->verifyVoucher($voucher, $paymentConfirmationSecret);
-            setcookie(COOKIE_TITLE, $voucher, $payload[JWT_EXPIRATION_KEY], '/');
-            echo SUCCESS_MESSAGE;
+
+            // allow CORS
+            header(HEADER_ALLOW_ORIGIN);
+            header(HEADER_ALLOW_CREDENTIALS);
+            header(HEADER_ALLOW_METHODS);
+            header(HEADER_EXPOSE_HEADERS);
+
+            setcookie(IceDragonConstants::COOKIE_TITLE, $voucher, $payload[JWT_EXPIRATION_KEY], '/');
+
+            echo IceDragonConstants::DRAGONS_NEST_SUCCESS_MESSSAGE;
             exit;
 
         } catch (Exception $exception) {
@@ -36,9 +48,9 @@ class DragonsNest {
     }
 
     public function receivedValidIceDragonCookie($paymentConfirmationSecret) {
-        if(isset($_COOKIE[COOKIE_TITLE])){
+        if(isset($_COOKIE[IceDragonConstants::COOKIE_TITLE])){
             try {
-                if ($this->verifyVoucher($_COOKIE[COOKIE_TITLE], $paymentConfirmationSecret)) {
+                if ($this->verifyVoucher($_COOKIE[IceDragonConstants::COOKIE_TITLE], $paymentConfirmationSecret)) {
                     return true;
                 }
             } catch (Exception $exception) {
