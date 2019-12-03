@@ -71,15 +71,3 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-== Screenshots ==
-1. Leaky Paywall general settings
-2. Leaky Paywall content restriction settings
-3. Leaky Paywall subscription level settings
-4. Leaky Paywall payment method settings
-5. Leaky Paywall visibility settings let you overwrite the default restrictions on a per content basis
-6. Leaky Paywall subscriber table to manage current current subscribers and add manually add new subscribers
-7. Leaky Paywall subscribe nag after a reader has reached their article limit
-8. Leaky Paywall subscribe cards
-9. Leaky Paywall register form for both free and paid levels
-10. Leaky Paywall account page for a subscriber to manage their account information
