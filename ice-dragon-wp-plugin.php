@@ -8,7 +8,7 @@
  
 /*
 Plugin Name: Ice Dragon
-Plugin URI: https://github.com/gcomte/wp-ice-dragon
+Plugin URI: https://github.com/ln-ice-dragon/ice-dragon-wp-plugin
 Description: The first Bitcoin paywall for Wordpress based on the Lightning Network. Uses <a href="https://ice-dragon.ch" target="_blank">Ice Dragon</a>. Based on zeen101's <a href="https://github.com/zeen101/leaky-paywall" target="_blank">Leaky Paywall</a>.
 Author: Puzzle ITC
 Version: 0.0.1

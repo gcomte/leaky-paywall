@@ -523,7 +523,7 @@ add_filter( 'plugin_action_links_' . ICE_DRAGON_PAYWALL_BASENAME, 'ice_dragon_pa
  */
 function ice_dragon_paywall_plugin_row_meta( $input, $file ) {
 	
-	if ( $file != 'wp-ice-dragon/wp-ice-dragon.php' ) {
+	if ( $file != 'ice-dragon-wp-plugin/ice-dragon-wp-plugin.php' ) {
 		return $input;
 	}
 

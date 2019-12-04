@@ -454,8 +454,8 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        	<?php if ( !isset( $settings['page_for_subscription'] ) || !$settings['page_for_subscription'] ) {
 	                        		?>
 	                        		<p>Need help getting started?
-                                        <?php /* todo write documentation and copy repository to puzzle Github
-                                        <a target="_blank" href="https://github.com/gcomte/wp-ice-dragon">See our guide</a>
+                                        <?php /* todo write documentation
+                                        <a target="_blank" href="https://github.com/ln-ice-dragon/ice-dragon-wp-plugin">See our guide</a>
  or */ ?>
                                         <a target="_blank" href="https://puzzle.ch/lightning">Contact us</a>.</p>
 	                        		<?php 

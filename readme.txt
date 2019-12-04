@@ -28,12 +28,12 @@ Based [ZEEN101](https://zeen101.com/)'s [Leaky Paywall](https://wordpress.org/pl
 
 For documentation see: [https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall](https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall)
 
-We love contributions! Head over to our [GitHub page](https://https://github.com/ln-ice-dragon/wp-ice-dragon) if your feeling inspired 🙏
+We love contributions! Head over to our [GitHub page](https://github.com/ln-ice-dragon/ice-dragon-wp-plugin) if your feeling inspired 🙏
 
 
 == Installation ==
 
-1. Upload the entire `wp-ice-dragon` folder to your `/wp-content/plugins/` folder.
+1. Upload the entire `ice-dragon-wp-plugin` folder to your `/wp-content/plugins/` folder.
 1. Go to the 'Plugins' page in the menu and activate the plugin.
 1. Register your content on [ice-dragon.ch](https://ice-dragon.ch).
 1. Copy your secret key from ice-dragon.ch to your plugin, and configure where you want a paywall to appear.
