@@ -507,7 +507,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                            </tr>
 
                                 <tr>
-                                    <th><?php _e( 'Ice Dragon Secret', 'leaky-paywall' ); ?></th>
+                                    <th><?php _e( 'Ice Dragon Secret Key', 'leaky-paywall' ); ?></th>
                                     <td>
                                         <input type="text" id="custom_excerpt_length" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
                                         <p class="description">
