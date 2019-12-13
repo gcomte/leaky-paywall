@@ -196,7 +196,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 			$defaults = array(
 				'custom_excerpt_length'			=> '',
-				'post_types'					=> ACTIVE_ISSUEM ? array( 'article' ) : array( 'post' ), /* Site Specific */
+				'post_types'					=> array( 'post' ), /* Site Specific */
 				'free_articles'					=> 2,
 				'cookie_expiration' 			=> 24,
 				'cookie_expiration_interval' 	=> 'day',
@@ -219,7 +219,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'js_restrictions_page_container' => 'article .entry-content',
 				'restrictions' 	=> array(
 					'post_types' => array(
-						'post_type' 	=> ACTIVE_ISSUEM ? 'article' : 'post',
+						'post_type' => 'post',
 						'taxonomy'	=> 'all',
 					)
 				),
