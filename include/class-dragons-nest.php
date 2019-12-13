@@ -100,4 +100,9 @@ class DragonsNest {
             return $default;
         }
     }
+
+    public function getFullDragonsNestURL(){
+        return get_home_url() . '/?rest_route=/' . API_NAMESPACE . '/' . API_VERSION . '/' . API_DRAGONSNEST_URL_PATH  . '/';
+    }
+
 }

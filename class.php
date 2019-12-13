@@ -509,10 +509,21 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                                 <tr>
                                     <th><?php _e( 'Ice Dragon Secret Key', 'leaky-paywall' ); ?></th>
                                     <td>
-                                        <input type="text" id="custom_excerpt_length" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
+                                        <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
                                         <p class="description">
                                             <?php _e( "Keep this information private! This secret is used to verify the validity of the vouchers purchased by your visitors.", 'leaky-paywall' ); ?>
                                         </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th><?php _e( "Dragon's Nest URL", 'leaky-paywall' ); ?></th>
+                                    <td>
+                                        <p><?php
+                                            require_once('include/class-dragons-nest.php');
+                                            $dragonsNest = new DragonsNest();
+                                            echo $dragonsNest->getFullDragonsNestURL();
+                                        ?></p>
                                     </td>
                                 </tr>
 
