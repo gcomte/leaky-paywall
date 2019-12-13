@@ -55,9 +55,13 @@ function ice_dragon_paywall_plugins_loaded() {
 		// helper classes
 		include( ICE_DRAGON_PAYWALL_PATH . 'include/class-restrictions.php' );
 
-		//Internationalization
+		// Internationalization
 		load_plugin_textdomain( 'leaky-paywall', false, ICE_DRAGON_PAYWALL_REL_DIR . '/i18n/' );
-			
+
+		// Register Dragonsnest as Rest API endpoint
+        require_once(ICE_DRAGON_PAYWALL_PATH . 'include/class-dragons-nest.php');
+        $dragonsNest = new DragonsNest();
+        $dragonsNest->registerRestAPI();
 	}
 
 }
