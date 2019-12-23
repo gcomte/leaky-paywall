@@ -40,8 +40,8 @@ if ( !function_exists( 'ice_dragon_paywall_content_visibility' ) ) {
         );
         $visibility = wp_parse_args( $visibility, $defaults );
 
-        echo '<label for="leaky-paywall-visibility">' . sprintf( __( 'This %s should...', 'issuem-leaky-paywall' ), $post->post_type ) . '</label> ';
-        echo '<select id="issuem-leaky-paywall-visibility-type" name="ice_dragon_visibility_type">';
+        echo '<label for="ice-dragon-visibility-type">' . sprintf( __( 'This %s should...', 'issuem-leaky-paywall' ), $post->post_type ) . '</label> ';
+        echo '<select id="ice-dragon-visibility-type" name="ice_dragon_visibility_type">';
         echo '  <option value="default" ' . selected( $visibility['visibility_type'], 'default', true ) . '>' . __( "obey Ice Dragon defaults.", 'issuem-leaky-paywall' ) . '</option>';
         echo '  <option value="always" ' . selected( $visibility['visibility_type'], 'always', true ) . '>' . __( 'always show a paywall.', 'issuem-leaky-paywall' ) . '</option>';
         echo '  <option value="never" ' . selected( $visibility['visibility_type'], 'never', true ) . '>' . __( 'never show a paywall.', 'issuem-leaky-paywall' ) . '</option>';
