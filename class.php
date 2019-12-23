@@ -135,9 +135,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				wp_enqueue_script( 'lpaywall_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-settings.js', array( 'jquery' ), LPAYWALL_VERSION );
 			}
 
-            if ( 'post.php' === $hook_suffix|| 'post-new.php' === $hook_suffix ) {
-                wp_enqueue_script( 'lpaywall_post_js', ICE_DRAGON_PAYWALL_URL . 'js/issuem-leaky-paywall-post.js', array( 'jquery' ), ICE_DRAGON_PAYWALL_URL );
-            }
 		}
 		
 		/**
@@ -219,24 +216,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			$defaults = apply_filters( 'ice_dragon_paywall_default_settings', $defaults );
 			$settings = get_option( IceDragonConstants::DB_STORAGE_KEY ); /* Site specific settings */
 			$settings = wp_parse_args( $settings, $defaults );
-			
-			if ( $this->is_site_wide_enabled() ) {
-				$site_wide_settings = get_site_option( IceDragonConstants::DB_STORAGE_KEY );
-				/* These are all site-specific settings */
-				unset( $site_wide_settings['post_types'] );
-				unset( $site_wide_settings['free_articles'] );
-				unset( $site_wide_settings['cookie_expiration'] );
-				unset( $site_wide_settings['cookie_expiration_interval'] );
-				unset( $site_wide_settings['subscribe_login_message'] );
-				unset( $site_wide_settings['subscribe_upgrade_message'] );
-				unset( $site_wide_settings['css_style'] );
-				unset( $site_wide_settings['site_name'] );
-				unset( $site_wide_settings['from_name'] );
-				unset( $site_wide_settings['from_email'] );
-				unset( $site_wide_settings['restrictions'] );
-				$site_wide_settings = apply_filters( 'ice_dragon_paywall_get_settings_site_wide_settings', $site_wide_settings );
-				$settings = wp_parse_args( $site_wide_settings, $settings );
-			}
 
 			return apply_filters( 'ice_dragon_paywall_get_settings', $settings );
 			
@@ -249,9 +228,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		 */
 		function update_settings( $settings ) {
             update_option( IceDragonConstants::DB_STORAGE_KEY, $settings );
-            if ( $this->is_site_wide_enabled()) {
-				update_site_option( IceDragonConstants::DB_STORAGE_KEY, $settings );
-			}
 		}
 		
 		/**
