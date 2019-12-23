@@ -179,15 +179,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		}
 		
 		/**
-		 * Check if zeen101's Leaky Paywall MultiSite options are enabled
-		 *
-		 * @since CHANGEME
-		 */
-		function is_site_wide_enabled() {
-			return ( is_multisite() ) ? get_site_option( 'issuem-leaky-paywall-site-wide' ) : false;
-		}
-		
-		/**
 		 * Get zeen101's Leaky Paywall options
 		 *
 		 * @since 1.0.0
@@ -289,12 +280,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			if ( isset( $_REQUEST['update_lpaywall_settings'] ) ) {
 
 				if ( $current_tab == 'general' ) {
-
-					if ( !empty( $_REQUEST['site_wide_enabled'] ) ) {
-						update_site_option( 'issuem-leaky-paywall-site-wide', true );
-					} else {
-						update_site_option( 'issuem-leaky-paywall-site-wide', false );
-					}
 
 					if ( isset( $_POST['custom_excerpt_length'] ) ) {
 						
