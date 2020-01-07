@@ -169,11 +169,11 @@ class Ice_Dragon_Paywall_Restrictions {
         $settings = get_ice_dragon_paywall_settings();
         $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
 
-        define('PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
-        define('DRAGONS_NEST_CLASS_RELATIVE_PATH', 'include/class-dragons-nest.php');
-        define('DRAGONS_NEST_CLASS_ABSOLUTE_PATH', PLUGIN_ABSOLUTE_PATH . DRAGONS_NEST_CLASS_RELATIVE_PATH);
+        define('IDRA_PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
+        define('IDRA_DRAGONS_NEST_CLASS_RELATIVE_PATH', 'include/class-dragons-nest.php');
+        define('IDRA_DRAGONS_NEST_CLASS_ABSOLUTE_PATH', IDRA_PLUGIN_ABSOLUTE_PATH . IDRA_DRAGONS_NEST_CLASS_RELATIVE_PATH);
 
-        require_once(DRAGONS_NEST_CLASS_ABSOLUTE_PATH);
+        require_once(IDRA_DRAGONS_NEST_CLASS_ABSOLUTE_PATH);
 
         $dragonsNest = new DragonsNest();
         return $dragonsNest->receivedValidIceDragonCookie($paymentConfirmationSecret);
