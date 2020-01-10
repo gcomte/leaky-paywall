@@ -218,7 +218,7 @@ class Ice_Dragon_Paywall_Restrictions {
             $message .=  '<div id="paywall-login-text"><div>' . $this->replace_variables( stripslashes( $settings['subscribe_login_message'] ) . '</div></div>' );
             $message .= '</div></a>';
         } else {
-			$message .= $this->replace_variables( stripslashes( $settings['subscribe_upgrade_message'] ) );
+			$message .= $this->replace_variables( stripslashes( $settings['pay_direct_message'] ) );
 		}
 		$message .= '</div></div>';
 

@@ -150,7 +150,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'cookie_expiration' 			=> 24,
 				'cookie_expiration_interval' 	=> 'day',
 				'subscribe_login_message'		=> __( 'Use ice-dragon.ch to pay for this content over the Lightning Network ⚡', 'leaky-paywall' ),
-				'subscribe_upgrade_message'		=> __( 'Tear down this Paywall! ⚡', 'leaky-paywall' ),
+				'pay_direct_message'		=> __( 'Tear down this Paywall! ⚡', 'leaky-paywall' ),
 				'css_style'						=> 'default',
 				'enable_user_delete_account'	=> 'off',
 				'site_name'						=> get_option( 'blogname' ), /* Site Specific */
@@ -228,8 +228,8 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					if ( !empty( $_REQUEST['subscribe_login_message'] ) )
 						$settings['subscribe_login_message'] = trim( $_REQUEST['subscribe_login_message'] );
 						
-					if ( !empty( $_REQUEST['subscribe_upgrade_message'] ) )
-						$settings['subscribe_upgrade_message'] = trim( $_REQUEST['subscribe_upgrade_message'] );
+					if ( !empty( $_REQUEST['pay_direct_message'] ) )
+						$settings['pay_direct_message'] = trim( $_REQUEST['pay_direct_message'] );
 						
 					if ( !empty( $_REQUEST['css_style'] ) )
 						$settings['css_style'] = $_REQUEST['css_style'];
@@ -401,7 +401,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        	<tr>
 	                                <th><?php _e( 'Direct Pay Message', 'leaky-paywall' ); ?></th>
 	                                <td>
-	                    				<textarea id="subscribe_upgrade_message" class="large-text" name="subscribe_upgrade_message" cols="50" rows="3"><?php echo stripslashes( $settings['subscribe_upgrade_message'] ); ?></textarea>
+	                    				<textarea id="pay_direct_message" class="large-text" name="pay_direct_message" cols="50" rows="3"><?php echo stripslashes( $settings['pay_direct_message'] ); ?></textarea>
 	                                    <p class="description">
 	                                    <?php _e( "Is shown when a visitor has an active session with the Ice Dragon website. Below a QR code of an Invoice is shown for the user to pay.", 'leaky-paywall' ); ?>
 	                                    </p>
