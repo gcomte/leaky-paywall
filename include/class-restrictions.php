@@ -56,13 +56,6 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	}
 
-	public function process_js_content_restrictions() 
-	{
-		add_action( 'wp_ajax_nopriv_lpaywall_process_cookie', array( $this, 'check_js_restrictions' ) );
-		add_action( 'wp_ajax_lpaywall_process_cookie', array( $this, 'check_js_restrictions' ) );
-
-	}
-
 	public function check_js_restrictions() 
 	{
 

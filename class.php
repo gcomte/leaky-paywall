@@ -44,21 +44,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			add_action( 'wp_ajax_ice_dragon_paywall_process_notice_link', array( $this, 'ajax_process_notice_link' ) );
 				
 			add_action( 'wp', array( $this, 'process_content_restrictions' ) );
-			add_action( 'init', array( $this, 'process_js_content_restrictions' ) );
-			
+
 			if ( 'on' === $settings['restrict_pdf_downloads'] ) {
 				add_filter( 'issuem_pdf_attachment_url', array( $this, 'restrict_pdf_attachment_url' ), 10, 2 );
-			}
-			
-		}
-
-		public function process_js_content_restrictions() 
-		{
-			$settings = get_ice_dragon_paywall_settings();
-
-			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
-				$restrictions = new Ice_Dragon_Paywall_Restrictions();
-				$restrictions->process_js_content_restrictions();
 			}
 			
 		}
@@ -67,12 +55,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 		{	
 
 			if ( is_admin() ) {
-				return;
-			}
-
-			$settings = get_ice_dragon_paywall_settings();
-
-			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
 				return;
 			}
 
@@ -152,27 +134,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', ICE_DRAGON_VERSION );
 			}
 			
-			if ( 'on' === $settings['enable_js_cookie_restrictions'] ) {
-
-				if ( is_home() || is_front_page() || is_archive() ) {
-					return;
-				}
-
-				wp_enqueue_script( 'js_cookie_js', ICE_DRAGON_PAYWALL_URL . 'js/js-cookie.js', array( 'jquery' ), LPAYWALL_VERSION );
-				wp_enqueue_script( 'lpaywall_cookie_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-cookie.js', array( 'jquery' ), LPAYWALL_VERSION );
-
-				$post_container = $settings['js_restrictions_post_container'];
-				$page_container = $settings['js_restrictions_page_container'];
-
-				wp_localize_script( 'lpaywall_cookie_js', 'lpaywall_cookie_ajax',
-		            array( 
-		            	'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
-		            	'post_container'	=> $post_container,
-		            	'page_container'	=> $page_container
-		             ) 
-		        );
-			}
-			
 		}
 		
 		/**
@@ -202,9 +163,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'lpaywall_decimal_separator'	=> '.',
 				'lpaywall_decimal_number'	=> '2',
 				'restrict_pdf_downloads' 		=> 'off',
-				'enable_js_cookie_restrictions' => 'off',
-				'js_restrictions_post_container' => 'article .entry-content',
-				'js_restrictions_page_container' => 'article .entry-content',
 				'restrictions' 	=> array(
 					'post_types' => array(
 						'post_type' => 'post',
@@ -306,11 +264,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					} else {
 						$settings['restrictions'] = array();
 					}
-
-					if ( !empty( $_POST['enable_js_cookie_restrictions'] ) )
-						$settings['enable_js_cookie_restrictions'] = $_POST['enable_js_cookie_restrictions'];
-					else
-						$settings['enable_js_cookie_restrictions'] = 'off';
 
 					if ( isset( $_POST['js_restrictions_post_container'] ) ) {
 						$settings['js_restrictions_post_container'] = sanitize_text_field( $_POST['js_restrictions_post_container'] );
@@ -649,30 +602,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				                    	<p class="description"><?php _e( 'By default all content is allowed.', 'leaky-paywall' ); ?></p>
 			                        </td>
 		                        </tr>
-                                <?php
-                                /* todo study this. What does it do? Do we need this for Ice Dragon? Could the current implementation possibly be tweaked to use it for removing ads through an LN payment?
-                                ?>
-		                        <tr class="restriction-options">
-	                                <th><?php _e( 'Alternative Restriction Handling', 'leaky-paywall' ); ?></th>
-	                                <td><input type="checkbox" id="enable_js_cookie_restrictions" name="enable_js_cookie_restrictions" <?php checked( 'on', $settings['enable_js_cookie_restrictions'] ); ?> /> <?php _e( 'Only enable this if you are using a caching plugin or your host uses heavy caching and the paywall notice is not displaying on your site.' ); ?></td>
-	                            </tr>
-
-	                            <tr class="restriction-options-post-container <?php echo $settings['enable_js_cookie_restrictions'] != 'on' ? 'hide-setting' : ''; ?>">
-	                                <th><?php _e( 'Alternative Restrictions Post Container', 'leaky-paywall' ); ?></th>
-	                                <td>
-	                                	<input type="text" id="js_restrictions_post_container" class="medium-text" name="js_restrictions_post_container" value="<?php echo stripcslashes( $settings['js_restrictions_post_container'] ); ?>" />
-	                                	<p class="description"><?php _e( 'CSS selector of the container that contains the content on a post and custom post type.' ); ?></p>
-	                                </td>
-	                            </tr>
-
-	                            <tr class="restriction-options-page-container <?php echo $settings['enable_js_cookie_restrictions'] != 'on' ? 'hide-setting' : ''; ?>">
-	                                <th><?php _e( 'Alternative Restrictions Page Container', 'leaky-paywall' ); ?></th>
-	                                <td>
-	                                	<input type="text" id="js_restrictions_page_container" class="medium-text" name="js_restrictions_page_container" value="<?php echo stripcslashes( $settings['js_restrictions_page_container'] ); ?>" />
-	                                	<p class="description"><?php _e( 'CSS selector of the container that contains the content on a page.' ); ?></p>
-	                                </td>
-	                            </tr>
-*/ ?>
 
 	                        </table>
 
