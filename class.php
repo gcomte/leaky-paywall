@@ -128,7 +128,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 			$settings = $this->get_settings();
 			
-			if ( $settings['css_style'] == 'default' ) {
+			if ( $settings['use_css'] === true ) {
 				wp_enqueue_style( 'issuem-leaky-paywall', ICE_DRAGON_PAYWALL_URL . '/css/lpaywall.css', '', LPAYWALL_VERSION );
 				// Added for Ice Dragon
 				wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', ICE_DRAGON_VERSION );
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'cookie_expiration_interval' 	=> 'day',
 				'subscribe_login_message'		=> __( 'Use ice-dragon.ch to pay for this content over the Lightning Network ⚡', 'leaky-paywall' ),
 				'pay_direct_message'		=> __( 'Tear down this Paywall! ⚡', 'leaky-paywall' ),
-				'css_style'						=> 'default',
+				'use_css'						=> true,
 				'enable_user_delete_account'	=> 'off',
 				'site_name'						=> get_option( 'blogname' ), /* Site Specific */
 				'from_name'						=> get_option( 'blogname' ), /* Site Specific */
@@ -226,8 +226,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					if ( !empty( $_REQUEST['pay_direct_message'] ) )
 						$settings['pay_direct_message'] = trim( $_REQUEST['pay_direct_message'] );
 						
-					if ( !empty( $_REQUEST['css_style'] ) )
-						$settings['css_style'] = $_REQUEST['css_style'];
+					$settings['use_css'] = !empty($_REQUEST['use_css']);
 
                     if ( !empty( $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ) )
 						$settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
@@ -378,12 +377,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
  */ ?>
 
 	                        	<tr>
-	                                <th><?php _e( 'CSS Style', 'leaky-paywall' ); ?></th>
+	                                <th><?php _e( 'Use default CSS Style', 'leaky-paywall' ); ?></th>
 	                                <td>
-									<select id='css_style' name='css_style'>
-										<option value='default' <?php selected( 'default', $settings['css_style'] ); ?> ><?php _e( 'Default', 'leaky-paywall' ); ?></option>
-										<option value='none' <?php selected( 'none', $settings['css_style'] ); ?> ><?php _e( 'None', 'leaky-paywall' ); ?></option>
-									</select>
+                                        <input type="checkbox" name="use_css" id="use_css" value="true"<?php if($settings['use_css']){echo " checked";}?> >
 	                                </td>
 	                            </tr>
 

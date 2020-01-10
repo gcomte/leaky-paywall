@@ -212,7 +212,7 @@ class Ice_Dragon_Paywall_Restrictions {
 		if ( !is_user_logged_in() ) {
             $message .= '<a class="link-on-paywall" href="https://ice-dragon.ch" target="_blank">';
             $message .= '<div id="paywall-login-container">';
-            if ( $settings['css_style'] == 'default' ) {
+            if ( $settings['use_css'] === true ) {
                 $message .= '<img src="' . ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png" alt="Ice Dragon Logo" id="ice-dragon-logo-on-paywall">';
             }
             $message .=  '<div id="paywall-login-text"><div>' . $this->replace_variables( stripslashes( $settings['subscribe_login_message'] ) . '</div></div>' );
