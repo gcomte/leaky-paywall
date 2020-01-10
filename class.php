@@ -207,7 +207,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				$tab = '';
 			}
 
-			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array( 'general', 'subscriptions', 'payments' ) );
+			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array( 'general', 'restrictions', 'payments' ) );
 
 			$current_tab = apply_filters( 'ice_dragon_paywall_current_tab', $tab, $settings_tabs );
 
@@ -240,7 +240,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				}
 
 
-				if ( $current_tab == 'subscriptions' ) {
+				if ( $current_tab == 'restrictions' ) {
 
 					if ( !empty( $_REQUEST['post_types'] ) )
 						$settings['post_types'] = $_REQUEST['post_types'];
@@ -339,7 +339,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     			
                     			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'general') { ?> nav-tab-active<?php } ?>"><?php _e('General', 'leaky-paywall');?></a>
 
-                    			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=subscriptions');?>" class="nav-tab<?php if($current_tab == 'subscriptions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
+                    			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=restrictions');?>" class="nav-tab<?php if($current_tab == 'restrictions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
 
                                 <?php /* Todo implement Currency options
                                 <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Currency Options', 'leaky-paywall');?></a>
@@ -541,9 +541,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                    <?php endif; // payment tabs ?>
 
 
-	                    <?php if ( $current_tab == 'subscriptions' ) : ?>
+	                    <?php if ( $current_tab == 'restrictions' ) : ?>
 
-	                    <?php do_action('ice_dragon_paywall_before_subscriptions_settings'); ?>
+	                    <?php do_action('ice_dragon_paywall_before_restrictions_settings'); ?>
 
 	                    <div id="modules" class="postbox leaky-paywall-restriction-settings">
 
