@@ -76,26 +76,6 @@ if ( !function_exists('lpaywall_get_current_site') ) {
 
 }
 
-if ( !function_exists('lpaywall_get_currency') ) {
-	
-	/**
-	 * Get the currency value set in the Leaky Paywall settings
-	 *
-	 * @since 4.9.3
-	 *
-	 * @return string Currency code (i.e USD)
-	 */
-	function lpaywall_get_currency() {
-
-		$settings = get_ice_dragon_paywall_settings();
-		$currency = $settings['lpaywall_currency'];
-
-		return apply_filters( 'lpaywall_currency', $currency );
-		
-	}
-
-}
-
 if ( !function_exists('build_lpaywall_default_restriction_row') ) {
 
     /**
@@ -439,25 +419,6 @@ if ( ! function_exists( 'object_to_array' ) ) {
 }
 
 /**
- * Get the current site's selected currency symbol
- *
- * @since 4.5.2
- * @return string
- */
-if ( ! function_exists('lpaywall_get_current_currency_symbol') ) {
-
-	function lpaywall_get_current_currency_symbol() {
-
-		$settings = get_ice_dragon_paywall_settings();
-		$currency = lpaywall_get_currency();
-		$currencies = lpaywall_supported_currencies();
-
-		return $currencies[$currency]['symbol'];
-
-	}
-}
-
-/**
  * Determine if the current subscriber can view the content
  *
  * @since 4.7.1
@@ -543,56 +504,6 @@ function ice_dragon_paywall_plugin_row_meta( $input, $file ) {
 	return $input;
 }
 add_filter( 'plugin_row_meta', 'ice_dragon_paywall_plugin_row_meta', 10, 2 );
-
-function ice_dragon_paywall_get_level_display_price( $level ) {
-
-	$settings = get_ice_dragon_paywall_settings();
-
-	$currency_position = $settings['lpaywall_currency_position'];
-	$thousand_separator = $settings['lpaywall_thousand_separator'];
-	$decimal_separator = $settings['lpaywall_decimal_separator'];
-	$decimal_number = empty( $settings['lpaywall_decimal_number'] ) ? '0' : $settings['lpaywall_decimal_number'];
-	$currency_symbol = lpaywall_get_current_currency_symbol();
-
-	$price = $level['price'];
-	$broken_price = explode('.', $price);
-
-	$before_decimal = $broken_price[0];
-	$after_decimal = substr( isset( $broken_price[1] ) ? $broken_price[1] : '', 0, $decimal_number );
-
-	if ( !$after_decimal && $decimal_number == 2 ) {
-		$after_decimal = '00';
-	}
-
-	if ( $price > 0 ) {
-
-		$decimal = $after_decimal ? $decimal_separator : '';
-		$formatted_number = number_format( $before_decimal, 0, '', $thousand_separator ) . $decimal . $after_decimal;
-
-		switch ( $currency_position ) {
-			case 'left':
-				$display_price = $currency_symbol . $formatted_number;
-				break;
-			case 'right':
-				$display_price = $formatted_number . $currency_symbol;
-				break;
-			case 'left_space':
-				$display_price = $currency_symbol . ' ' . $formatted_number;
-				break;
-			case 'right_space':
-				$display_price =$formatted_number . ' ' .  $currency_symbol;
-				break;
-			default:
-				$display_price = $currency_symbol . $formatted_number;
-				break;
-		}
-		
-	} else {
-		$display_price = 'Free';
-	}
-
-	return apply_filters( 'ice_dragon_paywall_display_price', $display_price, $level );
-}
 
 
 /**

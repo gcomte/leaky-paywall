@@ -157,11 +157,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				'from_name'						=> get_option( 'blogname' ), /* Site Specific */
 				'from_email'					=> get_option( 'admin_email' ), /* Site Specific */
 				'test_mode'						=> 'off',
-				'lpaywall_currency'		=> 'USD',
-				'lpaywall_currency_position'		=> 'left',
-				'lpaywall_thousand_separator'	=> ',',
-				'lpaywall_decimal_separator'	=> '.',
-				'lpaywall_decimal_number'	=> '2',
 				'restrict_pdf_downloads' 		=> 'off',
 				'restrictions' 	=> array(
 					'post_types' => array(
@@ -279,31 +274,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 				}
 
-				if ( $current_tab == 'payments' ) {
-
-					if ( !empty( $_REQUEST['lpaywall_currency'] ) )
-						$settings['lpaywall_currency'] = trim( $_REQUEST['lpaywall_currency'] );
-
-					if ( isset( $_POST['lpaywall_currency_position'] ) ) {
-						$settings['lpaywall_currency_position'] = trim( $_POST['lpaywall_currency_position'] );
-					}
-
-					if ( isset( $_POST['lpaywall_thousand_separator'] ) ) {
-						$settings['lpaywall_thousand_separator'] = trim( $_POST['lpaywall_thousand_separator'] );
-					}
-
-					if ( isset( $_POST['lpaywall_decimal_separator'] ) ) {
-						$settings['lpaywall_decimal_separator'] = trim( $_POST['lpaywall_decimal_separator'] );
-					}
-
-					if ( isset( $_POST['lpaywall_decimal_number'] ) ) {
-						$settings['lpaywall_decimal_number'] = trim( $_POST['lpaywall_decimal_number'] );
-					}
-
-				}
-
-				
-
 				$settings = apply_filters( 'ice_dragon_paywall_update_settings_settings', $settings, $current_tab );
 				$this->update_settings( $settings );
 				$settings_saved = true;
@@ -341,9 +311,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
                     			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=restrictions');?>" class="nav-tab<?php if($current_tab == 'restrictions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
 
-                                <?php /* Todo implement Currency options
-                                <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=payments');?>" class="nav-tab<?php if($current_tab == 'payments') { ?> nav-tab-active<?php } ?>"><?php _e('Currency Options', 'leaky-paywall');?></a>
-                                */ ?>
                                 <?php /* Added for Ice Dragon */ ?>
                                 <a href="https://ice-dragon.ch" target="_blank">
                                     <img src="<?php echo ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
@@ -458,88 +425,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                         </p>
 
 	                    <?php endif; ?>
-
-	                    <?php if ( $current_tab == 'payments' ) : ?>
-
-	                    <?php do_action('ice_dragon_paywall_before_payments_settings'); ?>
-
-	                    <?php // currency options ?>
-
-	                    <div id="modules" class="postbox">
-            
-			                <div class="handlediv" title="Click to toggle"><br /></div>
-			                
-			                <h3 class="hndle"><span><?php _e( 'Currency Options', 'leaky-paywall' ); ?></span></h3>
-			                
-			                <div class="inside">
-			                
-			                <table id="lpaywall_currency_options" class="form-table">
-			                
-			                    <tr>
-			                        <th><?php _e( 'Currency', 'leaky-paywall' ); ?></th>
-			                        <td>
-			                        	<select id="lpaywall_currency" name="lpaywall_currency">
-				                        	<?php
-											$currencies = lpaywall_supported_currencies();
-											foreach ( $currencies as $key => $currency ) {
-				                        		echo '<option value="' . $key . '" ' . selected( $key, $settings['lpaywall_currency'], true ) . '>' . $currency['label'] . ' - ' . $currency['symbol'] . '</option>';
-											}
-				                        	?>
-			                        	</select>
-			                        	<p class="description"><?php _e( 'This controls which currency payment gateways will take payments in.', 'leaky-paywall' ); ?></p>
-			                        </td>
-			                    </tr>
-
-			                    <tr>
-			                        <th><?php _e( 'Currency Position', 'leaky-paywall' ); ?></th>
-			                        <td>
-			                        	<select id="lpaywall_currency_position" name="lpaywall_currency_position">
-
-			                        		<option value="left" <?php selected( 'left', $settings['lpaywall_currency_position'] ); ?>>Left ($99.99)</option>
-			                        		<option value="right" <?php selected( 'right', $settings['lpaywall_currency_position'] ); ?>>Right (99.99$)</option>
-			                        		<option value="left_space" <?php selected( 'left_space', $settings['lpaywall_currency_position'] ); ?>>Left with space ($ 99.99)</option>
-			                        		<option value="right_space" <?php selected( 'right_space', $settings['lpaywall_currency_position'] ); ?>>Right with space (99.99 $)</option>
-			                        	</select>
-			                        </td>
-			                    </tr>
-
-			                    <tr>
-			                        <th><?php _e( 'Thousand Separator', 'leaky-paywall' ); ?></th>
-			                        <td>
-			                        	<input type="text" class="small-text" id="lpaywall_thousand_separator" name="lpaywall_thousand_separator" value="<?php echo $settings['lpaywall_thousand_separator']; ?>">
-			                        </td>
-			                    </tr>
-
-			                    <tr>
-			                        <th><?php _e( 'Decimal Separator', 'leaky-paywall' ); ?></th>
-			                        <td>
-			                        	<input type="text" class="small-text" id="lpaywall_decimal_separator" name="lpaywall_decimal_separator" value="<?php echo $settings['lpaywall_decimal_separator']; ?>">
-			                        </td>
-			                    </tr>
-
-			                    <tr>
-			                        <th><?php _e( 'Number of Decimals', 'leaky-paywall' ); ?></th>
-			                        <td>
-			                        	<input type="number" class="small-text" id="lpaywall_decimal_number" name="lpaywall_decimal_number" value="<?php echo $settings['lpaywall_decimal_number']; ?>" min="0" step="1">
-			                        </td>
-			                    </tr>
-
-			                    <?php do_action( 'ice_dragon_paywall_after_currency_settings', $settings ); ?>
-
-			                </table>
-
-			                </div>
-			                
-			            </div>
-
-			            <p class="submit">
-		                    <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
-		                </p>
-
-			            <?php do_action( 'ice_dragon_paywall_after_payments_settings', $settings ); ?>
-
-	                    <?php endif; // payment tabs ?>
-
 
 	                    <?php if ( $current_tab == 'restrictions' ) : ?>
 
