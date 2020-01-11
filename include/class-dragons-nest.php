@@ -16,7 +16,7 @@ define('IDRA_JWT_LIBRARY_SUPPORTED_HASHING_ALGORITHMS', array('HS256', 'HS384', 
 define('IDRA_JWT_EXPIRATION_KEY', 'exp');
 define('IDRA_JWT_SEGMENT_DELIMITER', '.');
 
-define('IDRA_HEADER_ALLOW_ORIGIN', 'Access-Control-Allow-Origin: ' . IceDragonConstants::ICE_DRAGON_DOMAIN);
+define('IDRA_HEADER_ALLOW_ORIGIN', 'Access-Control-Allow-Origin: ' . IDRA_Constants::ICE_DRAGON_DOMAIN);
 define('IDRA_HEADER_ALLOW_CREDENTIALS', 'Access-Control-Allow-Credentials: true');
 define('IDRA_HEADER_ALLOW_METHODS', 'Access-Control-Allow-Methods: GET');
 define('IDRA_HEADER_EXPOSE_HEADERS', 'Access-Control-Expose-Headers: Set-Cookie');
@@ -29,7 +29,7 @@ define('IDRA_COMPOSER_LOADER_ABSOLUTE_PATH', IDRA_PLUGIN_ABSOLUTE_PATH . IDRA_CO
 require_once(IDRA_COMPOSER_LOADER_ABSOLUTE_PATH);
 use Ahc\Jwt\JWT;
 
-class DragonsNest {
+class IDRA_DragonsNest {
 
     public function registerRestAPI() {
         add_action('rest_api_init', function () {
@@ -42,7 +42,7 @@ class DragonsNest {
 
     function receiveVoucher(WP_REST_Request $data){
         $settings = idra_get_ice_dragon_paywall_settings();
-        $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
+        $paymentConfirmationSecret = $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET];
 
         $this->registerIceDragonCookie($data[IDRA_API_VOUCHER_KEY], $paymentConfirmationSecret);
     }
@@ -58,9 +58,9 @@ class DragonsNest {
             header(IDRA_HEADER_ALLOW_METHODS);
             header(IDRA_HEADER_EXPOSE_HEADERS);
 
-            setcookie(IceDragonConstants::COOKIE_TITLE, $voucher, $payload[IDRA_JWT_EXPIRATION_KEY], '/');
+            setcookie(IDRA_Constants::COOKIE_TITLE, $voucher, $payload[IDRA_JWT_EXPIRATION_KEY], '/');
 
-            echo IceDragonConstants::DRAGONS_NEST_SUCCESS_MESSSAGE;
+            echo IDRA_Constants::DRAGONS_NEST_SUCCESS_MESSSAGE;
             exit;
 
         } catch (Exception $exception) {
@@ -70,9 +70,9 @@ class DragonsNest {
     }
 
     public function receivedValidIceDragonCookie($paymentConfirmationSecret) {
-        if(isset($_COOKIE[IceDragonConstants::COOKIE_TITLE])){
+        if(isset($_COOKIE[IDRA_Constants::COOKIE_TITLE])){
             try {
-                if ($this->verifyVoucher($_COOKIE[IceDragonConstants::COOKIE_TITLE], $paymentConfirmationSecret)) {
+                if ($this->verifyVoucher($_COOKIE[IDRA_Constants::COOKIE_TITLE], $paymentConfirmationSecret)) {
                     return true;
                 }
             } catch (Exception $exception) {

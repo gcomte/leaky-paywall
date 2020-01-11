@@ -40,10 +40,10 @@ function idra_plugins_loaded() {
 	require_once( 'class.php' );
 
 	// Instantiate the Pigeon Pack class
-	if ( class_exists( 'Ice_Dragon_Paywall' ) ) {
+	if ( class_exists( 'IDRA_Ice_Dragon_Paywall' ) ) {
 		
 		global $ice_dragon_paywall;
-		$ice_dragon_paywall = new Ice_Dragon_Paywall();
+		$ice_dragon_paywall = new IDRA_Ice_Dragon_Paywall();
 		
 		require_once( 'functions.php' );
 		require_once( 'metaboxes.php' );
@@ -59,7 +59,7 @@ function idra_plugins_loaded() {
 
 		// Register Dragonsnest as Rest API endpoint
         require_once(ICE_DRAGON_PAYWALL_PATH . 'include/class-dragons-nest.php');
-        $dragonsNest = new DragonsNest();
+        $dragonsNest = new IDRA_DragonsNest();
         $dragonsNest->registerRestAPI();
 	}
 

@@ -2,7 +2,7 @@
 /**
 * Load the Restrictions Class
 */
-class Ice_Dragon_Paywall_Restrictions {
+class IDRA_Content_Restrictions {
 
 	/** @var string Name of the restriction cookie */
 	public $cookie_name = 'issuem_lp';
@@ -160,7 +160,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function current_user_can_access()
 	{
         $settings = idra_get_ice_dragon_paywall_settings();
-        $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
+        $paymentConfirmationSecret = $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET];
 
         define('IDRA_PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
         define('IDRA_DRAGONS_NEST_CLASS_RELATIVE_PATH', 'include/class-dragons-nest.php');
@@ -168,7 +168,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
         require_once(IDRA_DRAGONS_NEST_CLASS_ABSOLUTE_PATH);
 
-        $dragonsNest = new DragonsNest();
+        $dragonsNest = new IDRA_DragonsNest();
         return $dragonsNest->receivedValidIceDragonCookie($paymentConfirmationSecret);
 	}
 

@@ -165,7 +165,7 @@ add_action( 'wp_ajax_issuem-leaky-paywall-add-new-restriction-row', 'idra_build_
  * @return  array $links
  */
 function idra_plugin_add_settings_link( $links ) {
-    $settings_link = '<a href="admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '">' . __( 'Settings' ) . '</a>';
+    $settings_link = '<a href="admin.php?page=' . IDRA_Constants::TOP_LEVEL_PAGE_NAME . '">' . __( 'Settings' ) . '</a>';
     array_unshift( $links, $settings_link );
   	return $links;
 }

@@ -3,7 +3,7 @@
 require_once ('ice-dragon-constants.php');
 
 
-class Ice_Dragon_Paywall {
+class IDRA_Ice_Dragon_Paywall {
 
     private $plugin_name	= ICE_DRAGON_PAYWALL_NAME;
     private $plugin_slug	= ICE_DRAGON_PAYWALL_SLUG;
@@ -45,7 +45,7 @@ class Ice_Dragon_Paywall {
             return;
         }
 
-        $restrictions = new Ice_Dragon_Paywall_Restrictions();
+        $restrictions = new IDRA_Content_Restrictions();
         $restrictions->process_content_restrictions();
     }
 
@@ -60,12 +60,12 @@ class Ice_Dragon_Paywall {
      */
     function admin_menu() {
 
-        add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IceDragonConstants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
+        add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IDRA_Constants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
 
         /*
-        add_submenu_page( IceDragonConstants::TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
+        add_submenu_page( IDRA_Constants::TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
 
-        add_submenu_page( IceDragonConstants::TOP_LEVEL_PAGE_NAME, __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
+        add_submenu_page( IDRA_Constants::TOP_LEVEL_PAGE_NAME, __( 'Subscribers', 'leaky-paywall' ), __( 'Subscribers', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'leaky-paywall-subscribers', array( $this, 'subscribers_page' ) );
         */
     }
 
@@ -82,7 +82,7 @@ class Ice_Dragon_Paywall {
 
         global $hook_suffix;
 
-        if ('toplevel_page_' . IceDragonConstants::TOP_LEVEL_PAGE_NAME === $hook_suffix
+        if ('toplevel_page_' . IDRA_Constants::TOP_LEVEL_PAGE_NAME === $hook_suffix
                 || 'index.php' === $hook_suffix
                 || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
@@ -100,7 +100,7 @@ class Ice_Dragon_Paywall {
      */
     function admin_wp_enqueue_scripts( $hook_suffix ) {
 
-        if ( 'toplevel_page_' . IceDragonConstants::TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
+        if ( 'toplevel_page_' . IDRA_Constants::TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
             wp_enqueue_script( 'lpaywall_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-settings.js', array( 'jquery' ), LPAYWALL_VERSION );
         }
 
@@ -154,7 +154,7 @@ class Ice_Dragon_Paywall {
         );
 
         $defaults = apply_filters( 'ice_dragon_paywall_default_settings', $defaults );
-        $settings = get_option( IceDragonConstants::DB_STORAGE_KEY ); /* Site specific settings */
+        $settings = get_option( IDRA_Constants::DB_STORAGE_KEY ); /* Site specific settings */
         $settings = wp_parse_args( $settings, $defaults );
 
         return apply_filters( 'ice_dragon_paywall_get_settings', $settings );
@@ -167,7 +167,7 @@ class Ice_Dragon_Paywall {
      * @since 1.0.0
      */
     function update_settings( $settings ) {
-        update_option( IceDragonConstants::DB_STORAGE_KEY, $settings );
+        update_option( IDRA_Constants::DB_STORAGE_KEY, $settings );
     }
 
     /**
@@ -183,7 +183,7 @@ class Ice_Dragon_Paywall {
 
         if(isset($_GET['tab'])) {
             $tab = $_GET['tab'];
-        } else if ( $_GET['page'] == IceDragonConstants::TOP_LEVEL_PAGE_NAME ) {
+        } else if ( $_GET['page'] == IDRA_Constants::TOP_LEVEL_PAGE_NAME ) {
             $tab = 'appearance';
         } else {
             $tab = '';
@@ -255,8 +255,8 @@ class Ice_Dragon_Paywall {
 
             if ( $current_tab === 'integration' ) {
 
-                if ( !empty( $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ) )
-                    $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
+                if ( !empty( $_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] ) )
+                    $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET];
 
             }
 
@@ -293,11 +293,11 @@ class Ice_Dragon_Paywall {
                         ?>
                         <h2 class="nav-tab-wrapper" style="margin-bottom: 10px;">
 
-                            <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'appearance') { ?> nav-tab-active<?php } ?>"><?php _e('Appearance', 'leaky-paywall');?></a>
+                            <a href="<?php echo admin_url('admin.php?page=' . IDRA_Constants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'appearance') { ?> nav-tab-active<?php } ?>"><?php _e('Appearance', 'leaky-paywall');?></a>
 
-                            <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=restrictions');?>" class="nav-tab<?php if($current_tab == 'restrictions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
+                            <a href="<?php echo admin_url('admin.php?page=' . IDRA_Constants::TOP_LEVEL_PAGE_NAME . '&tab=restrictions');?>" class="nav-tab<?php if($current_tab == 'restrictions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
 
-                            <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=integration');?>" class="nav-tab<?php if($current_tab == 'integration') { ?> nav-tab-active<?php } ?>"><?php _e('Integration', 'leaky-paywall');?></a>
+                            <a href="<?php echo admin_url('admin.php?page=' . IDRA_Constants::TOP_LEVEL_PAGE_NAME . '&tab=integration');?>" class="nav-tab<?php if($current_tab == 'integration') { ?> nav-tab-active<?php } ?>"><?php _e('Integration', 'leaky-paywall');?></a>
 
                             <?php /* Added for Ice Dragon */ ?>
                             <a href="https://ice-dragon.ch" target="_blank">
@@ -482,7 +482,7 @@ or */ ?>
                                 <tr>
                                     <th><?php _e( 'Ice Dragon Secret Key', 'leaky-paywall' ); ?></th>
                                     <td>
-                                        <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr($settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET]); ?>">
+                                        <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IDRA_Constants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr($settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET]); ?>">
                                         <p class="description">
                                             <?php _e( "Keep this information private! This secret is used to verify the validity of the vouchers purchased by your visitors.", 'leaky-paywall' ); ?>
                                         </p>
@@ -494,7 +494,7 @@ or */ ?>
                                     <td>
                                         <p><?php
                                             require_once('include/class-dragons-nest.php');
-                                            $dragonsNest = new DragonsNest();
+                                            $dragonsNest = new IDRA_DragonsNest();
                                             echo $dragonsNest->getFullDragonsNestURL();
                                             ?></p>
                                     </td>
