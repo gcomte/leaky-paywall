@@ -197,18 +197,18 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 			if(isset($_GET['tab'])) {
 				$tab = $_GET['tab'];
 			} else if ( $_GET['page'] == IceDragonConstants::TOP_LEVEL_PAGE_NAME ) {
-				$tab = 'general';
+				$tab = 'appearance';
 			} else {
 				$tab = '';
 			}
 
-			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array( 'general', 'restrictions', 'payments' ) );
+			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array( 'appearance', 'restrictions', 'payments' ) );
 
 			$current_tab = apply_filters( 'ice_dragon_paywall_current_tab', $tab, $settings_tabs );
 
 			if ( isset( $_REQUEST['update_lpaywall_settings'] ) ) {
 
-				if ( $current_tab == 'general' ) {
+				if ( $current_tab == 'appearance' ) {
 
 					if ( isset( $_POST['custom_excerpt_length'] ) ) {
 						
@@ -306,7 +306,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     		?>
                     		<h2 class="nav-tab-wrapper" style="margin-bottom: 10px;">
                     			
-                    			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'general') { ?> nav-tab-active<?php } ?>"><?php _e('General', 'leaky-paywall');?></a>
+                    			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'appearance') { ?> nav-tab-active<?php } ?>"><?php _e('Appearance', 'leaky-paywall');?></a>
 
                     			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=restrictions');?>" class="nav-tab<?php if($current_tab == 'restrictions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
 
@@ -319,7 +319,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
   		
 						<?php do_action('ice_dragon_paywall_before_settings', $current_tab ); ?>
 
-						<?php if ( $current_tab == 'general' ) : ?>
+						<?php if ( $current_tab == 'appearance' ) : ?>
 
 						<?php do_action('ice_dragon_paywall_before_general_settings'); ?>
 	                    
@@ -327,7 +327,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                    
 	                        <div class="handlediv" title="Click to toggle"><br /></div>
 	                        
-	                        <h3 class="hndle"><span><?php _e( 'General Settings', 'leaky-paywall' ); ?></span></h3>
+	                        <h3 class="hndle"><span><?php _e( 'Appearance of the Paywall', 'leaky-paywall' ); ?></span></h3>
 	                        
 	                        <div class="inside">
 
