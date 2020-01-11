@@ -202,13 +202,13 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				$tab = '';
 			}
 
-			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array( 'appearance', 'restrictions', 'payments' ) );
+			$settings_tabs = apply_filters('ice_dragon_paywall_settings_tabs', array('appearance', 'restrictions', 'integration'));
 
 			$current_tab = apply_filters( 'ice_dragon_paywall_current_tab', $tab, $settings_tabs );
 
 			if ( isset( $_REQUEST['update_lpaywall_settings'] ) ) {
 
-				if ( $current_tab == 'appearance' ) {
+				if ( $current_tab === 'appearance' ) {
 
 					if ( isset( $_POST['custom_excerpt_length'] ) ) {
 						
@@ -228,13 +228,9 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 						
 					$settings['use_css'] = !empty($_REQUEST['use_css']);
 
-                    if ( !empty( $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ) )
-						$settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
-
 				}
 
-
-				if ( $current_tab == 'restrictions' ) {
+				if ( $current_tab === 'restrictions' ) {
 
 					if ( !empty( $_REQUEST['post_types'] ) )
 						$settings['post_types'] = $_REQUEST['post_types'];
@@ -273,6 +269,13 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 				}
 
+                if ( $current_tab === 'integration' ) {
+
+                    if ( !empty( $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ) )
+                        $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
+
+                }
+
 				$settings = apply_filters( 'ice_dragon_paywall_update_settings_settings', $settings, $current_tab );
 				$this->update_settings( $settings );
 				$settings_saved = true;
@@ -309,6 +312,8 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                     			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME);?>" class="nav-tab<?php if($current_tab == 'appearance') { ?> nav-tab-active<?php } ?>"><?php _e('Appearance', 'leaky-paywall');?></a>
 
                     			<a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=restrictions');?>" class="nav-tab<?php if($current_tab == 'restrictions') { ?> nav-tab-active<?php } ?>"><?php _e('Content Restriction', 'leaky-paywall');?></a>
+
+                                <a href="<?php echo admin_url('admin.php?page=' . IceDragonConstants::TOP_LEVEL_PAGE_NAME . '&tab=integration');?>" class="nav-tab<?php if($current_tab == 'integration') { ?> nav-tab-active<?php } ?>"><?php _e('Integration', 'leaky-paywall');?></a>
 
                                 <?php /* Added for Ice Dragon */ ?>
                                 <a href="https://ice-dragon.ch" target="_blank">
@@ -382,27 +387,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                                         <input type="checkbox" name="use_css" id="use_css" value="true"<?php if($settings['use_css']){echo " checked";}?> >
 	                                </td>
 	                            </tr>
-
-                                <tr>
-                                    <th><?php _e( 'Ice Dragon Secret Key', 'leaky-paywall' ); ?></th>
-                                    <td>
-                                        <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
-                                        <p class="description">
-                                            <?php _e( "Keep this information private! This secret is used to verify the validity of the vouchers purchased by your visitors.", 'leaky-paywall' ); ?>
-                                        </p>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th><?php _e( "Dragon's Nest URL", 'leaky-paywall' ); ?></th>
-                                    <td>
-                                        <p><?php
-                                            require_once('include/class-dragons-nest.php');
-                                            $dragonsNest = new DragonsNest();
-                                            echo $dragonsNest->getFullDragonsNestURL();
-                                        ?></p>
-                                    </td>
-                                </tr>
 
 	                            <?php wp_nonce_field( 'pitc_ice_dragon_general_options', 'pitc_ice_dragon_general_options_nonce' ); ?>
 
@@ -494,8 +478,60 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                             <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'puzzle-ice-dragon' ) ?>" />
                         </p>
 
+                        <?php endif; ?>
 
-	                    <?php endif; ?>
+                    <?php if ( $current_tab == 'integration' ) : ?>
+
+                        <?php do_action('ice_dragon_paywall_before_general_integration'); ?>
+
+                        <div id="modules" class="postbox">
+
+                            <div class="handlediv" title="Click to toggle"><br /></div>
+
+                            <h3 class="hndle"><span><?php _e( 'Integration with your service on ice-dragon.ch', 'leaky-paywall' ); ?></span></h3>
+
+                            <div class="inside">
+
+                                <table id="lpaywall_administrator_options" class="form-table">
+
+                                    <tr>
+                                        <th><?php _e( 'Ice Dragon Secret Key', 'leaky-paywall' ); ?></th>
+                                        <td>
+                                            <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
+                                            <p class="description">
+                                                <?php _e( "Keep this information private! This secret is used to verify the validity of the vouchers purchased by your visitors.", 'leaky-paywall' ); ?>
+                                            </p>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th><?php _e( "Dragon's Nest URL", 'leaky-paywall' ); ?></th>
+                                        <td>
+                                            <p><?php
+                                                require_once('include/class-dragons-nest.php');
+                                                $dragonsNest = new DragonsNest();
+                                                echo $dragonsNest->getFullDragonsNestURL();
+                                                ?></p>
+                                        </td>
+                                    </tr>
+
+                                    <?php wp_nonce_field( 'pitc_ice_dragon_general_options', 'pitc_ice_dragon_general_options_nonce' ); ?>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                        <?php do_action('ice_dragon_paywall_after_general_settings'); ?>
+
+                        <?php do_action( 'ice_dragon_paywall_settings_form', $settings ); // here for backwards compatibility ?>
+
+                        <p class="submit">
+                            <input class="button-primary" type="submit" name="update_lpaywall_settings" value="<?php _e( 'Save Settings', 'leaky-paywall' ) ?>" />
+                        </p>
+
+                    <?php endif; ?>
 
                 </form>
 
