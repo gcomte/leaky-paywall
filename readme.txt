@@ -2,7 +2,7 @@
 Contributors: icedr4gon
 Requires at least: 4.6.0
 Tested up to: 5.2.4
-Stable tag: 0.0.1
+Stable tag: 0.0.2
 Tags: bitcoin, lightning, lightning network, metered paywall, paywall, metered, pay wall, content monetization, metered access, metered pay wall, paid content
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,12 +28,12 @@ Based [ZEEN101](https://zeen101.com/)'s [Leaky Paywall](https://wordpress.org/pl
 
 For documentation see: [https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall](https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall)
 
-We love contributions! Head over to our [GitHub page](https://https://github.com/ln-ice-dragon/wp-ice-dragon) if your feeling inspired 🙏
+We love contributions! Head over to our [GitHub page](https://github.com/ln-ice-dragon/ice-dragon-wp-plugin) if your feeling inspired 🙏
 
 
 == Installation ==
 
-1. Upload the entire `wp-ice-dragon` folder to your `/wp-content/plugins/` folder.
+1. Upload the entire `ice-dragon-wp-plugin` folder to your `/wp-content/plugins/` folder.
 1. Go to the 'Plugins' page in the menu and activate the plugin.
 1. Register your content on [ice-dragon.ch](https://ice-dragon.ch).
 1. Copy your secret key from ice-dragon.ch to your plugin, and configure where you want a paywall to appear.
@@ -58,6 +58,11 @@ Please don't hesitate to reach out to us. This is still an early-day implementat
 
 == Changelog ==
 
+= 0.0.2 Alpha =
+* Fixes to match the needs of WorPress.org plugin store
+* Move ice-dragon.ch integration part to own section plugin settings
+* Removal of unneeded Leaky Paywall code
+
 = 0.0.1 Alpha =
 * Initial Release based on a Fork of ZEEN101's Leaky Paywall
 
@@ -71,15 +76,3 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-== Screenshots ==
-1. Leaky Paywall general settings
-2. Leaky Paywall content restriction settings
-3. Leaky Paywall subscription level settings
-4. Leaky Paywall payment method settings
-5. Leaky Paywall visibility settings let you overwrite the default restrictions on a per content basis
-6. Leaky Paywall subscriber table to manage current current subscribers and add manually add new subscribers
-7. Leaky Paywall subscribe nag after a reader has reached their article limit
-8. Leaky Paywall subscribe cards
-9. Leaky Paywall register form for both free and paid levels
-10. Leaky Paywall account page for a subscriber to manage their account information

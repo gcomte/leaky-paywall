@@ -1,6 +1,6 @@
 <?php
 
-class IceDragonConstants {
+class IDRA_Constants {
 
     const ICE_DRAGON_DOMAIN = 'https://ice-dragon.ch'; // Do not put a slash at the end!
     const COOKIE_TITLE = 'ICE_DRAGON';

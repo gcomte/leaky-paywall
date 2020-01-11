@@ -2,7 +2,7 @@
 /**
 * Load the Restrictions Class
 */
-class Ice_Dragon_Paywall_Restrictions {
+class IDRA_Content_Restrictions {
 
 	/** @var string Name of the restriction cookie */
 	public $cookie_name = 'issuem_lp';
@@ -37,7 +37,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function process_content_restrictions() 
 	{
 
-		do_action( 'ice_dragon_paywall_before_process_requests', get_ice_dragon_paywall_settings() );
+		do_action( 'ice_dragon_paywall_before_process_requests', idra_get_ice_dragon_paywall_settings() );
 
 		if ( !$this->is_content_restricted() ) {
 			return;
@@ -53,13 +53,6 @@ class Ice_Dragon_Paywall_Restrictions {
 		$this->display_subscribe_nag();
 
 		do_action( 'ice_dragon_paywall_is_restricted_content' );
-
-	}
-
-	public function process_js_content_restrictions() 
-	{
-		add_action( 'wp_ajax_nopriv_lpaywall_process_cookie', array( $this, 'check_js_restrictions' ) );
-		add_action( 'wp_ajax_lpaywall_process_cookie', array( $this, 'check_js_restrictions' ) );
 
 	}
 
@@ -166,16 +159,16 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	public function current_user_can_access()
 	{
-        $settings = get_ice_dragon_paywall_settings();
-        $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
+        $settings = idra_get_ice_dragon_paywall_settings();
+        $paymentConfirmationSecret = $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET];
 
-        define('PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
-        define('DRAGONS_NEST_CLASS_RELATIVE_PATH', 'include/class-dragons-nest.php');
-        define('DRAGONS_NEST_CLASS_ABSOLUTE_PATH', PLUGIN_ABSOLUTE_PATH . DRAGONS_NEST_CLASS_RELATIVE_PATH);
+        define('IDRA_PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
+        define('IDRA_DRAGONS_NEST_CLASS_RELATIVE_PATH', 'include/class-dragons-nest.php');
+        define('IDRA_DRAGONS_NEST_CLASS_ABSOLUTE_PATH', IDRA_PLUGIN_ABSOLUTE_PATH . IDRA_DRAGONS_NEST_CLASS_RELATIVE_PATH);
 
-        require_once(DRAGONS_NEST_CLASS_ABSOLUTE_PATH);
+        require_once(IDRA_DRAGONS_NEST_CLASS_ABSOLUTE_PATH);
 
-        $dragonsNest = new DragonsNest();
+        $dragonsNest = new IDRA_DragonsNest();
         return $dragonsNest->receivedValidIceDragonCookie($paymentConfirmationSecret);
 	}
 
@@ -199,7 +192,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	 public function get_nag_excerpt( $content ) 
 	 {
-	 	$settings = get_ice_dragon_paywall_settings();
+	 	$settings = idra_get_ice_dragon_paywall_settings();
 
 	 	if ( isset( $settings['custom_excerpt_length'] ) && strlen( $settings['custom_excerpt_length'] ) > 0 ) {
 			$excerpt = substr( strip_tags( get_the_content( get_the_ID() ) ), 0, intval( $settings['custom_excerpt_length'] ) );
@@ -213,19 +206,19 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function the_content_paywall_message() 
 	{
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 		
 		$message  = '<div class="lpaywall_message_wrap"><div id="lpaywall_message">';
 		if ( !is_user_logged_in() ) {
             $message .= '<a class="link-on-paywall" href="https://ice-dragon.ch" target="_blank">';
             $message .= '<div id="paywall-login-container">';
-            if ( $settings['css_style'] == 'default' ) {
+            if ( $settings['use_css'] === true ) {
                 $message .= '<img src="' . ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png" alt="Ice Dragon Logo" id="ice-dragon-logo-on-paywall">';
             }
             $message .=  '<div id="paywall-login-text"><div>' . $this->replace_variables( stripslashes( $settings['subscribe_login_message'] ) . '</div></div>' );
             $message .= '</div></a>';
         } else {
-			$message .= $this->replace_variables( stripslashes( $settings['subscribe_upgrade_message'] ) );
+			$message .= $this->replace_variables( stripslashes( $settings['pay_direct_message'] ) );
 		}
 		$message .= '</div></div>';
 
@@ -244,7 +237,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	 */
 	public function replace_variables( $message ) {
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 
 		if ( 0 === $settings['page_for_subscription'] )
 			$subscription_url = get_bloginfo( 'wpurl' ) . '/?subscription'; //CHANGEME -- I don't really know what this is suppose to do...
@@ -286,7 +279,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function is_unblockable_content()
 	{
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 
 		$unblockable_content = array(
 			$settings['page_for_login'],
@@ -358,7 +351,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	public function get_restriction_settings()
 	{
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 		return $settings['restrictions'];
 	}
 
@@ -401,7 +394,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function get_expiration_time()
 	{
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 
 		switch ( $settings['cookie_expiration_interval'] ) {
 			case 'hour':

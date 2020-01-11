@@ -8,10 +8,10 @@
  
 /*
 Plugin Name: Ice Dragon
-Plugin URI: https://github.com/gcomte/wp-ice-dragon
+Plugin URI: https://github.com/ln-ice-dragon/ice-dragon-wp-plugin
 Description: The first Bitcoin paywall for Wordpress based on the Lightning Network. Uses <a href="https://ice-dragon.ch" target="_blank">Ice Dragon</a>. Based on zeen101's <a href="https://github.com/zeen101/leaky-paywall" target="_blank">Leaky Paywall</a>.
 Author: Puzzle ITC
-Version: 0.0.1
+Version: 0.0.2
 Author URI: https://puzzle.ch/lightning
 Tags: paywall, bitcoin, satoshis, lightning, lightning network, ice dragon, metered, pay wall, content monetization, metered access, metered pay wall, paid content
 Text Domain: leaky-paywall
@@ -22,7 +22,7 @@ define( 'ICE_DRAGON_PAYWALL_NAME', 		'Ice Dragon Plugin for WordPress' );
 define( 'ICE_DRAGON_PAYWALL_SLUG', 		'ice-dragon-paywall' );
 define( 'LPAYWALL_VERSION',	'4.13.5' );
 define( 'LPAYWALL_DB_VERSION',	'1.0.4' );
-define( 'ICE_DRAGON_VERSION',	'0.0.1' );
+define( 'ICE_DRAGON_VERSION',	'0.0.2' );
 define( 'ICE_DRAGON_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_BASENAME',	plugin_basename( __FILE__ ) );
@@ -33,24 +33,19 @@ define( 'ICE_DRAGON_PAYWALL_REL_DIR',	dirname( ICE_DRAGON_PAYWALL_BASENAME ) );
  *
  * @since 1.0.0
  */
-function ice_dragon_paywall_plugins_loaded() {
+function idra_plugins_loaded() {
 	
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	if ( is_plugin_active( 'issuem/issuem.php' ) )
-		define( 'ACTIVE_ISSUEM', true );
-	else
-		define( 'ACTIVE_ISSUEM', false );
 
 	require_once( 'class.php' );
 
 	// Instantiate the Pigeon Pack class
-	if ( class_exists( 'Ice_Dragon_Paywall' ) ) {
+	if ( class_exists( 'IDRA_Ice_Dragon_Paywall' ) ) {
 		
 		global $ice_dragon_paywall;
-		$ice_dragon_paywall = new Ice_Dragon_Paywall();
+		$ice_dragon_paywall = new IDRA_Ice_Dragon_Paywall();
 		
 		require_once( 'functions.php' );
-		require_once( 'shortcodes.php' );
 		require_once( 'metaboxes.php' );
 
 		// error tracking
@@ -59,10 +54,14 @@ function ice_dragon_paywall_plugins_loaded() {
 		// helper classes
 		include( ICE_DRAGON_PAYWALL_PATH . 'include/class-restrictions.php' );
 
-		//Internationalization
+		// Internationalization
 		load_plugin_textdomain( 'leaky-paywall', false, ICE_DRAGON_PAYWALL_REL_DIR . '/i18n/' );
-			
+
+		// Register Dragonsnest as Rest API endpoint
+        require_once(ICE_DRAGON_PAYWALL_PATH . 'include/class-dragons-nest.php');
+        $dragonsNest = new IDRA_DragonsNest();
+        $dragonsNest->registerRestAPI();
 	}
 
 }
-add_action( 'plugins_loaded', 'ice_dragon_paywall_plugins_loaded', 4815162342 ); //wait for the plugins to be loaded before init
+add_action( 'plugins_loaded', 'idra_plugins_loaded', 4815162342 ); //wait for the plugins to be loaded before init

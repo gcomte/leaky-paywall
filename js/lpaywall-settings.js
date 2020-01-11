@@ -54,16 +54,4 @@ $ice_dragon_paywall_settings(document).ready(function($) {
 		
 	});
 
-	$('#enable_js_cookie_restrictions').click(function() {
-		if ( $(this).is(':checked' ) ) {
-			$('.restriction-options-post-container').removeClass('hide-setting');
-			$('.restriction-options-page-container').removeClass('hide-setting');
-		} else {
-			$('.restriction-options-post-container').addClass('hide-setting');
-			$('.restriction-options-page-container').addClass('hide-setting');
-		}
-		
-	});
-
-
 });
