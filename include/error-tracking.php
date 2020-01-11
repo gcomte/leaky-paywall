@@ -17,7 +17,7 @@ function idra_errors() {
  * @access      public
  * @since       4.0.0
  */
-function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
+function idra_get_error_messages_html( $error_id = '' ) {
 
 	$html   = '';
 	$errors = idra_errors()->get_error_codes();
@@ -52,12 +52,12 @@ function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
  * @access      public
  * @since       4.0.0
  */
-function ice_dragon_paywall_show_error_messages( $error_id = '' ) {
+function idra_show_error_messages( $error_id = '' ) {
 
 	if( idra_errors()->get_error_codes() ) {
 
 		do_action( 'idra_errors_before' );
-		echo ice_dragon_paywall_get_error_messages_html( $error_id );
+		echo idra_get_error_messages_html( $error_id );
 		do_action( 'idra_errors_after' );
 
 	}
