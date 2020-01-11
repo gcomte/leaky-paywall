@@ -11,7 +11,7 @@ Plugin Name: Ice Dragon
 Plugin URI: https://github.com/ln-ice-dragon/ice-dragon-wp-plugin
 Description: The first Bitcoin paywall for Wordpress based on the Lightning Network. Uses <a href="https://ice-dragon.ch" target="_blank">Ice Dragon</a>. Based on zeen101's <a href="https://github.com/zeen101/leaky-paywall" target="_blank">Leaky Paywall</a>.
 Author: Puzzle ITC
-Version: 0.0.1
+Version: 0.0.2
 Author URI: https://puzzle.ch/lightning
 Tags: paywall, bitcoin, satoshis, lightning, lightning network, ice dragon, metered, pay wall, content monetization, metered access, metered pay wall, paid content
 Text Domain: leaky-paywall
@@ -22,7 +22,7 @@ define( 'ICE_DRAGON_PAYWALL_NAME', 		'Ice Dragon Plugin for WordPress' );
 define( 'ICE_DRAGON_PAYWALL_SLUG', 		'ice-dragon-paywall' );
 define( 'LPAYWALL_VERSION',	'4.13.5' );
 define( 'LPAYWALL_DB_VERSION',	'1.0.4' );
-define( 'ICE_DRAGON_VERSION',	'0.0.1' );
+define( 'ICE_DRAGON_VERSION',	'0.0.2' );
 define( 'ICE_DRAGON_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
 define( 'ICE_DRAGON_PAYWALL_BASENAME',	plugin_basename( __FILE__ ) );
