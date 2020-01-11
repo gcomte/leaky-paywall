@@ -213,7 +213,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					if ( isset( $_POST['custom_excerpt_length'] ) ) {
 						
 						if ( strlen( $_POST['custom_excerpt_length'] ) > 0 ) {
-							$settings['custom_excerpt_length'] = intval( $_POST['custom_excerpt_length'] );
+							$settings['custom_excerpt_length'] = intval($_POST['custom_excerpt_length']);
 						} else {	
 							$settings['custom_excerpt_length'] = '';
 						}
@@ -221,10 +221,10 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 					}
 
 					if ( !empty( $_REQUEST['subscribe_login_message'] ) )
-						$settings['subscribe_login_message'] = trim( $_REQUEST['subscribe_login_message'] );
+						$settings['subscribe_login_message'] = trim(sanitize_text_field($_REQUEST['subscribe_login_message']));
 						
 					if ( !empty( $_REQUEST['pay_direct_message'] ) )
-						$settings['pay_direct_message'] = trim( $_REQUEST['pay_direct_message'] );
+                        $settings['pay_direct_message'] = trim(sanitize_text_field($_REQUEST['pay_direct_message']));
 						
 					$settings['use_css'] = !empty($_REQUEST['use_css']);
 
@@ -233,27 +233,28 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 				if ( $current_tab === 'restrictions' ) {
 
 					if ( !empty( $_REQUEST['post_types'] ) )
-						$settings['post_types'] = $_REQUEST['post_types'];
+                        $settings['post_types'] = sanitize_text_field($_REQUEST['post_types']);
 
-					if ( isset( $_REQUEST['free_articles'] ) )
-						$settings['free_articles'] = trim( $_REQUEST['free_articles'] );
+                    // not implemented for now. If this will be implemented, remember to secure input and output:
+                    // https://developer.wordpress.org/plugins/security/securing-input/
+                    // https://developer.wordpress.org/plugins/security/securing-output/
+//					if ( !empty( $_REQUEST['restrict_pdf_downloads'] ) )
+//						$settings['restrict_pdf_downloads'] = $_REQUEST['restrict_pdf_downloads'];
+//					else
+//						$settings['restrict_pdf_downloads'] = 'off';
 
-					if ( !empty( $_REQUEST['cookie_expiration'] ) )
-						$settings['cookie_expiration'] = trim( $_REQUEST['cookie_expiration'] );
+                    if(!empty($_REQUEST['restrictions'])){
 
-					if ( !empty( $_REQUEST['cookie_expiration_interval'] ) )
-						$settings['cookie_expiration_interval'] = trim( $_REQUEST['cookie_expiration_interval'] );
+                        // sanitize input data
+                        foreach ($_REQUEST['restrictions']['post_types'] as $key => $restriction) {
+                            $_REQUEST['restrictions']['post_types'][$key]['post_type'] = sanitize_text_field($restriction['post_type']);
+                            $_REQUEST['restrictions']['post_types'][$key]['taxonomy'] = sanitize_text_field($restriction['taxonomy']);
+                        }
 
-					if ( !empty( $_REQUEST['restrict_pdf_downloads'] ) )
-						$settings['restrict_pdf_downloads'] = $_REQUEST['restrict_pdf_downloads'];
-					else
-						$settings['restrict_pdf_downloads'] = 'off';
-
-					if ( !empty( $_REQUEST['restrictions'] ) ) {
-						$settings['restrictions'] = $_REQUEST['restrictions'];
-					} else {
-						$settings['restrictions'] = array();
-					}
+                        $settings['restrictions'] = $_REQUEST['restrictions'];
+                    } else {
+                        $settings['restrictions'] = array();
+                    }
 
 					if ( isset( $_POST['js_restrictions_post_container'] ) ) {
 						$settings['js_restrictions_post_container'] = sanitize_text_field( $_POST['js_restrictions_post_container'] );
@@ -261,10 +262,6 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 					if ( isset( $_POST['js_restrictions_page_container'] ) ) {
 						$settings['js_restrictions_page_container'] = sanitize_text_field( $_POST['js_restrictions_page_container'] );
-					}
-
-					if ( !empty( $_REQUEST['levels'] ) ) {
-						$settings['levels'] = $_REQUEST['levels'];
 					}
 
 				}
@@ -435,6 +432,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 
 				                        	<?php
 				                        	$last_key = -1;
+
 				                        	if ( !empty( $settings['restrictions']['post_types'] ) ) {
 
 					                        	foreach( $settings['restrictions']['post_types'] as $key => $restriction ) {
