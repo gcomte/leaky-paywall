@@ -417,7 +417,7 @@ msgstr ""
 msgid "Subscription Level"
 msgstr ""
 
-#: class.php:1540 class.php:1590 shortcodes.php:233 subscriber-table.php:104
+#: class.php:1540 class.php:1590 subscriber-table.php:104
 msgid "Status"
 msgstr ""
 
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Deactivated"
 msgstr ""
 
-#: class.php:1548 class.php:1598 shortcodes.php:235
+#: class.php:1548 class.php:1598
 msgid "Payment Method"
 msgstr ""
 
@@ -619,26 +619,6 @@ msgstr ""
 msgid "Register for %s"
 msgstr ""
 
-#: deprecated.php:557 shortcodes.php:365 shortcodes.php:640
-msgid "Username"
-msgstr ""
-
-#: deprecated.php:561 shortcodes.php:375
-msgid "Email"
-msgstr ""
-
-#: deprecated.php:565 shortcodes.php:619
-msgid "First Name"
-msgstr ""
-
-#: deprecated.php:569 shortcodes.php:624
-msgid "Last Name"
-msgstr ""
-
-#: deprecated.php:573 shortcodes.php:645
-msgid "Password"
-msgstr ""
-
 #: deprecated.php:577
 msgid "Password Again"
 msgstr ""
@@ -687,12 +667,6 @@ msgstr ""
 
 #: functions.php:868
 msgid "No, get me outta here!"
-msgstr ""
-
-#: functions.php:884 shortcodes.php:417
-msgid ""
-"Unable to find valid Stripe customer ID to unsubscribe. Please contact "
-"support"
 msgstr ""
 
 #: functions.php:895
@@ -1509,7 +1483,7 @@ msgid "Name on Card"
 msgstr ""
 
 #: include/registration-functions.php:310
-#: include/registration-functions.php:341 shortcodes.php:479
+#: include/registration-functions.php:341
 msgid "Card Number"
 msgstr ""
 
@@ -1606,241 +1580,6 @@ msgstr ""
 
 #: shortcodes.php:21
 msgid "Check your email for a link to log in."
-msgstr ""
-
-#: shortcodes.php:22
-msgid "Email sent. Please check your email for the login link."
-msgstr ""
-
-#: shortcodes.php:23
-msgid "Error sending login email, please try again later."
-msgstr ""
-
-#: shortcodes.php:24
-msgid "Please supply a valid email address."
-msgstr ""
-
-#: shortcodes.php:56
-msgid "Send Login Email"
-msgstr ""
-
-#: shortcodes.php:102
-msgid "Enter your email address to start your subscription:"
-msgstr ""
-
-#: shortcodes.php:103
-msgid "Check your email for a link to start your subscription."
-msgstr ""
-
-#: shortcodes.php:146
-msgid ""
-"Your subscription will automatically renew until you <a href=\"%s\">cancel</"
-"a>"
-msgstr ""
-
-#: shortcodes.php:150
-msgid "You are a lifetime subscriber!"
-msgstr ""
-
-#: shortcodes.php:154
-msgid ""
-"Your subscription has been canceled. You will continue to have access to %s "
-"until the end of your billing cycle. Thank you for the time you have spent "
-"subscribed to our site and we hope you will return soon!"
-msgstr ""
-
-#: shortcodes.php:158
-msgid "You are subscribed via %s until %s."
-msgstr ""
-
-#: shortcodes.php:164
-msgid "Log Out"
-msgstr ""
-
-#: shortcodes.php:223
-msgid ""
-"<p>Welcome %s, you are currently logged in. <a href=\"%s\">Click here to log "
-"out.</a></p>"
-msgstr ""
-
-#: shortcodes.php:226 shortcodes.php:587
-msgid "Your Subscription"
-msgstr ""
-
-#: shortcodes.php:234
-msgid "Type"
-msgstr ""
-
-#: shortcodes.php:236
-msgid "Expiration"
-msgstr ""
-
-#: shortcodes.php:237
-msgid "Cancel?"
-msgstr ""
-
-#: shortcodes.php:247 subscriber-table.php:218
-msgid "Undefined"
-msgstr ""
-
-#: shortcodes.php:257 subscriber-table.php:285
-msgid "Never"
-msgstr ""
-
-#: shortcodes.php:265
-msgid "Recurs on %s"
-msgstr ""
-
-#: shortcodes.php:273
-msgid "<a href=\"%s\">cancel</a>"
-msgstr ""
-
-#: shortcodes.php:297
-msgid "Your Mobile Devices"
-msgstr ""
-
-#: shortcodes.php:298
-msgid ""
-"To generate a token for the mobile app, click the \"Add New Mobile Device\" "
-"button below."
-msgstr ""
-
-#: shortcodes.php:306
-msgid "Your Profile"
-msgstr ""
-
-#: shortcodes.php:332
-msgid "Invalid email address."
-msgstr ""
-
-#: shortcodes.php:340
-msgid "Passwords do not match."
-msgstr ""
-
-#: shortcodes.php:350
-msgid "Profile Changes Saved."
-msgstr ""
-
-#: shortcodes.php:370
-msgid "Display Name"
-msgstr ""
-
-#: shortcodes.php:381
-msgid "New Password"
-msgstr ""
-
-#: shortcodes.php:386
-msgid "New Password (again)"
-msgstr ""
-
-#: shortcodes.php:392
-msgid "Update Profile Information"
-msgstr ""
-
-#: shortcodes.php:420
-msgid "Credit Card Number Required"
-msgstr ""
-
-#: shortcodes.php:423
-msgid "Credit Card Expiration Month Required"
-msgstr ""
-
-#: shortcodes.php:426
-msgid "Credit Card Expiration Year Required"
-msgstr ""
-
-#: shortcodes.php:429
-msgid "Credit Card Security Code (CVC) Required"
-msgstr ""
-
-#: shortcodes.php:432
-msgid "Credit Card Cardholder's Name Required"
-msgstr ""
-
-#: shortcodes.php:449
-msgid "Your credit card has been successfully updated."
-msgstr ""
-
-#: shortcodes.php:453
-msgid "Error updating Credit Card information: %s"
-msgstr ""
-
-#: shortcodes.php:475
-msgid "Update Credit Card"
-msgstr ""
-
-#: shortcodes.php:484
-msgid "Expiration Date"
-msgstr ""
-
-#: shortcodes.php:491
-msgid "Security Code (CVC)"
-msgstr ""
-
-#: shortcodes.php:496
-msgid "Cardholder's Name"
-msgstr ""
-
-#: shortcodes.php:502
-msgid "Update Credit Card Information"
-msgstr ""
-
-#: shortcodes.php:510
-msgid "You can update your payment details through PayPal's website."
-msgstr ""
-
-#: shortcodes.php:516
-msgid "Your Payment Information"
-msgstr ""
-
-#: shortcodes.php:524
-msgid "Your Account is Not Currently Active"
-msgstr ""
-
-#: shortcodes.php:525
-msgid ""
-"To reactivate your account, please visit our <a href=\"%s\">Subscription "
-"page</a>."
-msgstr ""
-
-#: shortcodes.php:590
-msgid "Subscription Name:"
-msgstr ""
-
-#: shortcodes.php:591
-msgid "Subscription Length:"
-msgstr ""
-
-#: shortcodes.php:592
-msgid "Recurring:"
-msgstr ""
-
-#: shortcodes.php:593
-msgid "Content Access:"
-msgstr ""
-
-#: shortcodes.php:608
-msgid "Total:"
-msgstr ""
-
-#: shortcodes.php:616
-msgid "Your Details"
-msgstr ""
-
-#: shortcodes.php:629
-msgid "Email Address"
-msgstr ""
-
-#: shortcodes.php:637
-msgid "Account Details"
-msgstr ""
-
-#: shortcodes.php:650
-msgid "Confirm Password"
-msgstr ""
-
-#: shortcodes.php:688
-msgid "Subscribe"
 msgstr ""
 
 #: subscriber-table.php:90

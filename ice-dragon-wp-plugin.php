@@ -46,7 +46,6 @@ function idra_plugins_loaded() {
 		$ice_dragon_paywall = new Ice_Dragon_Paywall();
 		
 		require_once( 'functions.php' );
-		require_once( 'shortcodes.php' );
 		require_once( 'metaboxes.php' );
 
 		// error tracking
