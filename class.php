@@ -357,7 +357,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
 	                        	<tr>
 	                                <th><?php _e( 'Login Necessary Message', 'leaky-paywall' ); ?></th>
 	                                <td>
-	                    				<textarea id="subscribe_login_message" class="large-text" name="subscribe_login_message" cols="50" rows="3"><?php echo stripslashes( $settings['subscribe_login_message'] ); ?></textarea>
+	                    				<textarea id="subscribe_login_message" class="large-text" name="subscribe_login_message" cols="50" rows="3"><?php echo esc_html($settings['subscribe_login_message']); ?></textarea>
 	                                    <p class="description">
                                             <?php _e( "Is shown when a visitor does not have an active session with the Ice Dragon website. The user has to login first.", 'leaky-paywall' ); ?>
 	                                    </p>
@@ -495,7 +495,7 @@ if ( ! class_exists( 'Ice_Dragon_Paywall' ) ) {
                                     <tr>
                                         <th><?php _e( 'Ice Dragon Secret Key', 'leaky-paywall' ); ?></th>
                                         <td>
-                                            <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr( $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET] ); ?>">
+                                            <input type="text" id="ice_dragon_secret_key" class="large-text" name="<?php echo IceDragonConstants::SETTINGS_KEY_HMAC_SECRET ?>" value="<?php echo esc_attr($settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET]); ?>">
                                             <p class="description">
                                                 <?php _e( "Keep this information private! This secret is used to verify the validity of the vouchers purchased by your visitors.", 'leaky-paywall' ); ?>
                                             </p>
