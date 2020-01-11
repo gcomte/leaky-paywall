@@ -37,7 +37,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function process_content_restrictions() 
 	{
 
-		do_action( 'ice_dragon_paywall_before_process_requests', get_ice_dragon_paywall_settings() );
+		do_action( 'ice_dragon_paywall_before_process_requests', idra_get_ice_dragon_paywall_settings() );
 
 		if ( !$this->is_content_restricted() ) {
 			return;
@@ -159,7 +159,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	public function current_user_can_access()
 	{
-        $settings = get_ice_dragon_paywall_settings();
+        $settings = idra_get_ice_dragon_paywall_settings();
         $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
 
         define('IDRA_PLUGIN_ABSOLUTE_PATH', dirname(__FILE__, 2) . '/');
@@ -192,7 +192,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	 public function get_nag_excerpt( $content ) 
 	 {
-	 	$settings = get_ice_dragon_paywall_settings();
+	 	$settings = idra_get_ice_dragon_paywall_settings();
 
 	 	if ( isset( $settings['custom_excerpt_length'] ) && strlen( $settings['custom_excerpt_length'] ) > 0 ) {
 			$excerpt = substr( strip_tags( get_the_content( get_the_ID() ) ), 0, intval( $settings['custom_excerpt_length'] ) );
@@ -206,7 +206,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function the_content_paywall_message() 
 	{
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 		
 		$message  = '<div class="lpaywall_message_wrap"><div id="lpaywall_message">';
 		if ( !is_user_logged_in() ) {
@@ -237,7 +237,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	 */
 	public function replace_variables( $message ) {
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 
 		if ( 0 === $settings['page_for_subscription'] )
 			$subscription_url = get_bloginfo( 'wpurl' ) . '/?subscription'; //CHANGEME -- I don't really know what this is suppose to do...
@@ -279,7 +279,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function is_unblockable_content()
 	{
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 
 		$unblockable_content = array(
 			$settings['page_for_login'],
@@ -351,7 +351,7 @@ class Ice_Dragon_Paywall_Restrictions {
 
 	public function get_restriction_settings()
 	{
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 		return $settings['restrictions'];
 	}
 
@@ -394,7 +394,7 @@ class Ice_Dragon_Paywall_Restrictions {
 	public function get_expiration_time()
 	{
 
-		$settings = get_ice_dragon_paywall_settings();
+		$settings = idra_get_ice_dragon_paywall_settings();
 
 		switch ( $settings['cookie_expiration_interval'] ) {
 			case 'hour':

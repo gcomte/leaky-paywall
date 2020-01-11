@@ -33,7 +33,7 @@ define( 'ICE_DRAGON_PAYWALL_REL_DIR',	dirname( ICE_DRAGON_PAYWALL_BASENAME ) );
  *
  * @since 1.0.0
  */
-function ice_dragon_paywall_plugins_loaded() {
+function idra_plugins_loaded() {
 	
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
@@ -65,4 +65,4 @@ function ice_dragon_paywall_plugins_loaded() {
 	}
 
 }
-add_action( 'plugins_loaded', 'ice_dragon_paywall_plugins_loaded', 4815162342 ); //wait for the plugins to be loaded before init
+add_action( 'plugins_loaded', 'idra_plugins_loaded', 4815162342 ); //wait for the plugins to be loaded before init

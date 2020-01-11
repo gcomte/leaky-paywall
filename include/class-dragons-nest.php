@@ -41,7 +41,7 @@ class DragonsNest {
     }
 
     function receiveVoucher(WP_REST_Request $data){
-        $settings = get_ice_dragon_paywall_settings();
+        $settings = idra_get_ice_dragon_paywall_settings();
         $paymentConfirmationSecret = $settings[IceDragonConstants::SETTINGS_KEY_HMAC_SECRET];
 
         $this->registerIceDragonCookie($data[IDRA_API_VOUCHER_KEY], $paymentConfirmationSecret);

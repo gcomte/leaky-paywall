@@ -6,11 +6,9 @@
  * @access      public
  * @since       1.0
  */
-if ( !function_exists( 'ice_dragon_paywall_errors' ) ) {
-	function ice_dragon_paywall_errors() {
-	    static $wp_error; // Will hold global variable safely
-	    return isset( $wp_error ) ? $wp_error : ( $wp_error = new WP_Error( NULL, NULL, NULL ) );
-	}
+function idra_errors() {
+    static $wp_error; // Will hold global variable safely
+    return isset( $wp_error ) ? $wp_error : ( $wp_error = new WP_Error( NULL, NULL, NULL ) );
 }
 
 /**
@@ -22,7 +20,7 @@ if ( !function_exists( 'ice_dragon_paywall_errors' ) ) {
 function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
 
 	$html   = '';
-	$errors = ice_dragon_paywall_errors()->get_error_codes();
+	$errors = idra_errors()->get_error_codes();
 
 	if( $errors ) {
 		
@@ -30,9 +28,9 @@ function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
 		// Loop error codes and display errors
 		foreach( $errors as $code ) {
 
-			if( ice_dragon_paywall_errors()->get_error_data( $code ) == $error_id ) {
+			if( idra_errors()->get_error_data( $code ) == $error_id ) {
 
-				$message = ice_dragon_paywall_errors()->get_error_message( $code );
+				$message = idra_errors()->get_error_message( $code );
 
 				$html .= '<p class="lpaywall_error ' . esc_attr( $code ) . '"><span>' . $message . '</span></p>';
 
@@ -56,11 +54,11 @@ function ice_dragon_paywall_get_error_messages_html( $error_id = '' ) {
  */
 function ice_dragon_paywall_show_error_messages( $error_id = '' ) {
 
-	if( ice_dragon_paywall_errors()->get_error_codes() ) {
+	if( idra_errors()->get_error_codes() ) {
 
-		do_action( 'ice_dragon_paywall_errors_before' );
+		do_action( 'idra_errors_before' );
 		echo ice_dragon_paywall_get_error_messages_html( $error_id );
-		do_action( 'ice_dragon_paywall_errors_after' );
+		do_action( 'idra_errors_after' );
 
 	}
 }
