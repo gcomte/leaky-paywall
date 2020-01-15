@@ -2,7 +2,7 @@
 Contributors: icedr4gon
 Requires at least: 4.6.0
 Tested up to: 5.2.4
-Stable tag: 0.0.2
+Stable tag: 0.0.3
 Tags: bitcoin, lightning, lightning network, metered paywall, paywall, metered, pay wall, content monetization, metered access, metered pay wall, paid content
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -57,6 +57,11 @@ No. You can deactivate the Ice Dragon plugin at any time without losing any conf
 Please don't hesitate to reach out to us. This is still an early-day implementation and we are happy to hear where the obstacles are and help you out with any issue. Just write an e-mail to lightning@puzzle.ch .
 
 == Changelog ==
+
+= 0.0.3 Alpha =
+* Better sanitizing of input data
+* Major JWT library update from 0.1.0 to 1.0.0
+* Code cleanup
 
 = 0.0.2 Alpha =
 * Fixes to match the needs of WorPress.org plugin store
