@@ -232,13 +232,16 @@ class IDRA_Ice_Dragon_Paywall {
 
                 if(!empty($_REQUEST['restrictions'])){
 
+                    $restrictions = array();
+
                     // sanitize input data
                     foreach ($_REQUEST['restrictions']['post_types'] as $key => $restriction) {
-                        $_REQUEST['restrictions']['post_types'][$key]['post_type'] = sanitize_text_field($restriction['post_type']);
-                        $_REQUEST['restrictions']['post_types'][$key]['taxonomy'] = sanitize_text_field($restriction['taxonomy']);
+                        $keySanitized = intval($key);
+                        $restrictions['post_types'][$keySanitized]['post_type'] = sanitize_text_field($restriction['post_type']);
+                        $restrictions['post_types'][$keySanitized]['taxonomy'] = sanitize_text_field($restriction['taxonomy']);
                     }
 
-                    $settings['restrictions'] = $_REQUEST['restrictions'];
+                    $settings['restrictions'] = $restrictions;
                 } else {
                     $settings['restrictions'] = array();
                 }
