@@ -56,30 +56,6 @@ class IDRA_Content_Restrictions {
 
 	}
 
-	public function check_js_restrictions() 
-	{
-
-		$this->is_ajax = true;
-		$this->post_id = $_REQUEST['post_id'];
-		
-		if ( !$this->is_content_restricted() ) {
-			echo json_encode( 'do not show paywall' );
-			exit();
-		}
-
-		// content is restricted, so see if the current user can access it
-		if ( apply_filters( 'ice_dragon_paywall_current_user_can_access', $this->current_user_can_access() ) ) {
-			echo json_encode( 'do not show paywall' );
-			exit();
-		}
-
-		echo json_encode( $this->get_subscribe_nag() );
-		do_action( 'ice_dragon_paywall_is_restricted_content' );
-
-		exit();
-
-	}
-
 	// Helper method when restrictions need to be checked manually (like custom fields)
 	public function subscriber_can_view() 
 	{
