@@ -54,7 +54,7 @@ function idra_plugins_loaded() {
 		include( IDRA_PLUGIN_PATH . 'include/class-restrictions.php' );
 
 		// Internationalization
-		load_plugin_textdomain( 'leaky-paywall', false, IDRA_PLUGIN_REL_DIR . '/i18n/' );
+//		load_plugin_textdomain('ice-dragon-paywall', false, IDRA_PLUGIN_REL_DIR . '/i18n/' );
 
 		// Register Dragonsnest as Rest API endpoint
         require_once(IDRA_PLUGIN_PATH . 'include/class-dragons-nest.php');
