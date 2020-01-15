@@ -14,19 +14,18 @@ Author: Puzzle ITC
 Version: 0.0.2
 Author URI: https://puzzle.ch/lightning
 Tags: paywall, bitcoin, satoshis, lightning, lightning network, ice dragon, metered, pay wall, content monetization, metered access, metered pay wall, paid content
-Text Domain: leaky-paywall
+Text Domain: ice-dragon-paywall
 Domain Path: /i18n
 */
 
-define( 'ICE_DRAGON_PAYWALL_NAME', 		'Ice Dragon Plugin for WordPress' );
-define( 'ICE_DRAGON_PAYWALL_SLUG', 		'ice-dragon-paywall' );
-define( 'LPAYWALL_VERSION',	'4.13.5' );
-define( 'LPAYWALL_DB_VERSION',	'1.0.4' );
-define( 'ICE_DRAGON_VERSION',	'0.0.2' );
-define( 'ICE_DRAGON_PAYWALL_URL',		plugin_dir_url( __FILE__ ) );
-define( 'ICE_DRAGON_PAYWALL_PATH', 		plugin_dir_path( __FILE__ ) );
-define( 'ICE_DRAGON_PAYWALL_BASENAME',	plugin_basename( __FILE__ ) );
-define( 'ICE_DRAGON_PAYWALL_REL_DIR',	dirname( ICE_DRAGON_PAYWALL_BASENAME ) );
+define('IDRA_PLUGIN_NAME',     'Ice Dragon Plugin for WordPress');
+define('IDRA_PLUGIN_SLUG', 	   'ice-dragon-paywall');
+define('IDRA_PLUGIN_VERSION',  '0.0.2');
+define('IDRA_DB_VERSION',	   '0.0.1');
+define('IDRA_PLUGIN_URL',	   plugin_dir_url(__FILE__));
+define('IDRA_PLUGIN_PATH', 	   plugin_dir_path(__FILE__));
+define('IDRA_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('IDRA_PLUGIN_REL_DIR',  dirname(IDRA_PLUGIN_BASENAME));
 
 /**
  * Instantiate Pigeon Pack class, require helper files
@@ -49,16 +48,16 @@ function idra_plugins_loaded() {
 		require_once( 'metaboxes.php' );
 
 		// error tracking
-		include( ICE_DRAGON_PAYWALL_PATH . 'include/error-tracking.php' );
+		include( IDRA_PLUGIN_PATH . 'include/error-tracking.php' );
 
 		// helper classes
-		include( ICE_DRAGON_PAYWALL_PATH . 'include/class-restrictions.php' );
+		include( IDRA_PLUGIN_PATH . 'include/class-restrictions.php' );
 
 		// Internationalization
-		load_plugin_textdomain( 'leaky-paywall', false, ICE_DRAGON_PAYWALL_REL_DIR . '/i18n/' );
+		load_plugin_textdomain( 'leaky-paywall', false, IDRA_PLUGIN_REL_DIR . '/i18n/' );
 
 		// Register Dragonsnest as Rest API endpoint
-        require_once(ICE_DRAGON_PAYWALL_PATH . 'include/class-dragons-nest.php');
+        require_once(IDRA_PLUGIN_PATH . 'include/class-dragons-nest.php');
         $dragonsNest = new IDRA_DragonsNest();
         $dragonsNest->registerRestAPI();
 	}

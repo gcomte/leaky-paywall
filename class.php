@@ -5,9 +5,9 @@ require_once ('ice-dragon-constants.php');
 
 class IDRA_Ice_Dragon_Paywall {
 
-    private $plugin_name	= ICE_DRAGON_PAYWALL_NAME;
-    private $plugin_slug	= ICE_DRAGON_PAYWALL_SLUG;
-    private $basename		= ICE_DRAGON_PAYWALL_BASENAME;
+    private $plugin_name	= IDRA_PLUGIN_NAME;
+    private $plugin_slug	= IDRA_PLUGIN_SLUG;
+    private $basename		= IDRA_PLUGIN_BASENAME;
 
     /**
      * Class constructor, puts things in motion
@@ -58,7 +58,7 @@ class IDRA_Ice_Dragon_Paywall {
      */
     function admin_menu() {
 
-        add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IDRA_Constants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
+        add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IDRA_Constants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), IDRA_PLUGIN_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
 
         /*
         add_submenu_page( IDRA_Constants::TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
@@ -84,10 +84,10 @@ class IDRA_Ice_Dragon_Paywall {
                 || 'index.php' === $hook_suffix
                 || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
-            wp_enqueue_style('lpaywall_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/lpaywall-admin.css', '', LPAYWALL_VERSION);
+            wp_enqueue_style('lpaywall_admin_style', IDRA_PLUGIN_URL . 'css/lpaywall-admin.css', '', IDRA_PLUGIN_VERSION);
 
             /* Added for Ice Dragon */
-            wp_enqueue_style('ice_dragon_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', ICE_DRAGON_VERSION);
+            wp_enqueue_style('ice_dragon_admin_style', IDRA_PLUGIN_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', IDRA_PLUGIN_VERSION);
         }
     }
 
@@ -99,7 +99,7 @@ class IDRA_Ice_Dragon_Paywall {
     function admin_wp_enqueue_scripts( $hook_suffix ) {
 
         if ( 'toplevel_page_' . IDRA_Constants::TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
-            wp_enqueue_script( 'lpaywall_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-settings.js', array( 'jquery' ), LPAYWALL_VERSION );
+            wp_enqueue_script( 'lpaywall_js', IDRA_PLUGIN_URL . 'js/lpaywall-settings.js', array( 'jquery' ), IDRA_PLUGIN_VERSION );
         }
 
     }
@@ -114,9 +114,9 @@ class IDRA_Ice_Dragon_Paywall {
         $settings = $this->get_settings();
 
         if ( $settings['use_css'] === true ) {
-            wp_enqueue_style( 'issuem-leaky-paywall', ICE_DRAGON_PAYWALL_URL . '/css/lpaywall.css', '', LPAYWALL_VERSION );
+            wp_enqueue_style( 'issuem-leaky-paywall', IDRA_PLUGIN_URL . '/css/lpaywall.css', '', IDRA_PLUGIN_VERSION );
             // Added for Ice Dragon
-            wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', ICE_DRAGON_VERSION );
+            wp_enqueue_style( 'ice-dragon-paywall', IDRA_PLUGIN_URL . '/css/puzzle-itc-ice-dragon.css', '', IDRA_PLUGIN_VERSION );
         }
 
     }
@@ -302,7 +302,7 @@ class IDRA_Ice_Dragon_Paywall {
 
                             <?php /* Added for Ice Dragon */ ?>
                             <a href="https://ice-dragon.ch" target="_blank">
-                                <img src="<?php echo ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
+                                <img src="<?php echo IDRA_PLUGIN_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
                             </a>
                         </h2>
                     <?php } // endif ?>
@@ -543,8 +543,8 @@ or */ ?>
 
         $settings = $this->get_settings();
 
-        $settings['version'] = ICE_DRAGON_VERSION;
-        $settings['db_version'] = LPAYWALL_DB_VERSION;
+        $settings['version'] = IDRA_PLUGIN_VERSION;
+        $settings['db_version'] = IDRA_DB_VERSION;
 
         $this->update_settings( $settings );
 

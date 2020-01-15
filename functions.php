@@ -170,7 +170,7 @@ function idra_plugin_add_settings_link( $links ) {
     array_unshift( $links, $settings_link );
   	return $links;
 }
-add_filter( 'plugin_action_links_' . ICE_DRAGON_PAYWALL_BASENAME, 'idra_plugin_add_settings_link' );
+add_filter( 'plugin_action_links_' . IDRA_PLUGIN_BASENAME, 'idra_plugin_add_settings_link' );
 
 /**
  * Plugin row meta links for add ons
