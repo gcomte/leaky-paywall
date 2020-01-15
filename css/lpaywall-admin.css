@@ -1,34 +1,5 @@
 /* CSS Document */
 
-table.leaky-paywall-table {
-	width: 100%;
-}
-
-table.leaky-paywall-table input.small-text {
-	height: 28px;
-}
-
-table.issuem-leaky-paywall-subscription-level-row-table {
-	border: 1px solid #eee;
-	margin-bottom: 20px;
-	padding: 10px;
-}
-
-table.leaky-paywall-table tr th, table.leaky-paywall-table tr td {
-	vertical-align:top;
-	padding-bottom:10px;
-}
-
-table.leaky-paywall-table tr th {
-	padding-top:5px;
-	width:200px;
-}
-
-div.interval_div,
-div.allowed_value_div {
-	display: inline-block;
-}
-
 span.delete-x {
 	display: inline-block;
     color: #bbb;
@@ -44,40 +15,6 @@ span.delete-x {
 
 span.delete-x:hover {
     cursor: pointer;
-}
-
-select.select_level_post_type, select.select_level_site {
-	width: 100px;	
-}
-
-td.available-addon {
-	border: 1px solid #ccc;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    max-width: 340px;
-    min-width: 250px;
-    vertical-align: top;
-    width: 33%;
-    background: #fff;
-}
-
-div.available-addon-inner {
-	margin: 20px;
-}
-
-div.available-addon-inner img {
-	max-width: 100%;
-}
-
-.leaky-paywall-dashboard-table {
-	width: 100%;
-}
-
-.leaky-paywall-dashboard-table th {
-	text-align: left;
-	font-weight: bold;
-}
-.leaky-paywall-dashboard-table td {
-	padding-bottom: 5px;
 }
 
 span.delete-restriction-row {
@@ -101,36 +38,6 @@ span.delete-restriction-row {
 
 #add-restriction-row {
 	margin-bottom: 10px;
-}
-
-/* access options */
-
-.leaky-paywall-interal-setting-table {
-	border: 1px solid #ddd;
-}
-
-.leaky-paywall-interal-setting-table th {
-	padding: 10px;
-}
-
-.leaky-paywall-interal-setting-table td {
-	border-top: 1px solid #F0F0F0;
-	padding: 10px;
-}
-
-span.delete-post-type-row {
-	color: red;
-	margin-top: -10px;
-}
-
-.allowed_value_div .allowed_value {
-	margin-left: 5px;
-}
-
-.leaky-paywall-sidebar-widget {
-	background: #fff;
-	padding: 10px 20px;
-	margin-bottom: 20px;
 }
 
 .leaky-paywall-restriction-settings .hide-setting {
