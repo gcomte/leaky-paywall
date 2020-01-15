@@ -84,10 +84,10 @@ class IDRA_Ice_Dragon_Paywall {
                 || 'index.php' === $hook_suffix
                 || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
-            wp_enqueue_style('lpaywall_admin_style', IDRA_PLUGIN_URL . 'css/lpaywall-admin.css', '', IDRA_PLUGIN_VERSION);
+            wp_enqueue_style('ice-dragon-paywall_admin_lpaywall-fork', IDRA_PLUGIN_URL . 'css/lpaywall-admin.css', '', IDRA_PLUGIN_VERSION);
 
             /* Added for Ice Dragon */
-            wp_enqueue_style('ice_dragon_admin_style', IDRA_PLUGIN_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', IDRA_PLUGIN_VERSION);
+            wp_enqueue_style('ice-dragon-paywall_admin', IDRA_PLUGIN_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', IDRA_PLUGIN_VERSION);
         }
     }
 
@@ -99,7 +99,7 @@ class IDRA_Ice_Dragon_Paywall {
     function admin_wp_enqueue_scripts( $hook_suffix ) {
 
         if ( 'toplevel_page_' . IDRA_Constants::TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
-            wp_enqueue_script( 'lpaywall_js', IDRA_PLUGIN_URL . 'js/lpaywall-settings.js', array( 'jquery' ), IDRA_PLUGIN_VERSION );
+            wp_enqueue_script( 'ice-dragon-paywall_lpaywall-fork', IDRA_PLUGIN_URL . 'js/lpaywall-settings.js', array( 'jquery' ), IDRA_PLUGIN_VERSION );
         }
 
     }
@@ -114,9 +114,9 @@ class IDRA_Ice_Dragon_Paywall {
         $settings = $this->get_settings();
 
         if ( $settings['use_css'] === true ) {
-            wp_enqueue_style( 'issuem-leaky-paywall', IDRA_PLUGIN_URL . '/css/lpaywall.css', '', IDRA_PLUGIN_VERSION );
+            wp_enqueue_style('ice-dragon-paywall_lpaywall-fork', IDRA_PLUGIN_URL . '/css/lpaywall.css', '', IDRA_PLUGIN_VERSION);
             // Added for Ice Dragon
-            wp_enqueue_style( 'ice-dragon-paywall', IDRA_PLUGIN_URL . '/css/puzzle-itc-ice-dragon.css', '', IDRA_PLUGIN_VERSION );
+            wp_enqueue_style('ice-dragon-paywall', IDRA_PLUGIN_URL . '/css/puzzle-itc-ice-dragon.css', '', IDRA_PLUGIN_VERSION);
         }
 
     }
