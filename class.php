@@ -5,9 +5,9 @@ require_once ('ice-dragon-constants.php');
 
 class IDRA_Ice_Dragon_Paywall {
 
-    private $plugin_name	= ICE_DRAGON_PAYWALL_NAME;
-    private $plugin_slug	= ICE_DRAGON_PAYWALL_SLUG;
-    private $basename		= ICE_DRAGON_PAYWALL_BASENAME;
+    private $plugin_name	= IDRA_PLUGIN_NAME;
+    private $plugin_slug	= IDRA_PLUGIN_SLUG;
+    private $basename		= IDRA_PLUGIN_BASENAME;
 
     /**
      * Class constructor, puts things in motion
@@ -17,8 +17,6 @@ class IDRA_Ice_Dragon_Paywall {
     function __construct() {
 
         $settings = $this->get_settings();
-
-        add_action( 'http_api_curl', array( $this, 'force_ssl_version' ) );
 
         add_action( 'admin_init', array( $this, 'upgrade' ) );
 
@@ -60,7 +58,7 @@ class IDRA_Ice_Dragon_Paywall {
      */
     function admin_menu() {
 
-        add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IDRA_Constants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), ICE_DRAGON_PAYWALL_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
+        add_menu_page( __( 'Ice Dragon Paywall', 'leaky-paywall' ), __( 'Ice Dragon', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), IDRA_Constants::TOP_LEVEL_PAGE_NAME, array( $this, 'settings_page' ), IDRA_PLUGIN_URL . '/images/dragon-solid-20x20.png' ); // font-awesome: fas fa-dragon
 
         /*
         add_submenu_page( IDRA_Constants::TOP_LEVEL_PAGE_NAME, __( 'Settings', 'leaky-paywall' ), __( 'Settings', 'leaky-paywall' ), apply_filters( 'manage_ice_dragon_paywall_settings', 'manage_options' ), 'issuem-leaky-paywall', array( $this, 'settings_page' ) );
@@ -86,10 +84,10 @@ class IDRA_Ice_Dragon_Paywall {
                 || 'index.php' === $hook_suffix
                 || 'leaky-paywall_page_leaky-paywall-addons' === $hook_suffix) {
 
-            wp_enqueue_style('lpaywall_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/lpaywall-admin.css', '', LPAYWALL_VERSION);
+            wp_enqueue_style('ice-dragon-paywall_admin_lpaywall-fork', IDRA_PLUGIN_URL . 'css/lpaywall-admin.css', '', IDRA_PLUGIN_VERSION);
 
             /* Added for Ice Dragon */
-            wp_enqueue_style('ice_dragon_admin_style', ICE_DRAGON_PAYWALL_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', ICE_DRAGON_VERSION);
+            wp_enqueue_style('ice-dragon-paywall_admin', IDRA_PLUGIN_URL . 'css/puzzle-itc-ice-dragon-admin.css', '', IDRA_PLUGIN_VERSION);
         }
     }
 
@@ -101,7 +99,7 @@ class IDRA_Ice_Dragon_Paywall {
     function admin_wp_enqueue_scripts( $hook_suffix ) {
 
         if ( 'toplevel_page_' . IDRA_Constants::TOP_LEVEL_PAGE_NAME === $hook_suffix ) {
-            wp_enqueue_script( 'lpaywall_js', ICE_DRAGON_PAYWALL_URL . 'js/lpaywall-settings.js', array( 'jquery' ), LPAYWALL_VERSION );
+            wp_enqueue_script( 'ice-dragon-paywall_lpaywall-fork', IDRA_PLUGIN_URL . 'js/lpaywall-settings.js', array( 'jquery' ), IDRA_PLUGIN_VERSION );
         }
 
     }
@@ -116,9 +114,9 @@ class IDRA_Ice_Dragon_Paywall {
         $settings = $this->get_settings();
 
         if ( $settings['use_css'] === true ) {
-            wp_enqueue_style( 'issuem-leaky-paywall', ICE_DRAGON_PAYWALL_URL . '/css/lpaywall.css', '', LPAYWALL_VERSION );
+            wp_enqueue_style('ice-dragon-paywall_lpaywall-fork', IDRA_PLUGIN_URL . '/css/lpaywall.css', '', IDRA_PLUGIN_VERSION);
             // Added for Ice Dragon
-            wp_enqueue_style( 'ice-dragon-paywall', ICE_DRAGON_PAYWALL_URL . '/css/puzzle-itc-ice-dragon.css', '', ICE_DRAGON_VERSION );
+            wp_enqueue_style('ice-dragon-paywall', IDRA_PLUGIN_URL . '/css/puzzle-itc-ice-dragon.css', '', IDRA_PLUGIN_VERSION);
         }
 
     }
@@ -182,8 +180,8 @@ class IDRA_Ice_Dragon_Paywall {
         $settings_saved = false;
 
         if(isset($_GET['tab'])) {
-            $tab = $_GET['tab'];
-        } else if ( $_GET['page'] == IDRA_Constants::TOP_LEVEL_PAGE_NAME ) {
+            $tab = trim(sanitize_text_field($_GET['tab']));
+        } else if(trim(sanitize_text_field($_GET['page'])) == IDRA_Constants::TOP_LEVEL_PAGE_NAME) {
             $tab = 'appearance';
         } else {
             $tab = '';
@@ -232,13 +230,16 @@ class IDRA_Ice_Dragon_Paywall {
 
                 if(!empty($_REQUEST['restrictions'])){
 
+                    $restrictions = array();
+
                     // sanitize input data
                     foreach ($_REQUEST['restrictions']['post_types'] as $key => $restriction) {
-                        $_REQUEST['restrictions']['post_types'][$key]['post_type'] = sanitize_text_field($restriction['post_type']);
-                        $_REQUEST['restrictions']['post_types'][$key]['taxonomy'] = sanitize_text_field($restriction['taxonomy']);
+                        $keySanitized = intval($key);
+                        $restrictions['post_types'][$keySanitized]['post_type'] = sanitize_text_field($restriction['post_type']);
+                        $restrictions['post_types'][$keySanitized]['taxonomy'] = sanitize_text_field($restriction['taxonomy']);
                     }
 
-                    $settings['restrictions'] = $_REQUEST['restrictions'];
+                    $settings['restrictions'] = $restrictions;
                 } else {
                     $settings['restrictions'] = array();
                 }
@@ -256,7 +257,7 @@ class IDRA_Ice_Dragon_Paywall {
             if ( $current_tab === 'integration' ) {
 
                 if ( !empty( $_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] ) )
-                    $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET];
+                    $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] = trim(sanitize_text_field($_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET]));
 
             }
 
@@ -301,7 +302,7 @@ class IDRA_Ice_Dragon_Paywall {
 
                             <?php /* Added for Ice Dragon */ ?>
                             <a href="https://ice-dragon.ch" target="_blank">
-                                <img src="<?php echo ICE_DRAGON_PAYWALL_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
+                                <img src="<?php echo IDRA_PLUGIN_URL . '/images/iceDragonLogo.png' ?>" alt="Ice Dragon Logo" id="ice-dragon-logo">
                             </a>
                         </h2>
                     <?php } // endif ?>
@@ -542,8 +543,8 @@ or */ ?>
 
         $settings = $this->get_settings();
 
-        $settings['version'] = ICE_DRAGON_VERSION;
-        $settings['db_version'] = LPAYWALL_DB_VERSION;
+        $settings['version'] = IDRA_PLUGIN_VERSION;
+        $settings['db_version'] = IDRA_DB_VERSION;
 
         $this->update_settings( $settings );
 
@@ -564,35 +565,4 @@ or */ ?>
         exit;
 
     }
-
-    /**
-     * Force SSL version to TLS1.2 when using cURL
-     *
-     * Thanks roykho (WooCommerce Commit)
-     * Thanks olivierbellone (Stripe Engineer)
-     * @param resource $curl the handle
-     * @return null
-     */
-    public function force_ssl_version( $curl ) {
-        if ( ! $curl ) {
-            return;
-        }
-
-        if ( OPENSSL_VERSION_NUMBER >= 0x1000100f ) {
-            if ( ! defined( 'CURL_SSLVERSION_TLSv1_2' ) ) {
-                // Note the value 6 comes from its position in the enum that
-                // defines it in cURL's source code.
-                define( 'CURL_SSLVERSION_TLSv1_2', 6 ); // constant not defined in PHP < 5.5
-            }
-
-            curl_setopt( $curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2 );
-        } else {
-            if ( ! defined( 'CURL_SSLVERSION_TLSv1' ) ) {
-                define( 'CURL_SSLVERSION_TLSv1', 1 ); // constant not defined in PHP < 5.5
-            }
-
-            curl_setopt( $curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1 );
-        }
-    }
-	
 }

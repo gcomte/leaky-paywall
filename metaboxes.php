@@ -68,11 +68,11 @@ function idra_save_content_visibility( $post_id ) {
     }
 
     /* OK, it's safe for us to save the data now. */
-    if (isset($_POST['ice_dragon_visibility_type'])) {
-        $visibility_type = $_POST['ice_dragon_visibility_type'];
-        update_post_meta( $post_id, '_puzzle_ice_dragon_paywall_visibility', array('visibility_type' => $visibility_type) );
+    if(isset($_POST['ice_dragon_visibility_type'])) {
+        $visibility_type = trim(sanitize_text_field($_POST['ice_dragon_visibility_type']));
+        update_post_meta($post_id, '_puzzle_ice_dragon_paywall_visibility', array('visibility_type' => $visibility_type));
     } else {
-        delete_post_meta( $post_id, '_puzzle_ice_dragon_paywall_visibility' );
+        delete_post_meta($post_id, '_puzzle_ice_dragon_paywall_visibility');
     }
 
 }
