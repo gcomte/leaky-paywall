@@ -99,7 +99,7 @@ add_action( 'wp_ajax_leaky-paywall-get-restriction-row-post-type-taxonomies', 'i
  */
 function idra_get_restriction_row_post_type_taxonomies() {
 
-	$post_type = $_REQUEST['post_type'];
+    $post_type = trim(sanitize_text_field($_REQUEST['post_type']));
 
 	$taxes = get_object_taxonomies( $post_type, 'objects' );
 	$hidden_taxes = array( 'post_format' );
@@ -149,10 +149,11 @@ function idra_get_restriction_row_post_type_taxonomies() {
  * @since 1.0.0
  */
 function idra_build_lpaywall_default_restriction_row_ajax() {
-    if ( isset( $_REQUEST['row-key'] ) )
-        die( idra_build_lpaywall_default_restriction_row( array(), $_REQUEST['row-key'] ) );
-    else
+    if (isset($_REQUEST['row-key'])) {
+        die(idra_build_lpaywall_default_restriction_row(array(), intval($_REQUEST['row-key'])));
+    } else {
         die();
+    }
 }
 add_action( 'wp_ajax_issuem-leaky-paywall-add-new-restriction-row', 'idra_build_lpaywall_default_restriction_row_ajax' );
 

@@ -182,8 +182,8 @@ class IDRA_Ice_Dragon_Paywall {
         $settings_saved = false;
 
         if(isset($_GET['tab'])) {
-            $tab = $_GET['tab'];
-        } else if ( $_GET['page'] == IDRA_Constants::TOP_LEVEL_PAGE_NAME ) {
+            $tab = trim(sanitize_text_field($_GET['tab']));
+        } else if(trim(sanitize_text_field($_GET['page'])) == IDRA_Constants::TOP_LEVEL_PAGE_NAME) {
             $tab = 'appearance';
         } else {
             $tab = '';
@@ -259,7 +259,7 @@ class IDRA_Ice_Dragon_Paywall {
             if ( $current_tab === 'integration' ) {
 
                 if ( !empty( $_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] ) )
-                    $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] = $_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET];
+                    $settings[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET] = trim(sanitize_text_field($_REQUEST[IDRA_Constants::SETTINGS_KEY_HMAC_SECRET]));
 
             }
 
