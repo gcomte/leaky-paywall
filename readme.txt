@@ -25,10 +25,6 @@ While Ice Dragon is platform-agnostic and you may use it on various platforms, t
 * Metered paywall: Let your readers read X number of characters for free and the rest only after a successful payment
 * Flexible restrictions: restrict by entire post type, category, tag, taxonomy, or even on individual posts
 
-
-
-[//]: # For documentation see: [https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall](https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall)
-
 We love contributions! Head over to our [GitHub page](https://github.com/ln-ice-dragon/ice-dragon-wp-plugin) if your feeling inspired 🙏
 
 
