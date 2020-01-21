@@ -1,6 +1,6 @@
 === Ice Dragon Paywall ===
 Contributors: icedr4gon
-Requires at least: 4.6.0
+Requires at least: 5.0.0
 Tested up to: 5.3.2
 Stable tag: 0.0.3
 Tags: bitcoin, lightning, lightning network, metered paywall, paywall, metered, pay wall, content monetization, metered access, metered pay wall, paid content
