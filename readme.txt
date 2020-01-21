@@ -15,11 +15,10 @@ A Lighning Network enabled paywall for WordPress! Monetize your content today. E
 [//]: # *Start #stackingSats today!*
 *This plugin is still only meant for Alpha testers! The platform is not stable.*
 
-[Ice Dragon](https://ice-dragon.ch/) is a service that helps you to get paid for your content in Bitcoin over the Lightning Network without the hassle of running and integration Lightning Network components yourself.
+[Ice Dragon](https://ice-dragon.ch/) is a service that helps you to get paid for your content in Bitcoin over the Lightning Network!
+It completely removes the burden of running and integrating Lightning Network components from you, so you can focus on creating content.
 
 While Ice Dragon is platform-agnostic and you may use it on various platforms, this plugin helps you to integrate the service into your instance of Wordpress. Just register your content on [ice-dragon.ch](https://ice-dragon.ch/), install and configure the plugin, activate it for whatever pages or posts you'd like and start earning Bitcoin for your content!
-
-Based [ZEEN101](https://zeen101.com/)'s [Leaky Paywall](https://wordpress.org/plugins/leaky-paywall/#description).
 
 **Features**
 
@@ -28,7 +27,7 @@ Based [ZEEN101](https://zeen101.com/)'s [Leaky Paywall](https://wordpress.org/pl
 
 
 
-For documentation see: [https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall](https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall)
+[//]: # For documentation see: [https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall](https://zeen101.helpscoutdocs.com/collection/30-leaky-paywall)
 
 We love contributions! Head over to our [GitHub page](https://github.com/ln-ice-dragon/ice-dragon-wp-plugin) if your feeling inspired 🙏
 
@@ -56,7 +55,8 @@ No. You can deactivate the Ice Dragon plugin at any time without losing any conf
 
 = What can I do if something does not work as intended? =
 
-Please don't hesitate to reach out to us. This is still an early-day implementation and we are happy to hear where the obstacles are and help you out with any issue. Just write an e-mail to lightning@puzzle.ch .
+Please don't hesitate to reach out to us. This is still an early-day implementation and we are happy to hear where the obstacles are and help you out with any issue.
+Just write an e-mail to lightning@puzzle.ch .
 
 == Changelog ==
 
@@ -77,6 +77,7 @@ Please don't hesitate to reach out to us. This is still an early-day implementat
 
 Ice Dragon for WordPress
 Copyright (C) 2019 Puzzle ITC.
+Based on [ZEEN101](https://zeen101.com/)'s [Leaky Paywall](https://wordpress.org/plugins/leaky-paywall/#description).
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
