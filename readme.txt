@@ -11,7 +11,8 @@ A Lighning Network enabled paywall for WordPress! Monetize your content today. E
 
 == Description ==
 
-*Start #stackingSats today!*
+[//]: # *Start #stackingSats today!*
+*This plugin is still only meant for Alpha testers! The platform is not stable.*
 
 [Ice Dragon](https://ice-dragon.ch/) is a service that helps you to get paid for your content in Bitcoin over the Lightning Network without the hassle of running and integration Lightning Network components yourself.
 
